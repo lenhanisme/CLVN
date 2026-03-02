@@ -3,44 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Ký Tài Khoản</title>
+    <title>Đăng Ký Tài Khoản | CL-BANK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .auth-box { background: white; padding: 40px 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 350px; }
-        .auth-box h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 25px; }
+        :root { --primary: #00f2fe; --bg-color: #0b0f19; --glass-bg: rgba(255, 255, 255, 0.05); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-color); color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .auth-box { background: var(--glass-bg); padding: 40px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 400px; backdrop-filter: blur(10px); }
+        .auth-box h2 { text-align: center; color: var(--primary); margin-bottom: 25px; font-weight: 800; }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; color: #555; font-size: 14px; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
-        .form-group input:focus { border-color: #007bff; outline: none; }
-        .btn-submit { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-submit:hover { background-color: #0056b3; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #aaa; }
+        .form-group input { width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; outline: none; }
+        .form-group input:focus { border-color: var(--primary); }
+        .btn-submit { width: 100%; padding: 12px; background: linear-gradient(45deg, #4facfe, #00f2fe); border: none; border-radius: 8px; color: #000; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; }
+        .btn-submit:hover { opacity: 0.9; }
         .auth-links { text-align: center; margin-top: 20px; font-size: 14px; }
-        .auth-links a { color: #007bff; text-decoration: none; }
-        .auth-links a:hover { text-decoration: underline; }
+        .auth-links a { color: var(--primary); text-decoration: none; }
+        .error-msg { color: #ff4d4d; font-size: 13px; text-align: center; margin-bottom: 15px; display: none; }
     </style>
 </head>
 <body>
 
     <div class="auth-box">
-        <h2>Tạo Tài Khoản</h2>
-        <form action="#" method="POST">
+        <h2>ĐĂNG KÝ</h2>
+        <div id="errorMsg" class="error-msg"></div>
+        <form id="registerForm">
             <div class="form-group">
-                <label>Tên đăng nhập</label>
-                <input type="text" placeholder="Nhập tên đăng nhập" required>
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Nhập email của bạn" required>
             </div>
             <div class="form-group">
                 <label>Mật khẩu</label>
-                <input type="password" placeholder="Nhập mật khẩu" required>
+                <input type="password" id="password" placeholder="Nhập mật khẩu (từ 6 ký tự)" required>
             </div>
             <div class="form-group">
-                <label>Xác nhận mật khẩu</label>
-                <input type="password" placeholder="Nhập lại mật khẩu" required>
+                <label>Số tài khoản nhận thưởng</label>
+                <input type="text" id="bankAccount" placeholder="VD: 1903... (Techcombank)" required>
             </div>
-            <div class="form-group">
-                <label>Số tài khoản nhận thưởng (Của bạn)</label>
-                <input type="text" placeholder="VD: 1903... (Techcombank)" required>
-            </div>
-            <button type="submit" class="btn-submit">Đăng Ký</button>
+            <button type="submit" class="btn-submit">Tạo Tài Khoản</button>
         </form>
         <div class="auth-links">
             Đã có tài khoản? <a href="dangnhap.html">Đăng nhập ngay</a><br><br>
@@ -48,5 +48,61 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Cấu hình Firebase của bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
+            authDomain: "clvn-5571b.firebaseapp.com",
+            projectId: "clvn-5571b",
+            storageBucket: "clvn-5571b.firebasestorage.app",
+            messagingSenderId: "864443672228",
+            appId: "1:864443672228:web:25d180dfc83e0212f2e831",
+            measurementId: "G-CPH3LZ0RT2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const bankAccount = document.getElementById('bankAccount').value;
+            const errorMsg = document.getElementById('errorMsg');
+
+            try {
+                // 1. Tạo tài khoản Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Lưu số tài khoản vào Firestore (collection 'users')
+                await setDoc(doc(db, "users", user.uid), {
+                    email: email,
+                    bankAccount: bankAccount,
+                    balance: 0, // Khởi tạo số dư = 0
+                    createdAt: new Date()
+                });
+
+                alert("Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...");
+                window.location.href = "dangnhap.html";
+
+            } catch (error) {
+                console.error(error);
+                errorMsg.style.display = 'block';
+                if(error.code === 'auth/email-already-in-use') {
+                    errorMsg.innerText = "Email này đã được sử dụng!";
+                } else if(error.code === 'auth/weak-password') {
+                    errorMsg.innerText = "Mật khẩu quá yếu (cần ít nhất 6 ký tự)!";
+                } else {
+                    errorMsg.innerText = "Lỗi đăng ký: " + error.message;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
