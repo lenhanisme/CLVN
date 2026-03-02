@@ -3,46 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CLVN.VN | Mini Game Tự Động</title>
+<title>CLVN.VN | Mini Game Chẵn Lẻ</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
 :root{
-    --primary:#00f2fe;
-    --secondary:#4facfe;
-    --accent:#8b5cf6;
-    --bg-dark:#050914;
-    --glass:rgba(255,255,255,0.05);
-    --border:rgba(255,255,255,0.08);
-    --text:#ffffff;
-    --muted:#94a3b8;
+    --bg:#0b0e11;
+    --card:#161a1f;
+    --card-2:#1e2329;
+    --border:#2b3139;
+    --text:#eaecef;
+    --muted:#848e9c;
+    --green:#00ff84;
+    --yellow:#fcd535;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{
-    background:linear-gradient(-45deg,#050914,#0f172a,#0b0f19,#111827);
-    background-size:400% 400%;
-    animation:bgMove 18s ease infinite;
-    color:var(--text);
-    overflow-x:hidden;
-}
-
-@keyframes bgMove{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:var(--bg);color:var(--text);overflow-x:hidden}
 
 /* NAVBAR */
 .navbar{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:18px 6%;
-    backdrop-filter:blur(20px);
-    background:rgba(0,0,0,0.4);
+    padding:16px 6%;
+    background:#0b0e11;
     border-bottom:1px solid var(--border);
     position:sticky;
     top:0;
@@ -50,326 +37,257 @@ body{
 }
 
 .logo{
-    font-size:28px;
+    font-size:24px;
     font-weight:800;
-    text-decoration:none;
-    letter-spacing:2px;
     color:white;
+    text-decoration:none;
 }
-.logo span{
-    background:linear-gradient(45deg,var(--primary),var(--accent));
-    -webkit-background-clip:text;
-    color:transparent;
-}
+.logo span{color:var(--green)}
 
 .nav-links{display:flex;align-items:center;gap:20px}
 
-.btn-login{
-    text-decoration:none;
-    color:white;
-    font-weight:500;
-    transition:.3s;
-}
-.btn-login:hover{color:var(--primary)}
-
 .btn-primary{
-    background:linear-gradient(45deg,var(--secondary),var(--primary));
-    padding:12px 30px;
-    border-radius:50px;
-    font-weight:600;
-    border:none;
-    cursor:pointer;
+    background:var(--green);
     color:#000;
+    padding:10px 22px;
+    border-radius:6px;
+    font-weight:600;
     text-decoration:none;
-    box-shadow:0 10px 30px rgba(0,242,254,.3);
-    transition:.4s;
-}
-.btn-primary:hover{
-    transform:translateY(-4px);
-    box-shadow:0 15px 40px rgba(0,242,254,.6);
-}
-
-.btn-logout{
-    background:transparent;
-    border:1px solid #ff4d4d;
-    color:#ff4d4d;
-    padding:8px 20px;
-    border-radius:30px;
-    cursor:pointer;
-    font-weight:bold;
     transition:.3s;
 }
-.btn-logout:hover{background:#ff4d4d;color:white}
+.btn-primary:hover{opacity:.8}
+
+.btn-login{
+    color:var(--text);
+    text-decoration:none;
+    font-weight:500;
+}
+.btn-login:hover{color:var(--green)}
 
 /* HERO */
 .hero{
-    padding:120px 5% 80px;
-    text-align:center;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    padding:100px 6%;
+    gap:60px;
+    align-items:center;
 }
 
 .hero h1{
-    font-size:3.8rem;
+    font-size:3.2rem;
     font-weight:800;
-    margin-bottom:25px;
-    background:linear-gradient(to right,#fff,var(--primary));
-    -webkit-background-clip:text;
-    color:transparent;
+    margin-bottom:20px;
 }
+
+.hero h1 span{color:var(--green)}
 
 .hero p{
-    max-width:720px;
-    margin:0 auto 40px;
-    font-size:1.1rem;
     color:var(--muted);
+    margin-bottom:30px;
+    font-size:1.1rem;
 }
 
-.hero-btns{
+.hero-btns{display:flex;gap:20px;flex-wrap:wrap}
+
+/* RIGHT PANEL (fake trading box style) */
+.hero-panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:30px;
+}
+
+.panel-title{
+    font-weight:600;
+    margin-bottom:20px;
+    color:var(--yellow);
+}
+
+.panel-row{
     display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid var(--border);
 }
 
-/* STATS */
+.panel-row:last-child{border:none}
+
+/* STATS STRIP */
 .stats{
     display:flex;
     justify-content:center;
-    gap:30px;
-    margin-top:70px;
+    gap:40px;
+    background:var(--card-2);
+    padding:30px 5%;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
     flex-wrap:wrap;
 }
 
-.stat-box{
-    backdrop-filter:blur(30px);
-    background:var(--glass);
-    border:1px solid var(--border);
-    padding:35px;
-    border-radius:20px;
-    min-width:240px;
-    transition:.4s;
+.stat{
+    text-align:center;
 }
-.stat-box:hover{
-    transform:translateY(-8px);
-    border-color:var(--primary);
-    box-shadow:0 20px 40px rgba(0,242,254,.15);
+
+.stat h2{
+    color:var(--green);
+    font-size:2rem;
 }
-.stat-box h2{
-    font-size:2.8rem;
-    background:linear-gradient(45deg,var(--primary),var(--accent));
-    -webkit-background-clip:text;
-    color:transparent;
-}
-.stat-box p{
-    margin-top:8px;
-    font-size:.9rem;
+
+.stat p{
     color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:1px;
+    font-size:.9rem;
 }
 
 /* FEATURES */
-.section-title{
-    text-align:center;
-    margin:90px 0 40px;
-    font-size:2.4rem;
-}
-.section-title span{color:var(--primary)}
-
 .features{
-    display:flex;
-    justify-content:center;
+    padding:90px 6%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     gap:30px;
-    flex-wrap:wrap;
-    padding:0 5%;
 }
 
 .card{
-    width:320px;
-    padding:40px 30px;
-    border-radius:25px;
-    backdrop-filter:blur(30px);
-    background:var(--glass);
+    background:var(--card);
     border:1px solid var(--border);
-    text-align:center;
-    transition:.5s;
+    border-radius:10px;
+    padding:30px;
+    transition:.3s;
 }
+
 .card:hover{
-    transform:translateY(-12px);
-    border-color:var(--primary);
+    border-color:var(--green);
+    transform:translateY(-6px);
 }
+
 .card i{
-    font-size:55px;
-    margin-bottom:20px;
-    color:var(--primary);
-}
-.card h3{
+    font-size:35px;
+    color:var(--green);
     margin-bottom:15px;
-    font-size:1.4rem;
 }
+
+.card h3{
+    margin-bottom:10px;
+}
+
 .card p{
     color:var(--muted);
-    font-size:.95rem;
+    font-size:.9rem;
 }
 
 /* SUPPORT */
 .support{
-    padding:80px 5%;
+    background:var(--card-2);
+    padding:70px 6%;
     text-align:center;
-    background:linear-gradient(135deg,rgba(0,242,254,.1),rgba(139,92,246,.1));
-    margin-top:80px;
-    border-top:1px solid var(--border);
-    border-bottom:1px solid var(--border);
 }
-.support h2{font-size:2.2rem;margin-bottom:15px}
-.support p{color:var(--muted);margin-bottom:30px}
 
-.support-links{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
+.support h2{
+    margin-bottom:15px;
+}
+
+.support p{
+    color:var(--muted);
+    margin-bottom:30px;
 }
 
 .btn-tele,.btn-zalo{
-    padding:14px 35px;
-    border-radius:50px;
-    font-weight:600;
+    padding:10px 25px;
+    border-radius:6px;
     text-decoration:none;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    transition:.3s;
+    font-weight:600;
+    margin:0 10px;
 }
+
 .btn-tele{background:#0088cc;color:white}
 .btn-zalo{background:#0068ff;color:white}
-.btn-tele:hover,.btn-zalo:hover{transform:translateY(-4px)}
 
 /* FOOTER */
 footer{
     text-align:center;
-    padding:30px;
-    background:#02050c;
+    padding:25px;
     color:var(--muted);
+    border-top:1px solid var(--border);
 }
 
 /* RESPONSIVE */
-@media(max-width:768px){
-    .hero h1{font-size:2.3rem}
-    .card{width:100%}
-    .stat-box{width:100%}
+@media(max-width:900px){
+    .hero{grid-template-columns:1fr;padding:60px 6%}
 }
 </style>
 </head>
 <body>
 
 <nav class="navbar">
-<a href="index.html" class="logo">CL<span>VN</span></a>
+<a href="#" class="logo">CL<span>VN</span></a>
 <div class="nav-links" id="auth-section">
-<a href="#tinh-nang" class="btn-login">Tính Năng</a>
+<a href="#" class="btn-login">Tính Năng</a>
 <a href="dangnhap.html" class="btn-login">Đăng Nhập</a>
 <a href="dangky.html" class="btn-primary">Đăng Ký</a>
 </div>
 </nav>
 
-<header class="hero">
-<h1>Mini Game Chẵn Lẻ Tự Động</h1>
-<p>Hệ thống giải trí minh bạch dựa trên mã giao dịch ngân hàng. Trả thưởng tự động chỉ trong vài giây.</p>
-
+<section class="hero">
+<div>
+<h1>Mini Game <span>Chẵn Lẻ Tự Động</span></h1>
+<p>Hệ thống giải trí minh bạch theo mã giao dịch ngân hàng. Trả thưởng tự động trong vài giây.</p>
 <div class="hero-btns">
-<a href="dangnhap.html" class="btn-primary">CHƠI NGAY</a>
-<a href="#tinh-nang" class="btn-login">TÌM HIỂU</a>
+<a href="dangnhap.html" class="btn-primary">Chơi Ngay</a>
+<a href="#" class="btn-login">Tìm Hiểu</a>
+</div>
 </div>
 
-<div class="stats">
-<div class="stat-box">
-<h2>15.2K+</h2>
-<p>Thành Viên</p>
+<div class="hero-panel">
+<div class="panel-title">THỐNG KÊ HỆ THỐNG</div>
+<div class="panel-row"><span>Thành viên</span><span>15,245</span></div>
+<div class="panel-row"><span>Giao dịch hôm nay</span><span>12,845</span></div>
+<div class="panel-row"><span>Đã trả thưởng</span><span>2.4 Tỷ</span></div>
+<div class="panel-row"><span>Thời gian xử lý</span><span style="color:var(--green)">3s</span></div>
 </div>
-<div class="stat-box">
+</section>
+
+<section class="stats">
+<div class="stat">
+<h2>15K+</h2>
+<p>Người chơi</p>
+</div>
+<div class="stat">
 <h2>1.2M+</h2>
-<p>Giao Dịch</p>
+<p>Giao dịch</p>
 </div>
-<div class="stat-box">
-<h2>3s</h2>
-<p>Trả Thưởng</p>
+<div class="stat">
+<h2>99.9%</h2>
+<p>Ổn định</p>
 </div>
-</div>
-</header>
-
-<h2 class="section-title" id="tinh-nang">Tại Sao Chọn <span>CL-BANK?</span></h2>
+</section>
 
 <section class="features">
 <div class="card">
 <i class="fa-solid fa-robot"></i>
-<h3>100% Tự Động</h3>
-<p>BOT hoạt động 24/7, kiểm tra và trả thưởng tự động.</p>
+<h3>Tự Động 100%</h3>
+<p>Bot xử lý liên tục 24/7 không cần admin.</p>
 </div>
 <div class="card">
-<i class="fa-solid fa-shield-halved"></i>
+<i class="fa-solid fa-shield"></i>
 <h3>Minh Bạch</h3>
-<p>Kết quả dựa trên mã giao dịch ngân hàng thực tế.</p>
+<p>Dựa trên mã giao dịch thực tế ngân hàng.</p>
 </div>
 <div class="card">
-<i class="fa-solid fa-bolt-lightning"></i>
+<i class="fa-solid fa-bolt"></i>
 <h3>Siêu Tốc</h3>
-<p>Nhận tiền chỉ sau 3-5 giây khi thắng.</p>
+<p>Trả thưởng chỉ trong 3–5 giây.</p>
 </div>
 </section>
 
 <section class="support">
-<h2>Cần Hỗ Trợ?</h2>
-<p>Đội ngũ CSKH 24/7 luôn sẵn sàng.</p>
-<div class="support-links">
+<h2>Hỗ Trợ 24/7</h2>
+<p>Đội ngũ chăm sóc khách hàng luôn sẵn sàng.</p>
 <a href="https://t.me/@tolabimat" class="btn-tele"><i class="fa-brands fa-telegram"></i> Telegram</a>
-<a href="#" class="btn-zalo"><i class="fa-solid fa-comment-dots"></i> Zalo</a>
-</div>
+<a href="#" class="btn-zalo"><i class="fa-solid fa-comment"></i> Zalo</a>
 </section>
 
 <footer>
-© 2026 CLVN.VN - Nền tảng giải trí giao dịch minh bạch
+© 2026 CLVN.VN - All Rights Reserved
 </footer>
-
-<!-- Firebase giữ nguyên của bạn -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
-authDomain: "clvn-5571b.firebaseapp.com",
-projectId: "clvn-5571b",
-storageBucket: "clvn-5571b.firebasestorage.app",
-messagingSenderId: "864443672228",
-appId: "1:864443672228:web:25d180dfc83e0212f2e831",
-measurementId: "G-CPH3LZ0RT2"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const authSection = document.getElementById('auth-section');
-
-onAuthStateChanged(auth,(user)=>{
-if(user){
-const shortEmail = user.email.split('@')[0];
-authSection.innerHTML=`
-<span style="color:var(--primary);font-weight:600;">
-<i class="fa-solid fa-user"></i> ${shortEmail}
-</span>
-<a href="home.html" class="btn-primary">Vào Game</a>
-<button id="btnLogout" class="btn-logout">Đăng Xuất</button>
-`;
-document.getElementById('btnLogout').addEventListener('click',()=>{
-signOut(auth).then(()=>window.location.reload());
-});
-}else{
-authSection.innerHTML=`
-<a href="#tinh-nang" class="btn-login">Tính Năng</a>
-<a href="dangnhap.html" class="btn-login">Đăng Nhập</a>
-<a href="dangky.html" class="btn-primary">Đăng Ký</a>
-`;
-}
-});
-</script>
 
 </body>
 </html>
