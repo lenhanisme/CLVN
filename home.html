@@ -1,339 +1,317 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLVN.VN - Giao Diện Trò Chơi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* ... Kế thừa CSS như bản trước ... */
-        :root {
-            --bg-body: #0f172a; --bg-sidebar: #1e293b; --bg-card: #1e293b;
-            --text-main: #f8fafc; --text-muted: #94a3b8; --primary: #38bdf8;
-            --primary-hover: #0284c7; --border: #334155; --success: #22c55e; --danger: #ef4444;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLVN.VN | Mini Game</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); display: flex; overflow-x: hidden; }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        .sidebar { width: 260px; height: 100vh; background-color: var(--bg-sidebar); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; transition: 0.3s; z-index: 1000; }
-        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); }
-        .sidebar-header h2 { color: var(--primary); font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .nav-links { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 5px; }
-        .nav-link { padding: 15px 25px; color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s; cursor: pointer; border-left: 3px solid transparent; }
-        .nav-link:hover, .nav-link.active { color: var(--primary); background: rgba(56, 189, 248, 0.1); border-left: 3px solid var(--primary); }
-        .sidebar-close { display: none; position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+<style>
+:root{
+    --bg:#0b0e11;
+    --card:#161a1f;
+    --card-2:#1e2329;
+    --border:#2b3139;
+    --text:#eaecef;
+    --muted:#848e9c;
+    --green:#00ff84;
+    --yellow:#fcd535;
+}
 
-        .main-content { margin-left: 260px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; width: calc(100% - 260px); transition: 0.3s; }
-        header { background: var(--bg-sidebar); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 99; }
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .menu-toggle { display: none; background: none; border: none; color: var(--text-main); font-size: 24px; cursor: pointer; }
-        .header-right { display: flex; align-items: center; gap: 20px; }
-        .balance-badge { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--primary); color: var(--primary); padding: 8px 15px; border-radius: 20px; font-weight: 600; }
-        .btn-logout { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .btn-logout:hover { background: var(--danger); color: #fff; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:var(--bg);color:var(--text);overflow-x:hidden}
 
-        .section-content { display: none; padding: 30px; animation: fadeIn 0.4s ease; max-width: 1000px; margin: 0 auto; width: 100%; }
-        .section-content.active { display: block; }
-        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; }
-        .card-title { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+/* NAVBAR */
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 6%;
+    background:#0b0e11;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
 
-        /* Form / Inputs */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid var(--border); color: #fff; border-radius: 8px; outline: none; transition: 0.3s; }
-        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
-        .form-group input:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-save { width: 100%; padding: 12px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-        .btn-save:hover { background: var(--primary-hover); color: #fff; }
+.logo{
+    font-size:22px;
+    font-weight:800;
+    color:white;
+    text-decoration:none;
+}
+.logo span{color:var(--green)}
 
-        /* GAME GRID */
-        .bank-info-box { background: rgba(255,255,255,0.05); border: 1px dashed var(--border); padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
-        .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
-        .btn-bet { padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.2s; }
-        .btn-bet:active { transform: scale(0.97); }
-        .btn-bet span { font-size: 12px; font-weight: normal; opacity: 0.9; }
-        .bg-c { background: #ef4444; } .bg-l { background: #3b82f6; }
-        .bg-c2 { background: #f59e0b; } .bg-l2 { background: #8b5cf6; }
-        .bg-cc { background: #10b981; } .bg-ll { background: #14b8a6; }
-        
-        #qr-result { display: none; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; text-align: center; margin-top: 25px; border: 1px solid var(--primary); }
-        #qr-result img { max-width: 220px; border-radius: 8px; margin: 15px 0; }
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
 
-        /* HISTORY TABLE */
-        table { width: 100%; border-collapse: collapse; }
-        table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
-        table th { color: var(--text-muted); font-weight: 500; }
-        .badge { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
-        .badge.win { background: rgba(34, 197, 94, 0.2); color: var(--success); }
-        .badge.lose { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        .badge.wait { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+.btn-primary{
+    background:var(--green);
+    color:#000;
+    padding:10px 20px;
+    border-radius:6px;
+    font-weight:600;
+    text-decoration:none;
+    transition:.3s;
+    display:inline-block;
+}
+.btn-primary:hover{opacity:.8}
 
-        /* TRA SOÁT BOX */
-        .result-box { margin-top: 20px; padding: 25px; border-radius: 10px; display: none; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: fadeIn 0.4s ease; text-align: center; }
-        .result-box h3 { font-size: 24px; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .result-box p { font-size: 15px; margin-bottom: 8px; }
-        .result-box .amt { font-size: 20px; font-weight: bold; margin-top: 10px; background: rgba(0,0,0,0.2); display: inline-block; padding: 5px 15px; border-radius: 20px; }
+.btn-login{
+    color:var(--text);
+    text-decoration:none;
+}
+.btn-login:hover{color:var(--green)}
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); }
-            .sidebar-close { display: block; } .main-content { margin-left: 0; width: 100%; }
-            .menu-toggle { display: block; } .game-grid { grid-template-columns: 1fr; }
-            .section-content { padding: 15px; } header { padding: 15px; }
-        }
-    </style>
+/* MOBILE MENU */
+.menu-toggle{
+    display:none;
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* HERO */
+.hero{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    padding:80px 6%;
+    gap:50px;
+    align-items:center;
+}
+
+.hero h1{
+    font-size:2.8rem;
+    margin-bottom:20px;
+}
+.hero h1 span{color:var(--green)}
+
+.hero p{
+    color:var(--muted);
+    margin-bottom:25px;
+}
+
+.hero-btns{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+/* PANEL */
+.hero-panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:25px;
+}
+
+.panel-title{
+    color:var(--yellow);
+    margin-bottom:15px;
+    font-weight:600;
+}
+
+.panel-row{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+}
+.panel-row:last-child{border:none}
+
+/* STATS */
+.stats{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    background:var(--card-2);
+    padding:30px 6%;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    flex-wrap:wrap;
+}
+
+.stat{text-align:center}
+.stat h2{color:var(--green)}
+.stat p{color:var(--muted);font-size:.9rem}
+
+/* FEATURES */
+.features{
+    padding:70px 6%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:25px;
+    transition:.3s;
+}
+.card:hover{
+    border-color:var(--green);
+    transform:translateY(-5px);
+}
+.card i{
+    font-size:30px;
+    color:var(--green);
+    margin-bottom:10px;
+}
+.card p{color:var(--muted);font-size:.9rem}
+
+/* SUPPORT */
+.support{
+    background:var(--card-2);
+    padding:60px 6%;
+    text-align:center;
+}
+.support p{color:var(--muted);margin:15px 0 25px}
+
+.btn-tele,.btn-zalo{
+    padding:10px 20px;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:600;
+    margin:5px;
+    display:inline-block;
+}
+.btn-tele{background:#0088cc;color:white}
+.btn-zalo{background:#0068ff;color:white}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:20px;
+    color:var(--muted);
+    border-top:1px solid var(--border);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+
+    .hero{
+        grid-template-columns:1fr;
+        padding:60px 6%;
+    }
+
+    .hero h1{
+        font-size:2.2rem;
+    }
+
+    .hero-btns{
+        flex-direction:column;
+    }
+
+    .btn-primary{
+        width:100%;
+        text-align:center;
+    }
+
+    .nav-links{
+        position:absolute;
+        top:60px;
+        right:0;
+        background:var(--card);
+        flex-direction:column;
+        width:200px;
+        padding:20px;
+        display:none;
+        border-left:1px solid var(--border);
+        border-bottom:1px solid var(--border);
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+}
+</style>
 </head>
 <body>
 
-    <div class="sidebar" id="sidebar">
-        <button class="sidebar-close" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
-        <div class="sidebar-header">
-            <h2><i class="fa-solid fa-dice"></i> CLVN.VN</h2>
-        </div>
-        <div class="nav-links">
-            <a class="nav-link active" onclick="switchTab('game', this)"><i class="fa-solid fa-gamepad"></i> Chơi Game</a>
-            <a class="nav-link" onclick="switchTab('search', this)"><i class="fa-solid fa-magnifying-glass-chart"></i> Tra Soát Kết Quả</a>
-            <a class="nav-link" onclick="switchTab('profile', this)"><i class="fa-solid fa-user-gear"></i> Hồ Sơ Cá Nhân</a>
-            <a class="nav-link" onclick="switchTab('history', this)"><i class="fa-solid fa-clock-rotate-left"></i> Lịch Sử Cược</a>
-        </div>
-    </div>
+<nav class="navbar">
+<a href="#" class="logo">CL<span>VN</span></a>
 
-    <div class="main-content">
-        <header>
-            <div class="header-left">
-                <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
-            </div>
-            <div class="header-right">
-                <div class="balance-badge" id="balanceDisplay"><i class="fa-solid fa-wallet"></i> 0 đ</div>
-                <button id="btnLogout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i></button>
-            </div>
-        </header>
+<div class="menu-toggle" onclick="toggleMenu()">
+<i class="fa-solid fa-bars"></i>
+</div>
 
-        <section id="sec-game" class="section-content active">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-coins"></i> Đặt Cược Chẵn Lẻ Bank</div>
-                <div class="bank-info-box">
-                    <p style="color: var(--text-muted); font-size: 14px;">Hệ thống chuyển khoản tự động MBBank</p>
-                    <h2 style="color: var(--primary); margin: 5px 0; letter-spacing: 2px;">4477040408</h2>
-                    <p><b>LE NGOC NHAN</b></p>
-                </div>
-                <div class="form-group">
-                    <label>Username của bạn</label>
-                    <input type="text" id="gameUsername" disabled>
-                </div>
-                <div class="form-group">
-                    <label>Số tiền muốn cược (Tối thiểu 5.000đ)</label>
-                    <input type="number" id="coinAmount" placeholder="VD: 20000" min="2000" step="1000">
-                </div>
-                <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn cửa dự đoán:</label>
-                <div class="game-grid">
-                    <button class="btn-bet bg-c" onclick="generateQR('C', 2)">CHẴN (C) <span>Đuôi 2,4,6,8 - x2</span></button>
-                    <button class="btn-bet bg-l" onclick="generateQR('L', 2)">LẺ (L) <span>Đuôi 1,3,5,7 - x2</span></button>
-                    <button class="btn-bet bg-c2" onclick="generateQR('C2', 1.5)">CHẴN 2 (C2) <span>Đuôi 0,2,4,6,8 - x1.5</span></button>
-                    <button class="btn-bet bg-l2" onclick="generateQR('L2', 1.5)">LẺ 2 (L2) <span>Đuôi 1,3,5,7,9 - x1.5</span></button>
-                    <button class="btn-bet bg-cc" onclick="generateQR('CC', 1.5)">TÀI (CC) <span>Đuôi 1,2,3,4,5 - x1.5</span></button>
-                    <button class="btn-bet bg-ll" onclick="generateQR('LL', 1.5)">XỈU (LL) <span>Đuôi 6,7,8,9,0 - x1.5</span></button>
-                </div>
-                <div id="qr-result">
-                    <h3 style="color: var(--primary);">Quét Mã Chuyển Khoản</h3>
-                    <img id="qrImage" src="" alt="QR Thanh Toán">
-                    <p id="instruction" style="font-size: 15px;"></p>
-                </div>
-            </div>
-        </section>
+<div class="nav-links" id="navMenu">
+<a href="#" class="btn-login">Tính Năng</a>
+<a href="dangnhap.html" class="btn-login">Đăng Nhập</a>
+<a href="dangky.html" class="btn-primary">Đăng Ký</a>
+</div>
+</nav>
 
-        <section id="sec-search" class="section-content">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-magnifying-glass"></i> Tra Soát Kết Quả Giao Dịch</div>
-                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
-                    Nhập mã tham chiếu từ ngân hàng (Ví dụ: FT2606...) để xem ngay kết quả Thắng/Thua mà không cần đợi.
-                </p>
-                <div class="form-group">
-                    <label>Mã Tham Chiếu Giao Dịch</label>
-                    <input type="text" id="searchTransId" placeholder="Nhập mã giao dịch tại đây...">
-                </div>
-                <button class="btn-save" onclick="searchTransaction()"><i class="fa-solid fa-magnifying-glass"></i> Kiểm Tra Ngay</button>
+<section class="hero">
+<div>
+<h1>Mini Game <span>Chẵn Lẻ Tự Động</span></h1>
+<p>Hệ thống minh bạch dựa trên mã giao dịch ngân hàng. Trả thưởng tự động trong vài giây.</p>
 
-                <div id="searchResultBox" class="result-box"></div>
-            </div>
-        </section>
+<div class="hero-btns">
+<a href="dangnhap.html" class="btn-primary">Chơi Ngay</a>
+<a href="#" class="btn-login">Tìm Hiểu</a>
+</div>
+</div>
 
-        <section id="sec-profile" class="section-content">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-id-card"></i> Thông Tin Thanh Toán</div>
-                <div class="form-group"><label>Email</label><input type="email" id="profileEmail" disabled></div>
-                <div class="form-group"><label>SĐT</label><input type="text" id="profilePhone" placeholder="09xxxxxxx"></div>
-                <div class="form-group"><label>Ngân hàng nhận thưởng</label><select id="profileBank"></select></div>
-                <div class="form-group"><label>Số tài khoản</label><input type="text" id="profileAccount" placeholder="Nhập chính xác STK"></div>
-                <button class="btn-save" id="btnSaveProfile">Lưu Thông Tin</button>
-            </div>
-        </section>
+<div class="hero-panel">
+<div class="panel-title">Thống Kê Hệ Thống</div>
+<div class="panel-row"><span>Thành viên</span><span>15,245</span></div>
+<div class="panel-row"><span>Giao dịch hôm nay</span><span>12,845</span></div>
+<div class="panel-row"><span>Đã trả thưởng</span><span>2.4 Tỷ</span></div>
+<div class="panel-row"><span>Xử lý</span><span style="color:var(--green)">3s</span></div>
+</div>
+</section>
 
-        <section id="sec-history" class="section-content">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-list-check"></i> Lịch Sử 10 Giao Dịch</div>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead><tr><th>Mã GD</th><th>Thời Gian</th><th>Cửa Cược</th><th>Số Tiền</th><th>Kết Quả</th></tr></thead>
-                        <tbody id="historyTableBody"><tr><td colspan="5" style="text-align: center;">Đang tải...</td></tr></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </div>
+<section class="stats">
+<div class="stat"><h2>15K+</h2><p>Người chơi</p></div>
+<div class="stat"><h2>1.2M+</h2><p>Giao dịch</p></div>
+<div class="stat"><h2>99.9%</h2><p>Ổn định</p></div>
+</section>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+<section class="features">
+<div class="card">
+<i class="fa-solid fa-robot"></i>
+<h3>Tự Động</h3>
+<p>Bot hoạt động 24/7 không cần admin.</p>
+</div>
+<div class="card">
+<i class="fa-solid fa-shield"></i>
+<h3>Minh Bạch</h3>
+<p>Dựa trên mã giao dịch thực tế.</p>
+</div>
+<div class="card">
+<i class="fa-solid fa-bolt"></i>
+<h3>Siêu Tốc</h3>
+<p>Trả thưởng chỉ 3–5 giây.</p>
+</div>
+</section>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
-            authDomain: "clvn-5571b.firebaseapp.com",
-            projectId: "clvn-5571b",
-            storageBucket: "clvn-5571b.firebasestorage.app",
-            messagingSenderId: "864443672228",
-            appId: "1:864443672228:web:25d180dfc83e0212f2e831"
-        };
+<section class="support">
+<h2>Hỗ Trợ 24/7</h2>
+<p>Đội ngũ CSKH luôn sẵn sàng.</p>
+<a href="#" class="btn-tele"><i class="fa-brands fa-telegram"></i> Telegram</a>
+<a href="#" class="btn-zalo"><i class="fa-solid fa-comment"></i> Zalo</a>
+</section>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        let currentUserUid = null;
+<footer>
+© 2026 CLVN.VN
+</footer>
 
-        // Render Bank List...
-        const bankList = [
-            {code: "ICB", short_name: "VietinBank"}, {code: "VCB", short_name: "Vietcombank"}, {code: "MB", short_name: "MBBank"},
-            {code: "ACB", short_name: "ACB"}, {code: "VPB", short_name: "VPBank"}, {code: "TPB", short_name: "TPBank"},
-            {code: "TCB", short_name: "Techcombank"}, {code: "VBA", short_name: "Agribank"}, {code: "BIDV", short_name: "BIDV"}
-        ];
-        const bankSelect = document.getElementById('profileBank');
-        bankSelect.innerHTML = '<option value="">-- Chọn ngân hàng --</option>';
-        bankList.forEach(bank => bankSelect.innerHTML += `<option value="${bank.code}">${bank.short_name}</option>`);
+<script>
+function toggleMenu(){
+    document.getElementById("navMenu").classList.toggle("active");
+}
+</script>
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserUid = user.uid;
-                document.getElementById('gameUsername').value = user.email.split('@')[0];
-                document.getElementById('profileEmail').value = user.email;
-
-                const userRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(userRef);
-                
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('balanceDisplay').innerHTML = `<i class="fa-solid fa-wallet"></i> ${(data.balance || 0).toLocaleString('vi-VN')} đ`;
-                    if (data.phone) document.getElementById('profilePhone').value = data.phone;
-                    if (data.bankCode) document.getElementById('profileBank').value = data.bankCode;
-                    if (data.bankAccount) document.getElementById('profileAccount').value = data.bankAccount;
-                } else {
-                    await setDoc(userRef, { balance: 0, email: user.email }, { merge: true });
-                }
-                fetchHistory(user.uid);
-            } else {
-                window.location.href = "dangnhap.html";
-            }
-        });
-
-        // HÀM TRA SOÁT MÃ GIAO DỊCH
-        window.searchTransaction = async function() {
-            const transId = document.getElementById('searchTransId').value.trim();
-            const resBox = document.getElementById('searchResultBox');
-            
-            if (!transId) {
-                alert("Vui lòng nhập mã giao dịch để tra cứu!");
-                return;
-            }
-
-            resBox.style.display = 'block';
-            resBox.style.background = '#334155'; // Màu loading
-            resBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-2x"></i><p style="margin-top: 10px;">Đang tìm kiếm dữ liệu...</p>';
-
-            try {
-                // Đọc từ bảng giaodich bằng ID
-                const docRef = doc(db, "giaodich", transId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    
-                    // Format thời gian
-                    const dateObj = data.createdAt ? data.createdAt.toDate() : new Date();
-                    const timeStr = `${dateObj.getHours().toString().padStart(2, '0')}:${dateObj.getMinutes().toString().padStart(2, '0')} ${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()}`;
-                    
-                    if(data.status === 'win') {
-                        resBox.style.background = 'var(--success)';
-                        resBox.innerHTML = `
-                            <h3><i class="fa-solid fa-circle-check"></i> THẮNG CƯỢC</h3>
-                            <p><b>Mã GD:</b> ${data.transId}</p>
-                            <p><b>Thời gian:</b> ${timeStr}</p>
-                            <p><b>Cửa đánh:</b> ${data.choice}</p>
-                            <p><b>Tiền cược:</b> ${data.amount.toLocaleString('vi-VN')}đ</p>
-                            <div class="amt">Tiền nhận: ${(data.amount * data.rate).toLocaleString('vi-VN')}đ</div>
-                        `;
-                    } else {
-                        resBox.style.background = 'var(--danger)';
-                        resBox.innerHTML = `
-                            <h3><i class="fa-solid fa-circle-xmark"></i> THUA CƯỢC</h3>
-                            <p><b>Mã GD:</b> ${data.transId}</p>
-                            <p><b>Thời gian:</b> ${timeStr}</p>
-                            <p><b>Cửa đánh:</b> ${data.choice}</p>
-                            <p><b>Tiền cược:</b> ${data.amount.toLocaleString('vi-VN')}đ</p>
-                            <p style="margin-top:10px; font-style: italic;">Chúc bạn may mắn lần sau!</p>
-                        `;
-                    }
-                } else {
-                    resBox.style.background = '#f59e0b'; // Màu cam cảnh báo
-                    resBox.innerHTML = `
-                        <h3><i class="fa-solid fa-triangle-exclamation"></i> KHÔNG TÌM THẤY</h3>
-                        <p>Mã giao dịch <b>${transId}</b> không tồn tại hoặc hệ thống chưa xử lý kịp.</p>
-                        <p>Vui lòng thử lại sau vài giây hoặc kiểm tra lại mã.</p>
-                    `;
-                }
-            } catch (error) {
-                console.error("Lỗi tra cứu:", error);
-                resBox.style.background = 'var(--danger)';
-                resBox.innerHTML = '<p>Lỗi hệ thống khi tra cứu dữ liệu. Xem Console để biết thêm chi tiết.</p>';
-            }
-        };
-
-        // UI & Các hàm phụ
-        window.switchTab = function(tabName, element) {
-            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-            document.getElementById(`sec-${tabName}`).classList.add('active');
-            if(element) element.classList.add('active');
-            if(window.innerWidth <= 768) toggleSidebar();
-        };
-
-        window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
-
-        window.generateQR = function(choice, rate) {
-            const amt = document.getElementById('coinAmount').value;
-            const usr = document.getElementById('gameUsername').value;
-            if (amt < 2000) return alert("Cược tối thiểu 2.000đ!");
-            
-            const content = `CLVN ${usr} ${choice}`;
-            document.getElementById('instruction').innerHTML = `Nội dung: <b style="color:var(--danger)">${content}</b> <br> Tiền: <b>${parseInt(amt).toLocaleString('vi-VN')}đ</b>`;
-            document.getElementById('qrImage').src = `https://img.vietqr.io/image/970422-4477040408-compact2.png?amount=${amt}&addInfo=${encodeURIComponent(content)}&accountName=LE%20NGOC%20NHAN`;
-            document.getElementById('qr-result').style.display = 'block';
-        };
-
-        async function fetchHistory(uid) {
-            const tbody = document.getElementById('historyTableBody');
-            const q = query(collection(db, `users/${uid}/transactions`), orderBy("createdAt", "desc"), limit(10));
-            const querySnapshot = await getDocs(q);
-            tbody.innerHTML = '';
-            querySnapshot.forEach((doc) => {
-                const tx = doc.data();
-                const d = tx.createdAt ? tx.createdAt.toDate() : new Date();
-                const badge = tx.status === 'win' ? `<span class="badge win">+${(tx.amount*tx.rate).toLocaleString()}đ</span>` : `<span class="badge lose">Thua</span>`;
-                tbody.innerHTML += `<tr><td>${tx.transId}</td><td>${d.getHours()}:${d.getMinutes()} ${d.getDate()}/${d.getMonth()+1}</td><td><b>${tx.choice}</b></td><td>${tx.amount.toLocaleString()}đ</td><td>${badge}</td></tr>`;
-            });
-        }
-    </script>
 </body>
 </html>
