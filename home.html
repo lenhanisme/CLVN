@@ -74,7 +74,7 @@
         .contact-card:hover { transform: translateY(-5px); border-color: var(--primary); background: rgba(56, 189, 248, 0.05); }
         .contact-card i { font-size: 40px; margin-bottom: 15px; }
         .contact-card.tele i { color: #0088cc; }
-        .contact-card.mail i { color: #ea4335; }
+        .contact-card.mail i { color: #00F2FE; } /* Đổi màu xanh cho hợp theme Tawk.to */
         .contact-card h3 { margin-bottom: 5px; font-size: 18px; }
         .contact-card p { color: var(--text-muted); font-size: 14px; }
 
@@ -227,7 +227,7 @@
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-headset"></i> Trung Tâm Hỗ Trợ</div>
                 <p style="color: var(--text-muted); font-size: 14px;">
-                    Nếu bạn gặp vấn đề nạp/rút tiền, sai nội dung chuyển khoản hoặc cần giải đáp thắc mắc, vui lòng liên hệ với chúng tôi qua các kênh ẩn danh dưới đây. Đội ngũ admin hỗ trợ 24/7.
+                    Nếu bạn gặp sự cố nạp/rút hoặc cần hỗ trợ kiểm tra mã giao dịch, vui lòng liên hệ với chúng tôi. Hệ thống hỗ trợ hoàn toàn ẩn danh.
                 </p>
                 
                 <div class="contact-grid">
@@ -236,10 +236,11 @@
                         <h3>Telegram Admin</h3>
                         <p>@tolabimat</p>
                     </a>
-                    <a href="mailto:bot.thongbaoeth@gmail.com" class="contact-card mail">
-                        <i class="fa-solid fa-envelope"></i>
-                        <h3>Email Trực Tuyến</h3>
-                        <p>bot.thongbaoeth@gmail.com</p>
+                    
+                    <a href="#" onclick="window.Tawk_API.maximize(); return false;" class="contact-card mail">
+                        <i class="fa-solid fa-comments"></i>
+                        <h3>Chat Trực Tuyến</h3>
+                        <p>Hỗ trợ ngay trên web</p>
                     </a>
                 </div>
             </div>
@@ -340,8 +341,24 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserUid = user.uid;
-                document.getElementById('gameUsername').value = user.email.split('@')[0];
+                const username = user.email.split('@')[0];
+                document.getElementById('gameUsername').value = username;
                 document.getElementById('profileEmail').value = user.email;
+
+                // XỬ LÝ ĐỒNG BỘ THÔNG TIN CHO TAWK.TO
+                window.Tawk_API = window.Tawk_API || {};
+                const setTawkInfo = () => {
+                    window.Tawk_API.setAttributes({
+                        'name': username,
+                        'email': user.email
+                    }, function(error) {});
+                };
+                
+                if (typeof window.Tawk_API.setAttributes === 'function') {
+                    setTawkInfo();
+                } else {
+                    window.Tawk_API.onLoad = function() { setTawkInfo(); };
+                }
 
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
@@ -546,5 +563,18 @@
             });
         }
     </script>
+    
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/65eaf2cf8d261e1b5f6a7ef0/1hoes8uro';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
 </body>
 </html>
