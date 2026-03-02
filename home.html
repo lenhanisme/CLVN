@@ -161,7 +161,7 @@
                         <input type="text" id="gameUsername" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Số tiền muốn cược (Tối thiểu 5.000đ)</label>
+                        <label>Số tiền muốn cược (Tối thiểu 2.000đ)</label>
                         <input type="number" id="coinAmount" placeholder="VD: 20000" min="5000" step="1000">
                     </div>
                 </div>
@@ -441,7 +441,7 @@
             const amount = document.getElementById('coinAmount').value;
             const username = document.getElementById('gameUsername').value;
 
-            if (!amount || amount < 1000) return alert("Cược tối thiểu 1,000đ!");
+            if (!amount || amount < 2000) return alert("Cược tối thiểu 2,000đ!");
 
             const bankBin = "970422"; // MBBank
             const accountNo = "4477040408";
