@@ -1,293 +1,257 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CLVN.VN | Mini Game Chẵn Lẻ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLVN | Nền Tảng Giải Trí Tài Chính Đỉnh Cao</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #070B19;
+            --bg-card: #111827;
+            --primary: #00F2FE;
+            --primary-glow: rgba(0, 242, 254, 0.4);
+            --accent: #FFD700;
+            --accent-glow: rgba(255, 215, 0, 0.3);
+            --text-main: #FFFFFF;
+            --text-muted: #9CA3AF;
+            --border: rgba(255, 255, 255, 0.1);
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
 
-<style>
-:root{
-    --bg:#0b0e11;
-    --card:#161a1f;
-    --card-2:#1e2329;
-    --border:#2b3139;
-    --text:#eaecef;
-    --muted:#848e9c;
-    --green:#00ff84;
-    --yellow:#fcd535;
-}
+        /* Background Effects */
+        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); top: -200px; left: -200px; border-radius: 50%; filter: blur(80px); z-index: -1; }
+        .bg-glow.right { top: 20%; left: auto; right: -200px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:var(--bg);color:var(--text);overflow-x:hidden}
+        /* --- NAVBAR --- */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(7, 11, 25, 0.8); backdrop-filter: blur(15px); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid var(--border); }
+        .logo { font-size: 28px; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--primary); }
+        
+        .nav-links { display: flex; align-items: center; gap: 25px; }
+        .nav-link { color: var(--text-main); text-decoration: none; font-weight: 600; transition: 0.3s; font-size: 15px; }
+        .nav-link:hover { color: var(--primary); }
+        
+        .btn-outline { border: 1px solid var(--primary); color: var(--primary); padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: 0.3s; }
+        .btn-outline:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+        
+        .btn-glow { background: linear-gradient(90deg, #FFD700, #FDB931); color: #000; padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 800; text-transform: uppercase; transition: 0.3s; box-shadow: 0 0 20px var(--accent-glow); border: none; cursor: pointer; }
+        .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 5px 25px var(--accent-glow); }
 
-/* NAVBAR */
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:16px 6%;
-    background:#0b0e11;
-    border-bottom:1px solid var(--border);
-    position:sticky;
-    top:0;
-    z-index:1000;
-}
+        /* --- HERO SECTION --- */
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 100px 5% 50px; position: relative; gap: 50px; max-width: 1400px; margin: 0 auto; }
+        .hero-content { flex: 1; max-width: 600px; z-index: 10; }
+        .badge-live { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .badge-live .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: blink 1s infinite; }
+        
+        .hero h1 { font-size: 3.8rem; line-height: 1.1; margin-bottom: 20px; font-weight: 800; }
+        .hero h1 span { background: linear-gradient(90deg, var(--primary), #4facfe); -webkit-background-clip: text; color: transparent; }
+        .hero p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; }
+        
+        .hero-btns { display: flex; gap: 20px; }
+        .btn-play-large { background: var(--primary); color: #000; padding: 16px 40px; border-radius: 30px; text-decoration: none; font-size: 18px; font-weight: 800; box-shadow: 0 0 30px var(--primary-glow); transition: 0.3s; }
+        .btn-play-large:hover { transform: translateY(-3px); box-shadow: 0 10px 40px var(--primary-glow); }
 
-.logo{
-    font-size:24px;
-    font-weight:800;
-    color:white;
-    text-decoration:none;
-}
-.logo span{color:var(--green)}
+        /* Floating Cards Visual */
+        .hero-visual { flex: 1; position: relative; height: 500px; display: flex; justify-content: center; align-items: center; }
+        .floating-card { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--border); padding: 25px; border-radius: 20px; width: 320px; position: absolute; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: float 6s ease-in-out infinite; }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .card-top h3 { color: var(--text-main); font-size: 16px; }
+        .card-top i { color: var(--accent); font-size: 24px; }
+        .mock-btn { background: var(--border); height: 40px; border-radius: 8px; margin-top: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: bold; }
+        .floating-card.c1 { transform: rotate(-5deg); left: 0; z-index: 2; border-color: rgba(0, 242, 254, 0.3); }
+        .floating-card.c2 { transform: rotate(5deg); right: 0; top: 100px; animation-delay: 3s; border-color: rgba(255, 215, 0, 0.3); }
 
-.nav-links{display:flex;align-items:center;gap:20px}
+        /* --- STATS TICKER --- */
+        .ticker-wrap { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; padding: 15px 0; display: flex; }
+        .ticker { display: flex; white-space: nowrap; animation: ticker 25s linear infinite; }
+        .ticker-item { display: inline-flex; align-items: center; gap: 10px; margin: 0 30px; font-size: 15px; font-weight: 600; color: var(--text-muted); }
+        .ticker-item span { color: var(--success); }
 
-.btn-primary{
-    background:var(--green);
-    color:#000;
-    padding:10px 22px;
-    border-radius:6px;
-    font-weight:600;
-    text-decoration:none;
-    transition:.3s;
-}
-.btn-primary:hover{opacity:.8}
+        /* --- FEATURES SECTION --- */
+        .features { padding: 100px 5%; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 60px; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .feature-box { background: var(--bg-card); border: 1px solid var(--border); padding: 40px 30px; border-radius: 20px; transition: 0.4s; position: relative; overflow: hidden; }
+        .feature-box:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 40px rgba(0,242,254,0.1); }
+        .icon-wrapper { width: 70px; height: 70px; background: rgba(0,242,254,0.1); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 25px; }
+        .feature-box h3 { font-size: 1.3rem; margin-bottom: 15px; }
+        .feature-box p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
 
-.btn-login{
-    color:var(--text);
-    text-decoration:none;
-    font-weight:500;
-}
-.btn-login:hover{color:var(--green)}
+        /* --- FOOTER --- */
+        footer { background: #050811; padding: 40px 5%; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); }
+        .social-icons { margin: 20px 0; display: flex; justify-content: center; gap: 15px; }
+        .social-icons a { width: 40px; height: 40px; background: var(--bg-card); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-main); text-decoration: none; transition: 0.3s; border: 1px solid var(--border); }
+        .social-icons a:hover { background: var(--primary); color: #000; border-color: var(--primary); }
 
-/* HERO */
-.hero{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    padding:100px 6%;
-    gap:60px;
-    align-items:center;
-}
+        /* Animations */
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); } 50% { transform: translateY(-20px) rotate(var(--rot, 0deg)); } }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-.hero h1{
-    font-size:3.2rem;
-    font-weight:800;
-    margin-bottom:20px;
-}
-
-.hero h1 span{color:var(--green)}
-
-.hero p{
-    color:var(--muted);
-    margin-bottom:30px;
-    font-size:1.1rem;
-}
-
-.hero-btns{display:flex;gap:20px;flex-wrap:wrap}
-
-/* RIGHT PANEL (fake trading box style) */
-.hero-panel{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:30px;
-}
-
-.panel-title{
-    font-weight:600;
-    margin-bottom:20px;
-    color:var(--yellow);
-}
-
-.panel-row{
-    display:flex;
-    justify-content:space-between;
-    padding:12px 0;
-    border-bottom:1px solid var(--border);
-}
-
-.panel-row:last-child{border:none}
-
-/* STATS STRIP */
-.stats{
-    display:flex;
-    justify-content:center;
-    gap:40px;
-    background:var(--card-2);
-    padding:30px 5%;
-    border-top:1px solid var(--border);
-    border-bottom:1px solid var(--border);
-    flex-wrap:wrap;
-}
-
-.stat{
-    text-align:center;
-}
-
-.stat h2{
-    color:var(--green);
-    font-size:2rem;
-}
-
-.stat p{
-    color:var(--muted);
-    font-size:.9rem;
-}
-
-/* FEATURES */
-.features{
-    padding:90px 6%;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:30px;
-}
-
-.card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:30px;
-    transition:.3s;
-}
-
-.card:hover{
-    border-color:var(--green);
-    transform:translateY(-6px);
-}
-
-.card i{
-    font-size:35px;
-    color:var(--green);
-    margin-bottom:15px;
-}
-
-.card h3{
-    margin-bottom:10px;
-}
-
-.card p{
-    color:var(--muted);
-    font-size:.9rem;
-}
-
-/* SUPPORT */
-.support{
-    background:var(--card-2);
-    padding:70px 6%;
-    text-align:center;
-}
-
-.support h2{
-    margin-bottom:15px;
-}
-
-.support p{
-    color:var(--muted);
-    margin-bottom:30px;
-}
-
-.btn-tele,.btn-zalo{
-    padding:10px 25px;
-    border-radius:6px;
-    text-decoration:none;
-    font-weight:600;
-    margin:0 10px;
-}
-
-.btn-tele{background:#0088cc;color:white}
-.btn-zalo{background:#0068ff;color:white}
-
-/* FOOTER */
-footer{
-    text-align:center;
-    padding:25px;
-    color:var(--muted);
-    border-top:1px solid var(--border);
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-    .hero{grid-template-columns:1fr;padding:60px 6%}
-}
-</style>
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 120px; }
+            .hero-content { margin: 0 auto; }
+            .hero-btns { justify-content: center; }
+            .hero-visual { display: none; }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .navbar { padding: 15px 20px; }
+            .nav-links .nav-link { display: none; }
+            .hero h1 { font-size: 2.5rem; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .btn-play-large { padding: 15px 30px; font-size: 16px; }
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar">
-<a href="#" class="logo">CL<span>VN</span></a>
-<div class="nav-links" id="auth-section">
-<a href="#" class="btn-login">Tính Năng</a>
-<a href="dangnhap.html" class="btn-login">Đăng Nhập</a>
-<a href="dangky.html" class="btn-primary">Đăng Ký</a>
-</div>
-</nav>
+    <div class="bg-glow"></div>
+    <div class="bg-glow right"></div>
 
-<section class="hero">
-<div>
-<h1>Mini Game <span>Chẵn Lẻ Tự Động</span></h1>
-<p>Hệ thống giải trí minh bạch theo mã giao dịch ngân hàng. Trả thưởng tự động trong vài giây.</p>
-<div class="hero-btns">
-<a href="dangnhap.html" class="btn-primary">Chơi Ngay</a>
-<a href="#" class="btn-login">Tìm Hiểu</a>
-</div>
-</div>
+    <nav class="navbar">
+        <a href="#" class="logo"><i class="fa-solid fa-dice-d20"></i> CLVN<span>.</span></a>
+        <div class="nav-links" id="auth-section">
+            <a href="#luat-choi" class="nav-link">Luật Chơi</a>
+            <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
+            <a href="dangky.html" class="btn-glow">Đăng Ký Ngay</a>
+        </div>
+    </nav>
 
-<div class="hero-panel">
-<div class="panel-title">THỐNG KÊ HỆ THỐNG</div>
-<div class="panel-row"><span>Thành viên</span><span>15,245</span></div>
-<div class="panel-row"><span>Giao dịch hôm nay</span><span>12,845</span></div>
-<div class="panel-row"><span>Đã trả thưởng</span><span>2.4 Tỷ</span></div>
-<div class="panel-row"><span>Thời gian xử lý</span><span style="color:var(--green)">3s</span></div>
-</div>
-</section>
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge-live"><div class="dot"></div> Hệ thống đang hoạt động 24/7</div>
+            <h1>Kiếm Tiền Nhanh Chóng Cùng <span>Mini Game MBBank</span></h1>
+            <p>Sân chơi chẵn lẻ minh bạch nhất dựa trên mã tham chiếu ngân hàng thực tế. Hệ thống thanh toán tự động, nạp rút không giới hạn chỉ trong 3 giây.</p>
+            <div class="hero-btns" id="hero-cta">
+                <a href="dangky.html" class="btn-play-large">VÀO CHƠI NGAY <i class="fa-solid fa-arrow-right" style="margin-left: 10px;"></i></a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="floating-card c1" style="--rot: -5deg;">
+                <div class="card-top">
+                    <h3><i class="fa-solid fa-bolt"></i> Khớp Lệnh Nhanh</h3>
+                </div>
+                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Chuyển khoản đến MBBank:</div>
+                <h2 style="color: var(--primary); letter-spacing: 1px; margin-bottom: 10px;">4477040408</h2>
+                <div class="mock-btn">Nội dung: CLVN User C2</div>
+            </div>
+            
+            <div class="floating-card c2" style="--rot: 5deg;">
+                <div class="card-top">
+                    <h3><i class="fa-solid fa-trophy"></i> Trả Thưởng Tự Động</h3>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span style="color: var(--text-muted); font-size: 14px;">Mã GD: FT...89</span>
+                    <span style="color: var(--success); font-weight: bold;">Win x2</span>
+                </div>
+                <div class="mock-btn" style="background: rgba(34, 197, 94, 0.1); color: var(--success); border: 1px solid var(--success);">
+                    + 200,000 đ
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section class="stats">
-<div class="stat">
-<h2>15K+</h2>
-<p>Người chơi</p>
-</div>
-<div class="stat">
-<h2>1.2M+</h2>
-<p>Giao dịch</p>
-</div>
-<div class="stat">
-<h2>99.9%</h2>
-<p>Ổn định</p>
-</div>
-</section>
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User tuananh*** vừa thắng <span>+500,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User hoang_nam*** vừa thắng <span>+1,200,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User le_ngoc*** vừa thắng <span>+150,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User minhthu12*** vừa thắng <span>+400,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User tuananh*** vừa thắng <span>+500,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User hoang_nam*** vừa thắng <span>+1,200,000đ</span></div>
+        </div>
+    </div>
 
-<section class="features">
-<div class="card">
-<i class="fa-solid fa-robot"></i>
-<h3>Tự Động 100%</h3>
-<p>Bot xử lý liên tục 24/7 không cần admin.</p>
-</div>
-<div class="card">
-<i class="fa-solid fa-shield"></i>
-<h3>Minh Bạch</h3>
-<p>Dựa trên mã giao dịch thực tế ngân hàng.</p>
-</div>
-<div class="card">
-<i class="fa-solid fa-bolt"></i>
-<h3>Siêu Tốc</h3>
-<p>Trả thưởng chỉ trong 3–5 giây.</p>
-</div>
-</section>
+    <section class="features" id="luat-choi">
+        <h2 class="section-title">Trải Nghiệm Đẳng Cấp</h2>
+        <p class="section-subtitle">Tại sao hơn 15.000+ người chơi tin tưởng lựa chọn CLVN?</p>
+        
+        <div class="grid-3">
+            <div class="feature-box">
+                <div class="icon-wrapper"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Minh Bạch 100%</h3>
+                <p>Kết quả dựa hoàn toàn vào số cuối mã giao dịch (Mã tham chiếu FT) của ngân hàng MBBank. Không thể can thiệp, không thể gian lận.</p>
+            </div>
+            <div class="feature-box">
+                <div class="icon-wrapper" style="background: rgba(255, 215, 0, 0.1); color: var(--accent);"><i class="fa-solid fa-bolt-lightning"></i></div>
+                <h3>Trả Thưởng 3 Giây</h3>
+                <p>Khớp lệnh và cộng tiền tự động vào số dư trên Web ngay khi ngân hàng báo nhận được tiền. Tốc độ ánh sáng, không cần chờ đợi Admin duyệt.</p>
+            </div>
+            <div class="feature-box">
+                <div class="icon-wrapper" style="background: rgba(34, 197, 94, 0.1); color: var(--success);"><i class="fa-solid fa-headset"></i></div>
+                <h3>Hỗ Trợ 24/7</h3>
+                <p>Đội ngũ Chăm Sóc Khách Hàng chuyên nghiệp hoạt động ngày đêm. Sẵn sàng giải quyết mọi sự cố ghi sai nội dung hay lỗi nạp rút của bạn.</p>
+            </div>
+        </div>
+    </section>
 
-<section class="support">
-<h2>Hỗ Trợ 24/7</h2>
-<p>Đội ngũ chăm sóc khách hàng luôn sẵn sàng.</p>
-<a href="https://t.me/@tolabimat" class="btn-tele"><i class="fa-brands fa-telegram"></i> Telegram</a>
-<a href="#" class="btn-zalo"><i class="fa-solid fa-comment"></i> Zalo</a>
-</section>
+    <footer>
+        <div class="logo" style="justify-content: center; margin-bottom: 15px;"><i class="fa-solid fa-dice-d20"></i> CLVN<span>.</span></div>
+        <p>Hệ thống mini game giao dịch tự động. Tham gia giải trí có trách nhiệm.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-telegram"></i></a>
+            <a href="#"><i class="fa-solid fa-comment-dots"></i></a>
+        </div>
+        <p style="font-size: 12px; margin-top: 20px; color: #666;">&copy; 2026 CLVN Platform. All rights reserved.</p>
+    </footer>
 
-<footer>
-© 2026 CLVN.VN - All Rights Reserved
-</footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
+            authDomain: "clvn-5571b.firebaseapp.com",
+            projectId: "clvn-5571b",
+            storageBucket: "clvn-5571b.firebasestorage.app",
+            messagingSenderId: "864443672228",
+            appId: "1:864443672228:web:25d180dfc83e0212f2e831"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const authSection = document.getElementById('auth-section');
+        const heroCta = document.getElementById('hero-cta');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const username = user.email.split('@')[0];
+                
+                // Update Navbar
+                authSection.innerHTML = `
+                    <a href="#luat-choi" class="nav-link">Luật Chơi</a>
+                    <span style="color: var(--text-muted); font-weight: 600; margin-right: 10px;">Hi, <span style="color: var(--primary);">${username}</span></span>
+                    <a href="home.html" class="btn-glow">Vào Dashboard</a>
+                    <button id="btnLogout" style="background:none; border:none; color: var(--text-muted); cursor:pointer; font-size: 18px;"><i class="fa-solid fa-right-from-bracket"></i></button>
+                `;
+
+                // Update Hero Button
+                heroCta.innerHTML = `<a href="home.html" class="btn-play-large">VÀO CHƠI NGAY <i class="fa-solid fa-arrow-right" style="margin-left: 10px;"></i></a>`;
+
+                document.getElementById('btnLogout').addEventListener('click', () => {
+                    signOut(auth).then(() => window.location.reload());
+                });
+            } else {
+                // Not logged in (Default state is already in HTML)
+                authSection.innerHTML = `
+                    <a href="#luat-choi" class="nav-link">Luật Chơi</a>
+                    <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
+                    <a href="dangky.html" class="btn-glow">Đăng Ký Ngay</a>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
