@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CL-BANK | Dashboard Người Chơi</title>
+    <title>CLVN.VN - Giao Diện Trò Chơi</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+   
     <style>
-        /* ... Kế thừa CSS như bản trước ... */
         :root {
             --bg-body: #0f172a; --bg-sidebar: #1e293b; --bg-card: #1e293b;
             --text-main: #f8fafc; --text-muted: #94a3b8; --primary: #38bdf8;
             --primary-hover: #0284c7; --border: #334155; --success: #22c55e; --danger: #ef4444;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-body); color: var(--text-main); display: flex; overflow-x: hidden; }
 
+        /* Sidebar & Layout */
         .sidebar { width: 260px; height: 100vh; background-color: var(--bg-sidebar); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; transition: 0.3s; z-index: 1000; }
         .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); }
         .sidebar-header h2 { color: var(--primary); font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -25,7 +24,7 @@
         .nav-link { padding: 15px 25px; color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s; cursor: pointer; border-left: 3px solid transparent; }
         .nav-link:hover, .nav-link.active { color: var(--primary); background: rgba(56, 189, 248, 0.1); border-left: 3px solid var(--primary); }
         .sidebar-close { display: none; position: absolute; top: 15px; right: 15px; background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
-
+        
         .main-content { margin-left: 260px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; width: calc(100% - 260px); transition: 0.3s; }
         header { background: var(--bg-sidebar); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 99; }
         .header-left { display: flex; align-items: center; gap: 15px; }
@@ -35,34 +34,37 @@
         .btn-logout { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
         .btn-logout:hover { background: var(--danger); color: #fff; }
 
+        /* Sections & Cards */
         .section-content { display: none; padding: 30px; animation: fadeIn 0.4s ease; max-width: 1000px; margin: 0 auto; width: 100%; }
         .section-content.active { display: block; }
         .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; }
         .card-title { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-
-        /* Form / Inputs */
+        
+        /* Form */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid var(--border); color: #fff; border-radius: 8px; outline: none; transition: 0.3s; }
         .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
-        .form-group input:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-save { width: 100%; padding: 12px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         .btn-save:hover { background: var(--primary-hover); color: #fff; }
 
-        /* GAME GRID */
+        /* Game */
         .bank-info-box { background: rgba(255,255,255,0.05); border: 1px dashed var(--border); padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
         .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
         .btn-bet { padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.2s; }
         .btn-bet:active { transform: scale(0.97); }
         .btn-bet span { font-size: 12px; font-weight: normal; opacity: 0.9; }
-        .bg-c { background: #ef4444; } .bg-l { background: #3b82f6; }
-        .bg-c2 { background: #f59e0b; } .bg-l2 { background: #8b5cf6; }
-        .bg-cc { background: #10b981; } .bg-ll { background: #14b8a6; }
-        
+        .bg-c { background: #ef4444; } 
+        .bg-l { background: #3b82f6; }
+        .bg-c2 { background: #f59e0b; } 
+        .bg-l2 { background: #8b5cf6; }
+        .bg-cc { background: #10b981; } 
+        .bg-ll { background: #14b8a6; }
+       
         #qr-result { display: none; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; text-align: center; margin-top: 25px; border: 1px solid var(--primary); }
         #qr-result img { max-width: 220px; border-radius: 8px; margin: 15px 0; }
 
-        /* HISTORY TABLE */
+        /* Table & Result */
         table { width: 100%; border-collapse: collapse; }
         table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
         table th { color: var(--text-muted); font-weight: 500; }
@@ -70,19 +72,73 @@
         .badge.win { background: rgba(34, 197, 94, 0.2); color: var(--success); }
         .badge.lose { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
         .badge.wait { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-
-        /* TRA SOÁT BOX */
         .result-box { margin-top: 20px; padding: 25px; border-radius: 10px; display: none; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: fadeIn 0.4s ease; text-align: center; }
-        .result-box h3 { font-size: 24px; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .result-box p { font-size: 15px; margin-bottom: 8px; }
-        .result-box .amt { font-size: 20px; font-weight: bold; margin-top: 10px; background: rgba(0,0,0,0.2); display: inline-block; padding: 5px 15px; border-radius: 20px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ==================== POPUP THÔNG BÁO ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.75);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--bg-card);
+            padding: 30px 25px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            border: 2px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .modal-header {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .modal-body {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        .modal-footer button {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            background: var(--primary);
+            color: #000;
+        }
+        .success { border-color: var(--success) !important; }
+        .error { border-color: var(--danger) !important; }
+
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); }
-            .sidebar-close { display: block; } .main-content { margin-left: 0; width: 100%; }
-            .menu-toggle { display: block; } .game-grid { grid-template-columns: 1fr; }
-            .section-content { padding: 15px; } header { padding: 15px; }
+            .sidebar { transform: translateX(-100%); } 
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-close { display: block; } 
+            .main-content { margin-left: 0; width: 100%; }
+            .menu-toggle { display: block; } 
+            .game-grid { grid-template-columns: 1fr; }
+            .section-content { padding: 15px; } 
+            header { padding: 15px; }
         }
     </style>
 </head>
@@ -91,7 +147,7 @@
     <div class="sidebar" id="sidebar">
         <button class="sidebar-close" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
         <div class="sidebar-header">
-            <h2><i class="fa-solid fa-dice"></i> CL-BANK</h2>
+            <h2><i class="fa-solid fa-dice"></i> CLVN.VN</h2>
         </div>
         <div class="nav-links">
             <a class="nav-link active" onclick="switchTab('game', this)"><i class="fa-solid fa-gamepad"></i> Chơi Game</a>
@@ -108,10 +164,11 @@
             </div>
             <div class="header-right">
                 <div class="balance-badge" id="balanceDisplay"><i class="fa-solid fa-wallet"></i> 0 đ</div>
-                <button id="btnLogout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <button id="btnLogout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
             </div>
         </header>
 
+        <!-- GAME SECTION -->
         <section id="sec-game" class="section-content active">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-coins"></i> Đặt Cược Chẵn Lẻ Bank</div>
@@ -126,7 +183,7 @@
                 </div>
                 <div class="form-group">
                     <label>Số tiền muốn cược (Tối thiểu 5.000đ)</label>
-                    <input type="number" id="coinAmount" placeholder="VD: 20000" min="5000" step="1000">
+                    <input type="number" id="coinAmount" placeholder="VD: 20000" min="2000" step="1000">
                 </div>
                 <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn cửa dự đoán:</label>
                 <div class="game-grid">
@@ -145,6 +202,7 @@
             </div>
         </section>
 
+        <!-- TRA SOÁT SECTION -->
         <section id="sec-search" class="section-content">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-magnifying-glass"></i> Tra Soát Kết Quả Giao Dịch</div>
@@ -156,33 +214,68 @@
                     <input type="text" id="searchTransId" placeholder="Nhập mã giao dịch tại đây...">
                 </div>
                 <button class="btn-save" onclick="searchTransaction()"><i class="fa-solid fa-magnifying-glass"></i> Kiểm Tra Ngay</button>
-
                 <div id="searchResultBox" class="result-box"></div>
             </div>
         </section>
 
+        <!-- PROFILE SECTION -->
         <section id="sec-profile" class="section-content">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-id-card"></i> Thông Tin Thanh Toán</div>
-                <div class="form-group"><label>Email</label><input type="email" id="profileEmail" disabled></div>
-                <div class="form-group"><label>SĐT</label><input type="text" id="profilePhone" placeholder="09xxxxxxx"></div>
-                <div class="form-group"><label>Ngân hàng nhận thưởng</label><select id="profileBank"></select></div>
-                <div class="form-group"><label>Số tài khoản</label><input type="text" id="profileAccount" placeholder="Nhập chính xác STK"></div>
-                <button class="btn-save" id="btnSaveProfile">Lưu Thông Tin</button>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="profileEmail" disabled>
+                </div>
+                <div class="form-group">
+                    <label>SĐT</label>
+                    <input type="text" id="profilePhone" placeholder="09xxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label>Ngân hàng nhận thưởng</label>
+                    <select id="profileBank"></select>
+                </div>
+                <div class="form-group">
+                    <label>Số tài khoản</label>
+                    <input type="text" id="profileAccount" placeholder="Nhập chính xác STK">
+                </div>
+                <button class="btn-save" id="btnSaveProfile">💾 Lưu Thông Tin</button>
             </div>
         </section>
 
+        <!-- HISTORY SECTION -->
         <section id="sec-history" class="section-content">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-list-check"></i> Lịch Sử 10 Giao Dịch</div>
                 <div style="overflow-x: auto;">
                     <table>
-                        <thead><tr><th>Mã GD</th><th>Thời Gian</th><th>Cửa Cược</th><th>Số Tiền</th><th>Kết Quả</th></tr></thead>
-                        <tbody id="historyTableBody"><tr><td colspan="5" style="text-align: center;">Đang tải...</td></tr></tbody>
+                        <thead>
+                            <tr>
+                                <th>Mã GD</th>
+                                <th>Thời Gian</th>
+                                <th>Cửa Cược</th>
+                                <th>Số Tiền</th>
+                                <th>Kết Quả</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr><td colspan="5" style="text-align: center;">Đang tải...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
         </section>
+    </div>
+
+    <!-- ==================== POPUP THÔNG BÁO ==================== -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">×</span>
+            <div id="modalTitle" class="modal-header"></div>
+            <div id="modalMessage" class="modal-body"></div>
+            <div class="modal-footer">
+                <button onclick="closeModal()">OK</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -204,16 +297,43 @@
         const db = getFirestore(app);
         let currentUserUid = null;
 
-        // Render Bank List...
+        // ==================== POPUP THÔNG BÁO ====================
+        function showNotification(title, message, type = "info") {
+            document.getElementById("modalTitle").innerHTML = title;
+            document.getElementById("modalMessage").innerHTML = message;
+            
+            const modalContent = document.querySelector(".modal-content");
+            modalContent.classList.remove("success", "error");
+            if (type === "success") modalContent.classList.add("success");
+            if (type === "error") modalContent.classList.add("error");
+
+            document.getElementById("notificationModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("notificationModal").style.display = "none";
+        }
+
+        // ==================== BANK LIST ====================
         const bankList = [
-            {code: "ICB", short_name: "VietinBank"}, {code: "VCB", short_name: "Vietcombank"}, {code: "MB", short_name: "MBBank"},
-            {code: "ACB", short_name: "ACB"}, {code: "VPB", short_name: "VPBank"}, {code: "TPB", short_name: "TPBank"},
-            {code: "TCB", short_name: "Techcombank"}, {code: "VBA", short_name: "Agribank"}, {code: "BIDV", short_name: "BIDV"}
+            {code: "ICB", short_name: "VietinBank"}, 
+            {code: "VCB", short_name: "Vietcombank"}, 
+            {code: "MB", short_name: "MBBank"},
+            {code: "ACB", short_name: "ACB"}, 
+            {code: "VPB", short_name: "VPBank"}, 
+            {code: "TPB", short_name: "TPBank"},
+            {code: "TCB", short_name: "Techcombank"}, 
+            {code: "VBA", short_name: "Agribank"}, 
+            {code: "BIDV", short_name: "BIDV"}
         ];
+
         const bankSelect = document.getElementById('profileBank');
         bankSelect.innerHTML = '<option value="">-- Chọn ngân hàng --</option>';
-        bankList.forEach(bank => bankSelect.innerHTML += `<option value="${bank.code}">${bank.short_name}</option>`);
+        bankList.forEach(bank => {
+            bankSelect.innerHTML += `<option value="${bank.code}">${bank.short_name}</option>`;
+        });
 
+        // ==================== AUTH STATE ====================
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserUid = user.uid;
@@ -222,7 +342,7 @@
 
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
-                
+               
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('balanceDisplay').innerHTML = `<i class="fa-solid fa-wallet"></i> ${(data.balance || 0).toLocaleString('vi-VN')} đ`;
@@ -238,32 +358,60 @@
             }
         });
 
-        // HÀM TRA SOÁT MÃ GIAO DỊCH
+        // ==================== SAVE PROFILE ====================
+        document.getElementById("btnSaveProfile").addEventListener("click", async () => {
+            if (!currentUserUid) return;
+            const phone = document.getElementById("profilePhone").value.trim();
+            const bankCode = document.getElementById("profileBank").value;
+            const bankAccount = document.getElementById("profileAccount").value.trim();
+
+            try {
+                await updateDoc(doc(db, "users", currentUserUid), {
+                    phone: phone || null,
+                    bankCode: bankCode || null,
+                    bankAccount: bankAccount || null,
+                    updatedAt: new Date()
+                });
+                showNotification("✅ Thành công!", "Thông tin cá nhân đã được lưu.", "success");
+            } catch (err) {
+                console.error(err);
+                showNotification("❌ Lỗi", "Không thể lưu thông tin. Vui lòng thử lại sau.", "error");
+            }
+        });
+
+        // ==================== LOGOUT ====================
+        document.getElementById("btnLogout").addEventListener("click", async () => {
+            if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+                try {
+                    await signOut(auth);
+                    window.location.href = "dangnhap.html";
+                } catch (err) {
+                    showNotification("❌ Lỗi", "Đăng xuất thất bại. Vui lòng thử lại.", "error");
+                }
+            }
+        });
+
+        // ==================== TRA SOÁT ====================
         window.searchTransaction = async function() {
             const transId = document.getElementById('searchTransId').value.trim();
             const resBox = document.getElementById('searchResultBox');
-            
+           
             if (!transId) {
-                alert("Vui lòng nhập mã giao dịch để tra cứu!");
+                showNotification("⚠️ Cảnh báo", "Vui lòng nhập mã giao dịch để tra cứu!", "error");
                 return;
             }
-
             resBox.style.display = 'block';
-            resBox.style.background = '#334155'; // Màu loading
+            resBox.style.background = '#334155';
             resBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-2x"></i><p style="margin-top: 10px;">Đang tìm kiếm dữ liệu...</p>';
-
+            
             try {
-                // Đọc từ bảng giaodich bằng ID
                 const docRef = doc(db, "giaodich", transId);
                 const docSnap = await getDoc(docRef);
-
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    
-                    // Format thời gian
                     const dateObj = data.createdAt ? data.createdAt.toDate() : new Date();
                     const timeStr = `${dateObj.getHours().toString().padStart(2, '0')}:${dateObj.getMinutes().toString().padStart(2, '0')} ${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()}`;
-                    
+                   
                     if(data.status === 'win') {
                         resBox.style.background = 'var(--success)';
                         resBox.innerHTML = `
@@ -286,7 +434,7 @@
                         `;
                     }
                 } else {
-                    resBox.style.background = '#f59e0b'; // Màu cam cảnh báo
+                    resBox.style.background = '#f59e0b';
                     resBox.innerHTML = `
                         <h3><i class="fa-solid fa-triangle-exclamation"></i> KHÔNG TÌM THẤY</h3>
                         <p>Mã giao dịch <b>${transId}</b> không tồn tại hoặc hệ thống chưa xử lý kịp.</p>
@@ -296,11 +444,11 @@
             } catch (error) {
                 console.error("Lỗi tra cứu:", error);
                 resBox.style.background = 'var(--danger)';
-                resBox.innerHTML = '<p>Lỗi hệ thống khi tra cứu dữ liệu. Xem Console để biết thêm chi tiết.</p>';
+                resBox.innerHTML = '<p>Lỗi hệ thống khi tra cứu dữ liệu.</p>';
             }
         };
 
-        // UI & Các hàm phụ
+        // ==================== UI FUNCTIONS ====================
         window.switchTab = function(tabName, element) {
             document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
@@ -309,17 +457,24 @@
             if(window.innerWidth <= 768) toggleSidebar();
         };
 
-        window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
+        window.toggleSidebar = function() { 
+            document.getElementById('sidebar').classList.toggle('open'); 
+        };
 
         window.generateQR = function(choice, rate) {
             const amt = document.getElementById('coinAmount').value;
             const usr = document.getElementById('gameUsername').value;
-            if (amt < 5000) return alert("Cược tối thiểu 5.000đ!");
-            
+            if (!amt || amt < 2000) {
+                showNotification("⚠️ Cảnh báo", "Cược tối thiểu 2.000đ!", "error");
+                return;
+            }
+           
             const content = `CLVN ${usr} ${choice}`;
             document.getElementById('instruction').innerHTML = `Nội dung: <b style="color:var(--danger)">${content}</b> <br> Tiền: <b>${parseInt(amt).toLocaleString('vi-VN')}đ</b>`;
             document.getElementById('qrImage').src = `https://img.vietqr.io/image/970422-4477040408-compact2.png?amount=${amt}&addInfo=${encodeURIComponent(content)}&accountName=LE%20NGOC%20NHAN`;
             document.getElementById('qr-result').style.display = 'block';
+            
+            showNotification("✅ QR đã tạo", "Vui lòng quét mã để chuyển khoản!", "success");
         };
 
         async function fetchHistory(uid) {
@@ -327,11 +482,23 @@
             const q = query(collection(db, `users/${uid}/transactions`), orderBy("createdAt", "desc"), limit(10));
             const querySnapshot = await getDocs(q);
             tbody.innerHTML = '';
+            if (querySnapshot.empty) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Chưa có giao dịch nào</td></tr>`;
+                return;
+            }
             querySnapshot.forEach((doc) => {
                 const tx = doc.data();
                 const d = tx.createdAt ? tx.createdAt.toDate() : new Date();
-                const badge = tx.status === 'win' ? `<span class="badge win">+${(tx.amount*tx.rate).toLocaleString()}đ</span>` : `<span class="badge lose">Thua</span>`;
-                tbody.innerHTML += `<tr><td>${tx.transId}</td><td>${d.getHours()}:${d.getMinutes()} ${d.getDate()}/${d.getMonth()+1}</td><td><b>${tx.choice}</b></td><td>${tx.amount.toLocaleString()}đ</td><td>${badge}</td></tr>`;
+                const badge = tx.status === 'win' 
+                    ? `<span class="badge win">+${(tx.amount*tx.rate).toLocaleString()}đ</span>` 
+                    : `<span class="badge lose">Thua</span>`;
+                tbody.innerHTML += `<tr>
+                    <td>${tx.transId}</td>
+                    <td>${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</td>
+                    <td><b>${tx.choice}</b></td>
+                    <td>${tx.amount.toLocaleString()}đ</td>
+                    <td>${badge}</td>
+                </tr>`;
             });
         }
     </script>
