@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Tài Khoản</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .auth-box { background: white; padding: 40px 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 350px; }
+        .auth-box h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #555; font-size: 14px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
+        .form-group input:focus { border-color: #007bff; outline: none; }
+        .btn-submit { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-submit:hover { background-color: #0056b3; }
+        .auth-links { text-align: center; margin-top: 20px; font-size: 14px; }
+        .auth-links a { color: #007bff; text-decoration: none; }
+        .auth-links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-box">
+        <h2>Tạo Tài Khoản</h2>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" placeholder="Nhập tên đăng nhập" required>
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" placeholder="Nhập mật khẩu" required>
+            </div>
+            <div class="form-group">
+                <label>Xác nhận mật khẩu</label>
+                <input type="password" placeholder="Nhập lại mật khẩu" required>
+            </div>
+            <div class="form-group">
+                <label>Số tài khoản nhận thưởng (Của bạn)</label>
+                <input type="text" placeholder="VD: 1903... (Techcombank)" required>
+            </div>
+            <button type="submit" class="btn-submit">Đăng Ký</button>
+        </form>
+        <div class="auth-links">
+            Đã có tài khoản? <a href="dangnhap.html">Đăng nhập ngay</a><br><br>
+            <a href="index.html">&larr; Về trang chủ</a>
+        </div>
+    </div>
+
+</body>
+</html>
