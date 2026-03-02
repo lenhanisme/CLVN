@@ -3,62 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Mini Game Chẵn Lẻ</title>
+    <title>CL-BANK | Đẳng Cấp Mini Game Tự Động</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; color: #333; }
-        .navbar { background-color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .logo { font-size: 24px; font-weight: bold; color: #007bff; text-decoration: none; }
-        .nav-links a { margin-left: 15px; text-decoration: none; color: #555; font-weight: 500; transition: 0.3s; }
-        .nav-links a:hover { color: #007bff; }
-        .btn-outline { border: 1px solid #007bff; padding: 8px 15px; border-radius: 5px; color: #007bff; }
-        .btn-outline:hover { background: #007bff; color: #fff; }
-        .btn-primary { background: #007bff; padding: 8px 15px; border-radius: 5px; color: #fff; }
-        .btn-primary:hover { background: #0056b3; }
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --bg-color: #0b0f19;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html { scroll-behavior: smooth; }
         
-        .hero { text-align: center; padding: 80px 20px; }
-        .hero h1 { font-size: 42px; margin-bottom: 20px; }
-        .hero p { font-size: 18px; color: #666; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6; }
-        .hero-btns { display: flex; gap: 15px; justify-content: center; }
-        .hero-btns a { padding: 12px 30px; font-size: 18px; text-decoration: none; border-radius: 6px; font-weight: bold; }
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 15% 50%, rgba(79, 172, 254, 0.1), transparent 30%),
+                              radial-gradient(circle at 85% 30%, rgba(0, 242, 254, 0.1), transparent 30%);
+            overflow-x: hidden;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-size: 26px; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: 1px; }
+        .logo span { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; color: transparent; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a.link-text { text-decoration: none; color: var(--text-main); font-weight: 600; transition: 0.3s; display: none; }
+        .nav-links a.link-text:hover { color: var(--primary); }
         
-        .features { display: flex; justify-content: center; gap: 30px; padding: 40px 20px; background: #fff; flex-wrap: wrap; }
-        .feature-card { background: #f9f9f9; padding: 20px; border-radius: 8px; width: 300px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        .feature-card h3 { color: #007bff; }
+        .btn-login { color: var(--text-main); text-decoration: none; font-weight: 600; transition: 0.3s; }
+        .btn-login:hover { color: var(--primary); }
+        .btn-primary {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            padding: 10px 24px; border-radius: 30px; color: #000 !important; font-weight: bold; text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); border: none; cursor: pointer;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5); }
+        .btn-logout { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 8px 18px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-logout:hover { background: #ff4d4d; color: #fff; }
+
+        /* --- HERO SECTION --- */
+        .hero { text-align: center; padding: 100px 5% 60px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; text-transform: uppercase; font-weight: 800; line-height: 1.2; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px; line-height: 1.6; }
+        .hero-btns { display: flex; gap: 20px; justify-content: center; }
+
+        /* --- STATS SECTION --- */
+        .stats { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 60px; }
+        .stat-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 25px; border-radius: 15px; min-width: 220px; text-align: center; backdrop-filter: blur(10px); }
+        .stat-box h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 5px; }
+        .stat-box p { color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+        /* --- ABOUT & FEATURES --- */
+        .section-title { text-align: center; margin: 80px 0 40px; font-size: 2.2rem; }
+        .section-title span { color: var(--primary); }
+        .features { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 5%; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px 30px; border-radius: 20px; width: calc(33.333% - 20px); text-align: center; transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 242, 254, 0.1); }
+        .card i { font-size: 50px; color: var(--primary); margin-bottom: 20px; }
+        .card h3 { font-size: 1.3rem; margin-bottom: 15px; color: #fff; }
+        .card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+        /* --- SUPPORT SECTION --- */
+        .support { background: linear-gradient(135deg, rgba(0,242,254,0.1), rgba(11,15,25,0.9)); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 60px 5%; text-align: center; margin-top: 80px; }
+        .support h2 { font-size: 2rem; margin-bottom: 15px; }
+        .support p { color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem; }
+        .support-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn-tele { background: #0088cc; color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .btn-tele:hover { background: #007ab8; transform: translateY(-3px); }
+        .btn-zalo { background: #0068ff; color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .btn-zalo:hover { background: #005ce6; transform: translateY(-3px); }
+
+        /* --- FOOTER --- */
+        footer { text-align: center; padding: 25px; color: var(--text-muted); font-size: 0.9rem; background: #05080f; }
+
+        /* --- RESPONSIVE MOBILE --- */
+        @media (max-width: 992px) {
+            .card { width: calc(50% - 15px); }
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; padding: 15px 20px; gap: 15px; }
+            .nav-links a.link-text { display: none; }
+            .hero { padding: 50px 20px 40px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            .card { width: 100%; }
+            .stats { gap: 15px; }
+            .stat-box { width: 100%; }
+            .user-email-display { font-size: 12px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <a href="index.html" class="logo">CL-BANK</a>
-        <div class="nav-links">
-            <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
+    <nav class="navbar">
+        <a href="index.html" class="logo">CL<span>BANK</span></a>
+        <div class="nav-links" id="auth-section">
+            <a href="#tinh-nang" class="link-text" style="display:inline-block;">Tính Năng</a>
+            <a href="dangnhap.html" class="btn-login">Đăng Nhập</a>
             <a href="dangky.html" class="btn-primary">Đăng Ký</a>
         </div>
-    </div>
+    </nav>
 
-    <div class="hero">
-        <h1>Mini Game Giải Trí Tự Động 24/7</h1>
-        <p>Hệ thống xử lý giao dịch tự động siêu tốc qua MBBank. Trả thưởng ngay lập tức chỉ trong 3-5 giây. Minh bạch, uy tín và hoàn toàn tự động.</p>
+    <header class="hero">
+        <h1>Hệ Thống Mini Game <br><span>Chẵn Lẻ Tự Động</span></h1>
+        <p>Nền tảng giải trí an toàn, minh bạch dựa trên mã giao dịch ngân hàng thực tế. Hệ thống tự động khớp lệnh và trả thưởng thẳng về tài khoản của bạn chỉ trong vài giây.</p>
         <div class="hero-btns">
-            <a href="dangky.html" class="btn-primary">Chơi Ngay</a>
-            <a href="#luat-choi" class="btn-outline">Xem Luật Chơi</a>
+            <a href="dangnhap.html" class="btn-primary" style="padding: 15px 40px; font-size: 18px;">CHƠI NGAY</a>
+            <a href="#tinh-nang" class="btn-login" style="padding: 15px 20px; border: 1px solid var(--glass-border); border-radius: 30px;">TÌM HIỂU THÊM</a>
         </div>
-    </div>
 
-    <div class="features" id="luat-choi">
-        <div class="feature-card">
-            <h3>1. Chuyển Khoản</h3>
-            <p>Sử dụng App ngân hàng quét mã QR hoặc chuyển khoản với nội dung quy định (CHAN hoặc LE).</p>
+        <div class="stats">
+            <div class="stat-box">
+                <h2>15.2K+</h2>
+                <p>Thành Viên Tham Gia</p>
+            </div>
+            <div class="stat-box">
+                <h2>1.2M+</h2>
+                <p>Giao Dịch Thành Công</p>
+            </div>
+            <div class="stat-box">
+                <h2>3s</h2>
+                <p>Tốc Độ Trả Thưởng</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <h3>2. Lấy Kết Quả</h3>
-            <p>Hệ thống sẽ lấy số cuối cùng của mã giao dịch MBBank để đối chiếu kết quả Chẵn hoặc Lẻ.</p>
-        </div>
-        <div class="feature-card">
-            <h3>3. Nhận Thưởng</h3>
-            <p>Nếu dự đoán đúng, hệ thống tự động chuyển khoản tiền thưởng về tài khoản của bạn ngay lập tức.</p>
-        </div>
-    </div>
+    </header>
 
+    <h2 class="section-title" id="tinh-nang">Tại Sao Chọn <span>CL-BANK?</span></h2>
+    <section class="features">
+        <div class="card">
+            <i class="fa-solid fa-robot"></i>
+            <h3>100% Tự Động</h3>
+            <p>Không cần chờ đợi admin duyệt. Hệ thống BOT chạy liên tục 24/7 kiểm tra giao dịch và trả thưởng tự động bất kể ngày đêm.</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Minh Bạch Tuyệt Đối</h3>
+            <p>Kết quả hoàn toàn dựa trên mã giao dịch (Reference Number) do chính ngân hàng sinh ra. Tuyệt đối không có sự can thiệp từ hệ thống.</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-bolt-lightning"></i>
+            <h3>Trả Thưởng Siêu Tốc</h3>
+            <p>Sau khi bạn chuyển khoản, hệ thống xác nhận và nếu bạn thắng, tiền sẽ tự động "ting ting" về tài khoản của bạn chỉ sau 3-5 giây.</p>
+        </div>
+    </section>
+
+    <section class="support">
+        <h2>Cần Hỗ Trợ?</h2>
+        <p>Đội ngũ CSKH của chúng tôi luôn túc trực 24/7 để giải quyết mọi vấn đề nạp/rút hoặc lỗi giao dịch của bạn.</p>
+        <div class="support-links">
+            <a href="#" class="btn-tele"><i class="fa-brands fa-telegram"></i> Hỗ trợ qua Telegram</a>
+            <a href="#" class="btn-zalo"><i class="fa-solid fa-comment-dots"></i> Nhóm Zalo</a>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 CL-BANK. Nền tảng giải trí giao dịch minh bạch.
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // Cấu hình Firebase của bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
+            authDomain: "clvn-5571b.firebaseapp.com",
+            projectId: "clvn-5571b",
+            storageBucket: "clvn-5571b.firebasestorage.app",
+            messagingSenderId: "864443672228",
+            appId: "1:864443672228:web:25d180dfc83e0212f2e831",
+            measurementId: "G-CPH3LZ0RT2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Quản lý hiển thị nút Đăng nhập / User
+        const authSection = document.getElementById('auth-section');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Rút gọn email trên mobile để tránh bị tràn layout
+                const shortEmail = user.email.split('@')[0];
+                
+                authSection.innerHTML = `
+                    <span class="user-email-display" style="color: var(--primary); font-weight: 600;">
+                        <i class="fa-solid fa-user-circle"></i> Hi, ${shortEmail}
+                    </span>
+                    <a href="trang_game.html" class="btn-primary">Vào Game</a>
+                    <button id="btnLogout" class="btn-logout">Đăng Xuất</button>
+                `;
+
+                // Xử lý sự kiện đăng xuất
+                document.getElementById('btnLogout').addEventListener('click', () => {
+                    signOut(auth).then(() => {
+                        window.location.reload();
+                    }).catch((error) => {
+                        console.error("Lỗi đăng xuất:", error);
+                    });
+                });
+            } else {
+                authSection.innerHTML = `
+                    <a href="#tinh-nang" class="link-text" style="display:inline-block;">Tính Năng</a>
+                    <a href="dangnhap.html" class="btn-login">Đăng Nhập</a>
+                    <a href="dangky.html" class="btn-primary">Đăng Ký</a>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
