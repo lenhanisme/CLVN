@@ -1,36 +1,170 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Game Chẵn Lẻ Bank - CLVN.VN</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .game-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        h2 { color: #333; margin-bottom: 20px; }
-        input { width: 90%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
-        .btn-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; color: white; }
-        .btn-chan { background-color: #28a745; }
-        .btn-chan:hover { background-color: #218838; }
-        .btn-le { background-color: #007bff; }
-        .btn-le:hover { background-color: #0069d9; }
-        #result { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 6px; display: none; }
-        #result img { max-width: 100%; border-radius: 8px; margin-top: 10px; }
-        .bank-info { font-size: 14px; color: #555; margin-bottom: 15px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Game Chẵn Lẻ Bank - FLVN</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* HEADER */
+header {
+    background: rgba(0,0,0,0.2);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* MAIN */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-box {
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    text-align: center;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.game-box h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.bank-info {
+    background: #f1f3f5;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+}
+
+.btn-chan {
+    background: #28a745;
+}
+
+.btn-chan:hover {
+    background: #218838;
+}
+
+.btn-le {
+    background: #007bff;
+}
+
+.btn-le:hover {
+    background: #0069d9;
+}
+
+#result {
+    margin-top: 20px;
+    display: none;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+#result img {
+    margin-top: 10px;
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 13px;
+    background: rgba(0,0,0,0.2);
+    color: white;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+</style>
 </head>
+
 <body>
 
+<header>
+    🎲 MINI GAME CHẴN LẺ FLVN 🎲
+</header>
+
+<main>
     <div class="game-box">
         <h2>Chẵn Lẻ MBBank</h2>
+
         <div class="bank-info">
             Người nhận: <b>LE NGOC NHAN</b><br>
             STK: <b>4477040408</b> (MBBank)
         </div>
-        
-        <input type="number" id="coinAmount" placeholder="Nhập số tiền cược (VD: 10000)" min="10000" step="1000">
-        
+
+        <input type="text" id="username" placeholder="Nhập username của bạn">
+        <input type="number" id="coinAmount" placeholder="Nhập số tiền cược (VD: 10000)" min="5000" step="1000">
+
         <div class="btn-group">
             <button class="btn-chan" onclick="generateQR('CHAN')">Cược CHẴN</button>
             <button class="btn-le" onclick="generateQR('LE')">Cược LẺ</button>
@@ -38,30 +172,46 @@
 
         <div id="result">
             <p id="instruction"></p>
-            <img id="qrImage" src="" alt="Mã QR Thanh Toán">
+            <img id="qrImage" src="" alt="QR Thanh Toán">
         </div>
     </div>
+</main>
 
-    <script>
-        function generateQR(choice) {
-            const amount = document.getElementById('coinAmount').value;
-            if (!amount || amount < 5000) {
-                alert("Vui lòng nhập số tiền hợp lệ (Tối thiểu 5,000đ)!");
-                return;
-            }
+<footer>
+    © 2026 FLVN Game | Thanh toán tự động qua MBBank
+</footer>
 
-            const bankBin = "970422"; // BIN của MBBank
-            const accountNo = "4477040408";
-            const accountName = "LE NGOC NHAN";
-            const content = choice; // Nội dung chuyển khoản là CHAN hoặc LE
+<script>
+function generateQR(choice) {
+    const amount = document.getElementById('coinAmount').value;
+    const username = document.getElementById('username').value.trim();
 
-            // Tạo link QR từ VietQR
-            const qrUrl = `https://img.vietqr.io/image/${bankBin}-${accountNo}-compact2.png?amount=${amount}&addInfo=${content}&accountName=${encodeURIComponent(accountName)}`;
-            
-            document.getElementById('instruction').innerHTML = `Vui lòng quét mã QR hoặc chuyển <b>${amount}đ</b> với nội dung <b>${content}</b>`;
-            document.getElementById('qrImage').src = qrUrl;
-            document.getElementById('result').style.display = 'block';
-        }
-    </script>
+    if (!username) {
+        alert("Vui lòng nhập username!");
+        return;
+    }
+
+    if (!amount || amount < 5000) {
+        alert("Số tiền tối thiểu là 5.000đ!");
+        return;
+    }
+
+    const bankBin = "970422";
+    const accountNo = "4477040408";
+    const accountName = "LE NGOC NHAN";
+
+    // Nội dung chuyển khoản mặc định
+    const content = `FLVN ${username} ${choice}`;
+
+    const qrUrl = `https://img.vietqr.io/image/${bankBin}-${accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(content)}&accountName=${encodeURIComponent(accountName)}`;
+
+    document.getElementById('instruction').innerHTML =
+        `Quét mã QR hoặc chuyển <b>${amount}đ</b><br>Nội dung: <b>${content}</b>`;
+
+    document.getElementById('qrImage').src = qrUrl;
+    document.getElementById('result').style.display = 'block';
+}
+</script>
+
 </body>
 </html>
