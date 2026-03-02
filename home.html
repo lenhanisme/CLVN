@@ -76,26 +76,26 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ==================== POPUP THÔNG BÁO ==================== */
+        /* ==================== POPUP THÔNG BÁO (ĐÃ SỬA) ==================== */
         .modal {
             display: none;
             position: fixed;
             z-index: 2000;
             left: 0; top: 0;
             width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.75);
+            background-color: rgba(0,0,0,0.85);
             align-items: center;
             justify-content: center;
         }
         .modal-content {
             background: var(--bg-card);
-            padding: 30px 25px;
+            padding: 35px 30px 25px;
             border-radius: 16px;
             width: 90%;
             max-width: 420px;
             text-align: center;
             border: 2px solid var(--primary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             position: relative;
         }
         .modal-header {
@@ -104,28 +104,21 @@
             margin-bottom: 15px;
         }
         .modal-body {
-            font-size: 15px;
+            font-size: 15.5px;
             color: var(--text-muted);
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #94a3b8;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
         .modal-footer button {
-            padding: 12px 35px;
+            padding: 14px 40px;
             border: none;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             font-size: 16px;
             background: var(--primary);
             color: #000;
+            width: 100%;
         }
         .success { border-color: var(--success) !important; }
         .error { border-color: var(--danger) !important; }
@@ -266,10 +259,10 @@
         </section>
     </div>
 
-    <!-- ==================== POPUP THÔNG BÁO ==================== -->
+    <!-- ==================== POPUP THÔNG BÁO (CHỈ TẮT KHI BẤM OK) ==================== -->
     <div id="notificationModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">×</span>
+            <!-- KHÔNG CÒN DẤU X -->
             <div id="modalTitle" class="modal-header"></div>
             <div id="modalMessage" class="modal-body"></div>
             <div class="modal-footer">
