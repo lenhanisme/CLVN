@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Mini Game Chẵn Lẻ</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; color: #333; }
+        .navbar { background-color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .logo { font-size: 24px; font-weight: bold; color: #007bff; text-decoration: none; }
+        .nav-links a { margin-left: 15px; text-decoration: none; color: #555; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: #007bff; }
+        .btn-outline { border: 1px solid #007bff; padding: 8px 15px; border-radius: 5px; color: #007bff; }
+        .btn-outline:hover { background: #007bff; color: #fff; }
+        .btn-primary { background: #007bff; padding: 8px 15px; border-radius: 5px; color: #fff; }
+        .btn-primary:hover { background: #0056b3; }
+        
+        .hero { text-align: center; padding: 80px 20px; }
+        .hero h1 { font-size: 42px; margin-bottom: 20px; }
+        .hero p { font-size: 18px; color: #666; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6; }
+        .hero-btns { display: flex; gap: 15px; justify-content: center; }
+        .hero-btns a { padding: 12px 30px; font-size: 18px; text-decoration: none; border-radius: 6px; font-weight: bold; }
+        
+        .features { display: flex; justify-content: center; gap: 30px; padding: 40px 20px; background: #fff; flex-wrap: wrap; }
+        .feature-card { background: #f9f9f9; padding: 20px; border-radius: 8px; width: 300px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .feature-card h3 { color: #007bff; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html" class="logo">CL-BANK</a>
+        <div class="nav-links">
+            <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
+            <a href="dangky.html" class="btn-primary">Đăng Ký</a>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>Mini Game Giải Trí Tự Động 24/7</h1>
+        <p>Hệ thống xử lý giao dịch tự động siêu tốc qua MBBank. Trả thưởng ngay lập tức chỉ trong 3-5 giây. Minh bạch, uy tín và hoàn toàn tự động.</p>
+        <div class="hero-btns">
+            <a href="dangky.html" class="btn-primary">Chơi Ngay</a>
+            <a href="#luat-choi" class="btn-outline">Xem Luật Chơi</a>
+        </div>
+    </div>
+
+    <div class="features" id="luat-choi">
+        <div class="feature-card">
+            <h3>1. Chuyển Khoản</h3>
+            <p>Sử dụng App ngân hàng quét mã QR hoặc chuyển khoản với nội dung quy định (CHAN hoặc LE).</p>
+        </div>
+        <div class="feature-card">
+            <h3>2. Lấy Kết Quả</h3>
+            <p>Hệ thống sẽ lấy số cuối cùng của mã giao dịch MBBank để đối chiếu kết quả Chẵn hoặc Lẻ.</p>
+        </div>
+        <div class="feature-card">
+            <h3>3. Nhận Thưởng</h3>
+            <p>Nếu dự đoán đúng, hệ thống tự động chuyển khoản tiền thưởng về tài khoản của bạn ngay lập tức.</p>
+        </div>
+    </div>
+
+</body>
+</html>
