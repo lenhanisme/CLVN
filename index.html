@@ -29,22 +29,25 @@
         .bg-glow.right { top: 20%; left: auto; right: -200px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); }
 
         /* --- NAVBAR --- */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(7, 11, 25, 0.8); backdrop-filter: blur(15px); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid var(--border); }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(7, 11, 25, 0.85); backdrop-filter: blur(15px); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid var(--border); }
         .logo { font-size: 28px; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
         .logo span { color: var(--primary); }
         
-        .nav-links { display: flex; align-items: center; gap: 25px; }
+        .nav-links { display: flex; align-items: center; gap: 25px; transition: 0.3s ease-in-out; }
         .nav-link { color: var(--text-main); text-decoration: none; font-weight: 600; transition: 0.3s; font-size: 15px; }
         .nav-link:hover { color: var(--primary); }
         
+        .auth-buttons { display: flex; align-items: center; gap: 15px; }
         .btn-outline { border: 1px solid var(--primary); color: var(--primary); padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: 0.3s; }
         .btn-outline:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
         
         .btn-glow { background: linear-gradient(90deg, #FFD700, #FDB931); color: #000; padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 800; text-transform: uppercase; transition: 0.3s; box-shadow: 0 0 20px var(--accent-glow); border: none; cursor: pointer; }
         .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 5px 25px var(--accent-glow); }
 
+        .menu-toggle { display: none; background: none; border: none; color: var(--text-main); font-size: 24px; cursor: pointer; }
+
         /* --- HERO SECTION --- */
-        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 100px 5% 50px; position: relative; gap: 50px; max-width: 1400px; margin: 0 auto; }
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 120px 5% 50px; position: relative; gap: 50px; max-width: 1400px; margin: 0 auto; }
         .hero-content { flex: 1; max-width: 600px; z-index: 10; }
         .badge-live { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
         .badge-live .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: blink 1s infinite; }
@@ -54,7 +57,7 @@
         .hero p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; }
         
         .hero-btns { display: flex; gap: 20px; }
-        .btn-play-large { background: var(--primary); color: #000; padding: 16px 40px; border-radius: 30px; text-decoration: none; font-size: 18px; font-weight: 800; box-shadow: 0 0 30px var(--primary-glow); transition: 0.3s; }
+        .btn-play-large { background: var(--primary); color: #000; padding: 16px 40px; border-radius: 30px; text-decoration: none; font-size: 18px; font-weight: 800; box-shadow: 0 0 30px var(--primary-glow); transition: 0.3s; text-align: center; }
         .btn-play-large:hover { transform: translateY(-3px); box-shadow: 0 10px 40px var(--primary-glow); }
 
         /* Floating Cards Visual */
@@ -96,20 +99,40 @@
         @keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); } 50% { transform: translateY(-20px) rotate(var(--rot, 0deg)); } }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* Responsive */
+        /* ================= RESPONSIVE MOBILE ================= */
         @media (max-width: 992px) {
             .hero { flex-direction: column; text-align: center; padding-top: 120px; }
             .hero-content { margin: 0 auto; }
             .hero-btns { justify-content: center; }
-            .hero-visual { display: none; }
+            .hero-visual { display: none; /* Ẩn thẻ bay lơ lửng trên màn hình nhỏ để tránh rối mắt */ }
             .grid-3 { grid-template-columns: repeat(2, 1fr); }
         }
+
         @media (max-width: 768px) {
             .navbar { padding: 15px 20px; }
-            .nav-links .nav-link { display: none; }
-            .hero h1 { font-size: 2.5rem; }
-            .grid-3 { grid-template-columns: 1fr; }
-            .btn-play-large { padding: 15px 30px; font-size: 16px; }
+            .menu-toggle { display: block; }
+            
+            /* Giao diện Menu ẩn cho Mobile */
+            .nav-links {
+                position: absolute; top: 100%; left: -100%; width: 100%;
+                background: rgba(7, 11, 25, 0.98); backdrop-filter: blur(15px);
+                flex-direction: column; padding: 25px 0; gap: 20px;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active { left: 0; }
+            .auth-buttons { flex-direction: column; width: 100%; padding: 0 20px; }
+            .auth-buttons a, .auth-buttons button { width: 100%; text-align: center; }
+
+            .hero h1 { font-size: 2.3rem; }
+            .hero p { font-size: 1rem; padding: 0 10px; }
+            .btn-play-large { font-size: 16px; padding: 14px 25px; width: 100%; }
+            .hero-btns { flex-direction: column; width: 100%; padding: 0 10px; }
+            
+            .grid-3 { grid-template-columns: 1fr; gap: 20px; }
+            .section-title { font-size: 2rem; }
+            .feature-box { padding: 30px 20px; }
+            
+            .ticker-item { font-size: 13px; margin: 0 15px; }
         }
     </style>
 </head>
@@ -120,10 +143,16 @@
 
     <nav class="navbar">
         <a href="#" class="logo"><i class="fa-solid fa-dice-d20"></i> CLVN<span>.</span></a>
-        <div class="nav-links" id="auth-section">
-            <a href="#luat-choi" class="nav-link">Luật Chơi</a>
-            <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
-            <a href="dangky.html" class="btn-glow">Đăng Ký Ngay</a>
+        
+        <button class="menu-toggle" id="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+        
+        <div class="nav-links" id="nav-menu">
+            <a href="#luat-choi" class="nav-link" id="btn-luat-choi">Luật Chơi</a>
+            
+            <div class="auth-buttons" id="auth-section">
+                <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
+                <a href="dangky.html" class="btn-glow">Đăng Ký Ngay</a>
+            </div>
         </div>
     </nav>
 
@@ -143,7 +172,8 @@
                     <h3><i class="fa-solid fa-bolt"></i> Khớp Lệnh Nhanh</h3>
                 </div>
                 <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Chuyển khoản đến MBBank:</div>
-                <h2 style="color: var(--primary); letter-spacing: 1px; margin-bottom: 10px;">4477040408</h2>
+                <h2 style="color: var(--primary); letter-spacing: 1px; margin-bottom: 10px;">0987654321</h2>
+                <div style="font-size: 13px; color: var(--text-main); font-weight: bold; margin-bottom: 10px;">NGUYEN VAN A</div>
                 <div class="mock-btn">Nội dung: CLVN User C2</div>
             </div>
             
@@ -181,17 +211,17 @@
             <div class="feature-box">
                 <div class="icon-wrapper"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3>Minh Bạch 100%</h3>
-                <p>Kết quả dựa hoàn toàn vào số cuối mã giao dịch (Mã tham chiếu FT) của ngân hàng MBBank. Không thể can thiệp, không thể gian lận.</p>
+                <p>Kết quả dựa hoàn toàn vào số cuối mã giao dịch (Mã tham chiếu FT) của ngân hàng. Không thể can thiệp, không thể gian lận.</p>
             </div>
             <div class="feature-box">
                 <div class="icon-wrapper" style="background: rgba(255, 215, 0, 0.1); color: var(--accent);"><i class="fa-solid fa-bolt-lightning"></i></div>
                 <h3>Trả Thưởng 3 Giây</h3>
-                <p>Khớp lệnh và cộng tiền tự động vào số dư trên Web ngay khi ngân hàng báo nhận được tiền. Tốc độ ánh sáng, không cần chờ đợi Admin duyệt.</p>
+                <p>Khớp lệnh và cộng tiền tự động vào số dư trên Web ngay khi ngân hàng báo nhận được tiền. Tốc độ ánh sáng, không cần đợi Admin.</p>
             </div>
             <div class="feature-box">
                 <div class="icon-wrapper" style="background: rgba(34, 197, 94, 0.1); color: var(--success);"><i class="fa-solid fa-headset"></i></div>
                 <h3>Hỗ Trợ 24/7</h3>
-                <p>Đội ngũ Chăm Sóc Khách Hàng chuyên nghiệp hoạt động ngày đêm. Sẵn sàng giải quyết mọi sự cố ghi sai nội dung hay lỗi nạp rút của bạn.</p>
+                <p>Đội ngũ Chăm Sóc Khách Hàng chuyên nghiệp hoạt động ngày đêm. Sẵn sàng giải quyết mọi sự cố hay lỗi nạp rút của bạn.</p>
             </div>
         </div>
     </section>
@@ -209,6 +239,20 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // Logic ẩn/hiện menu trên Mobile
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        const btnLuatChoi = document.getElementById('btn-luat-choi');
+
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Bấm vào link Luật chơi tự động đóng menu trên Mobile
+        btnLuatChoi.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+        });
 
         const firebaseConfig = {
             apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
@@ -229,10 +273,9 @@
             if (user) {
                 const username = user.email.split('@')[0];
                 
-                // Update Navbar
+                // Update Navbar cho User đã đăng nhập
                 authSection.innerHTML = `
-                    <a href="#luat-choi" class="nav-link">Luật Chơi</a>
-                    <span style="color: var(--text-muted); font-weight: 600; margin-right: 10px;">Hi, <span style="color: var(--primary);">${username}</span></span>
+                    <span style="color: var(--text-muted); font-weight: 600;">Hi, <span style="color: var(--primary);">${username}</span></span>
                     <a href="home.html" class="btn-glow">Vào Dashboard</a>
                     <button id="btnLogout" style="background:none; border:none; color: var(--text-muted); cursor:pointer; font-size: 18px;"><i class="fa-solid fa-right-from-bracket"></i></button>
                 `;
@@ -244,9 +287,8 @@
                     signOut(auth).then(() => window.location.reload());
                 });
             } else {
-                // Not logged in (Default state is already in HTML)
+                // Not logged in
                 authSection.innerHTML = `
-                    <a href="#luat-choi" class="nav-link">Luật Chơi</a>
                     <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
                     <a href="dangky.html" class="btn-glow">Đăng Ký Ngay</a>
                 `;
