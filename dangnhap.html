@@ -13,10 +13,20 @@
         .auth-box h2 { text-align: center; color: var(--primary); margin-bottom: 25px; font-weight: 800; }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #aaa; }
-        .form-group input { width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; outline: none; }
+        .form-group input { width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; outline: none; transition: 0.3s;}
         .form-group input:focus { border-color: var(--primary); }
-        .btn-submit { width: 100%; padding: 12px; background: linear-gradient(45deg, #4facfe, #00f2fe); border: none; border-radius: 8px; color: #000; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .btn-submit:hover { opacity: 0.9; }
+        
+        .btn-submit { width: 100%; padding: 12px; background: linear-gradient(45deg, #4facfe, #00f2fe); border: none; border-radius: 8px; color: #000; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.3s;}
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* CSS cho phần Google */
+        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #aaa; font-size: 12px; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .divider span { padding: 0 10px; }
+        .btn-google { width: 100%; padding: 12px; background: #fff; color: #333; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        .btn-google:hover { background: #f1f1f1; transform: translateY(-2px); }
+        .btn-google img { width: 20px; }
+
         .auth-links { text-align: center; margin-top: 20px; font-size: 14px; }
         .auth-links a { color: var(--primary); text-decoration: none; }
         .error-msg { color: #ff4d4d; font-size: 13px; text-align: center; margin-bottom: 15px; display: none; }
@@ -27,6 +37,7 @@
     <div class="auth-box">
         <h2>ĐĂNG NHẬP</h2>
         <div id="errorMsg" class="error-msg"></div>
+        
         <form id="loginForm">
             <div class="form-group">
                 <label>Email</label>
@@ -38,6 +49,14 @@
             </div>
             <button type="submit" class="btn-submit">Đăng Nhập</button>
         </form>
+
+        <div class="divider"><span>HOẶC</span></div>
+
+        <button type="button" id="btnGoogle" class="btn-google">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+            Đăng nhập bằng Google
+        </button>
+
         <div class="auth-links">
             Chưa có tài khoản? <a href="dangky.html">Đăng ký tại đây</a><br><br>
             <a href="index.html">&larr; Về trang chủ</a>
@@ -46,9 +65,10 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // Cần import thêm firestore ở trang đăng nhập để lưu user mới nếu họ dùng Google lần đầu
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Cấu hình Firebase của bạn
         const firebaseConfig = {
             apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
             authDomain: "clvn-5571b.firebaseapp.com",
@@ -61,20 +81,20 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Xử lý Đăng nhập Email/Password
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('errorMsg');
 
             try {
-                // Đăng nhập bằng Authentication
                 await signInWithEmailAndPassword(auth, email, password);
-                
-                // Nếu thành công, chuyển hướng về trang chủ hoặc trang game
                 window.location.href = "index.html";
-                
             } catch (error) {
                 console.error(error);
                 errorMsg.style.display = 'block';
@@ -83,6 +103,27 @@
                 } else {
                     errorMsg.innerText = "Lỗi đăng nhập: " + error.message;
                 }
+            }
+        });
+
+        // Xử lý Đăng nhập Google
+        document.getElementById('btnGoogle').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+
+                // Lưu lại thông tin vào Database nếu họ đăng nhập Google lần đầu.
+                // { merge: true } đảm bảo dữ liệu cũ (như số dư balance) không bị mất nếu họ đăng nhập lại.
+                await setDoc(doc(db, "users", user.uid), {
+                    email: user.email,
+                    lastLogin: new Date()
+                }, { merge: true });
+
+                window.location.href = "index.html";
+            } catch (error) {
+                console.error(error);
+                errorMsg.style.display = 'block';
+                errorMsg.innerText = "Lỗi đăng nhập Google: " + error.message;
             }
         });
     </script>
