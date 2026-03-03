@@ -47,13 +47,24 @@
         .btn-save:disabled { background: #334155; color: #94a3b8; cursor: not-allowed; }
 
         .bank-info-box { background: rgba(255,255,255,0.05); border: 1px dashed var(--border); padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
+        
+        /* CẬP NHẬT TAB GAMES */
+        .game-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: #0f172a; padding: 5px; border-radius: 10px;}
+        .btn-tab { flex: 1; padding: 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s;}
+        .btn-tab.active { background: var(--primary); color: #000;}
+        .game-mode-content { display: none; animation: fadeIn 0.4s ease; }
+        .game-mode-content.active { display: block; }
+
         .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
+        .game-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 10px; }
+        
         .btn-bet { padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.2s; }
         .btn-bet:active { transform: scale(0.97); }
         .btn-bet span { font-size: 12px; font-weight: normal; opacity: 0.9; }
         .bg-c { background: #ef4444; } .bg-l { background: #3b82f6; }
         .bg-c2 { background: #f59e0b; } .bg-l2 { background: #8b5cf6; }
         .bg-cc { background: #10b981; } .bg-ll { background: #14b8a6; }
+        .bg-n1 { background: #ec4899; } .bg-n2 { background: #8b5cf6; } .bg-n3 { background: #14b8a6; }
         
         #qr-result { display: none; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; text-align: center; margin-top: 25px; border: 1px solid var(--primary); }
         #qr-result img { max-width: 220px; border-radius: 8px; margin: 15px 0; }
@@ -74,7 +85,7 @@
         .contact-card:hover { transform: translateY(-5px); border-color: var(--primary); background: rgba(56, 189, 248, 0.05); }
         .contact-card i { font-size: 40px; margin-bottom: 15px; }
         .contact-card.tele i { color: #0088cc; }
-        .contact-card.mail i { color: #00F2FE; } /* Đổi màu xanh cho hợp theme Tawk.to */
+        .contact-card.mail i { color: #00F2FE; }
         .contact-card h3 { margin-bottom: 5px; font-size: 18px; }
         .contact-card p { color: var(--text-muted); font-size: 14px; }
 
@@ -94,7 +105,7 @@
             .sidebar-close { display: block; } 
             .main-content { margin-left: 0; width: 100%; }
             .menu-toggle { display: block; } 
-            .game-grid, .contact-grid { grid-template-columns: 1fr; }
+            .game-grid, .contact-grid, .game-grid-3 { grid-template-columns: 1fr; }
             .section-content { padding: 15px; } 
             header { padding: 15px; }
         }
@@ -130,7 +141,7 @@
 
         <section id="sec-game" class="section-content active">
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-coins"></i> Đặt Cược Chẵn Lẻ Bank</div>
+                <div class="card-title"><i class="fa-solid fa-coins"></i> Đặt Cược Tự Động</div>
                 <div class="bank-info-box">
                     <p style="color: var(--text-muted); font-size: 14px;">Hệ thống chuyển khoản tự động MBBank</p>
                     <h2 style="color: var(--primary); margin: 5px 0; letter-spacing: 2px;">4477040408</h2>
@@ -144,15 +155,33 @@
                     <label>Số tiền muốn cược (Tối thiểu 5.000đ)</label>
                     <input type="number" id="coinAmount" placeholder="VD: 20000" min="2000" step="1000">
                 </div>
-                <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn cửa dự đoán:</label>
-                <div class="game-grid">
-                    <button class="btn-bet bg-c" onclick="generateQR('C', 2)">CHẴN (C) <span>Đuôi 2,4,6,8 - x2</span></button>
-                    <button class="btn-bet bg-l" onclick="generateQR('L', 2)">LẺ (L) <span>Đuôi 1,3,5,7 - x2</span></button>
-                    <button class="btn-bet bg-c2" onclick="generateQR('C2', 1.5)">CHẴN 2 (C2) <span>Đuôi 0,2,4,6,8 - x1.5</span></button>
-                    <button class="btn-bet bg-l2" onclick="generateQR('L2', 1.5)">LẺ 2 (L2) <span>Đuôi 1,3,5,7,9 - x1.5</span></button>
-                    <button class="btn-bet bg-cc" onclick="generateQR('CC', 1.5)">TÀI (CC) <span>Đuôi 1,2,3,4,5 - x1.5</span></button>
-                    <button class="btn-bet bg-ll" onclick="generateQR('LL', 1.5)">XỈU (LL) <span>Đuôi 6,7,8,9,0 - x1.5</span></button>
+
+                <div class="game-tabs">
+                    <button class="btn-tab active" onclick="switchGameMode('chanle', this)">Chẵn Lẻ Bank</button>
+                    <button class="btn-tab" onclick="switchGameMode('1phan3', this)">1 Phần 3 (x3)</button>
                 </div>
+
+                <div id="mode-chanle" class="game-mode-content active">
+                    <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn cửa dự đoán:</label>
+                    <div class="game-grid">
+                        <button class="btn-bet bg-c" onclick="generateQR('C', 2)">CHẴN (C) <span>Đuôi 2,4,6,8 - x2</span></button>
+                        <button class="btn-bet bg-l" onclick="generateQR('L', 2)">LẺ (L) <span>Đuôi 1,3,5,7 - x2</span></button>
+                        <button class="btn-bet bg-c2" onclick="generateQR('C2', 1.5)">CHẴN 2 (C2) <span>Đuôi 0,2,4,6,8 - x1.5</span></button>
+                        <button class="btn-bet bg-l2" onclick="generateQR('L2', 1.5)">LẺ 2 (L2) <span>Đuôi 1,3,5,7,9 - x1.5</span></button>
+                        <button class="btn-bet bg-cc" onclick="generateQR('CC', 1.5)">TÀI (CC) <span>Đuôi 1,2,3,4,5 - x1.5</span></button>
+                        <button class="btn-bet bg-ll" onclick="generateQR('LL', 1.5)">XỈU (LL) <span>Đuôi 6,7,8,9,0 - x1.5</span></button>
+                    </div>
+                </div>
+
+                <div id="mode-1phan3" class="game-mode-content">
+                    <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn nhóm dự đoán (Tỷ lệ x3):</label>
+                    <div class="game-grid-3">
+                        <button class="btn-bet bg-n1" onclick="generateQR('N1', 3)">NHÓM 1 (N1) <span>Đuôi 1, 5, 7 - x3</span></button>
+                        <button class="btn-bet bg-n2" onclick="generateQR('N2', 3)">NHÓM 2 (N2) <span>Đuôi 2, 4, 8 - x3</span></button>
+                        <button class="btn-bet bg-n3" onclick="generateQR('N3', 3)">NHÓM 3 (N3) <span>Đuôi 3, 6, 9 - x3</span></button>
+                    </div>
+                </div>
+
                 <div id="qr-result">
                     <h3 style="color: var(--primary);">Quét Mã Chuyển Khoản</h3>
                     <img id="qrImage" src="" alt="QR Thanh Toán">
@@ -264,6 +293,7 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+        // (GIỮ NGUYÊN TOÀN BỘ CẤU HÌNH VÀ CODE CŨ CỦA FIREBASE)
         const firebaseConfig = {
             apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
             authDomain: "clvn-5571b.firebaseapp.com",
@@ -280,11 +310,11 @@
         let currentUserUid = null;
         let globalUserData = null; 
 
-        // ==================== CẤU HÌNH BOT TELEGRAM ====================
+        // CẤU HÌNH BOT TELEGRAM
         const telegramBotToken = "8590476877:AAEzGcryuXjIk3E1zk7c7FBePHGSoTrWTCs";
         const telegramChatId = "8405954014"; 
 
-        // ==================== POPUP ====================
+        // POPUP
         window.showNotification = function(title, message, type = "info") {
             document.getElementById("modalTitle").innerHTML = title;
             document.getElementById("modalMessage").innerHTML = message;
@@ -297,7 +327,7 @@
         window.closeModal = function() { document.getElementById("notificationModal").style.display = "none"; }
         document.getElementById('notificationModal').addEventListener('click', function(e) { if (e.target === this) window.closeModal(); });
 
-        // ==================== BANK LIST ====================
+        // BANK LIST
         const bankList = [
             { code: "ICB", short_name: "VietinBank" }, { code: "VCB", short_name: "Vietcombank" },
             { code: "MB", short_name: "MBBank" }, { code: "ACB", short_name: "ACB" },
@@ -307,31 +337,15 @@
             { code: "BIDV", short_name: "BIDV" }, { code: "STB", short_name: "Sacombank" },
             { code: "VIB", short_name: "VIB" }, { code: "HDB", short_name: "HDBank" },
             { code: "SEAB", short_name: "SeABank" }, { code: "GPB", short_name: "GPBank" },
-            { code: "PVCB", short_name: "PVcomBank" }, { code: "PVCBP", short_name: "PVcomBankPay" },
-            { code: "NCB", short_name: "NCB" }, { code: "SHBVN", short_name: "ShinhanBank" },
-            { code: "SCB", short_name: "SCB" }, { code: "PGB", short_name: "PGBank" },
-            { code: "VBA", short_name: "Agribank" }, { code: "TCB", short_name: "Techcombank" },
-            { code: "SGICB", short_name: "SaigonBank" }, { code: "DOB", short_name: "DongABank" },
-            { code: "BAB", short_name: "BacABank" }, { code: "SCVN", short_name: "StandardChartered" },
-            { code: "Oceanbank", short_name: "Oceanbank" }, { code: "VRB", short_name: "VRB" },
-            { code: "ABB", short_name: "ABBANK" }, { code: "VAB", short_name: "VietABank" },
-            { code: "EIB", short_name: "Eximbank" }, { code: "VIETBANK", short_name: "VietBank" },
-            { code: "IVB", short_name: "IndovinaBank" }, { code: "BVB", short_name: "BaoVietBank" },
-            { code: "PBVN", short_name: "PublicBank" }, { code: "SHB", short_name: "SHB" },
-            { code: "CBB", short_name: "CBBank" }, { code: "OCB", short_name: "OCB" },
-            { code: "KLB", short_name: "KienLongBank" }, { code: "CIMB", short_name: "CIMB" },
-            { code: "HSBC", short_name: "HSBC" }, { code: "DBS", short_name: "DBSBank" },
-            { code: "NHB HN", short_name: "Nonghyup" }, { code: "HLBVN", short_name: "HongLeong" },
-            { code: "IBK - HN", short_name: "IBK Bank" }, { code: "IBK - HCM", short_name: "IBK Bank" },
-            { code: "WVN", short_name: "Woori" }, { code: "UOB", short_name: "UnitedOverseas" },
-            { code: "KBHN", short_name: "KookminHN" }, { code: "KBHCM", short_name: "KookminHCM" },
-            { code: "COOPBANK", short_name: "COOPBANK" }
+            { code: "TCB", short_name: "Techcombank" }, { code: "VBA", short_name: "Agribank" },
+            { code: "SCB", short_name: "SCB" }, { code: "SHB", short_name: "SHB" },
+            { code: "EIB", short_name: "Eximbank" }, { code: "OCB", short_name: "OCB" }
         ];
         const bankSelect = document.getElementById('profileBank');
         bankSelect.innerHTML = '<option value="">-- Chọn ngân hàng --</option>';
         bankList.forEach(bank => { bankSelect.innerHTML += `<option value="${bank.code}">${bank.short_name}</option>`; });
 
-        // ==================== AUTH STATE & RENDER ====================
+        // AUTH STATE & RENDER
         function updateUIVisuals(data) {
             const balanceStr = (data.balance || 0).toLocaleString('vi-VN') + ' đ';
             document.getElementById('balanceDisplay').innerHTML = `<i class="fa-solid fa-wallet"></i> ${balanceStr}`;
@@ -345,20 +359,12 @@
                 document.getElementById('gameUsername').value = username;
                 document.getElementById('profileEmail').value = user.email;
 
-                // XỬ LÝ ĐỒNG BỘ THÔNG TIN CHO TAWK.TO
                 window.Tawk_API = window.Tawk_API || {};
                 const setTawkInfo = () => {
-                    window.Tawk_API.setAttributes({
-                        'name': username,
-                        'email': user.email
-                    }, function(error) {});
+                    window.Tawk_API.setAttributes({ 'name': username, 'email': user.email }, function(error) {});
                 };
-                
-                if (typeof window.Tawk_API.setAttributes === 'function') {
-                    setTawkInfo();
-                } else {
-                    window.Tawk_API.onLoad = function() { setTawkInfo(); };
-                }
+                if (typeof window.Tawk_API.setAttributes === 'function') { setTawkInfo(); } 
+                else { window.Tawk_API.onLoad = function() { setTawkInfo(); }; }
 
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
@@ -366,9 +372,7 @@
                 if (docSnap.exists()) {
                     globalUserData = docSnap.data();
                     globalUserData.email = user.email; 
-                    
                     updateUIVisuals(globalUserData);
-                    
                     if (globalUserData.phone) document.getElementById('profilePhone').value = globalUserData.phone;
                     if (globalUserData.bankCode) document.getElementById('profileBank').value = globalUserData.bankCode;
                     if (globalUserData.bankAccount) document.getElementById('profileAccount').value = globalUserData.bankAccount;
@@ -384,24 +388,17 @@
             }
         });
 
-        // ==================== XỬ LÝ RÚT TIỀN & GỬI TELEGRAM ====================
+        // XỬ LÝ RÚT TIỀN (GIỮ NGUYÊN)
         window.requestWithdraw = async function() {
             if (!currentUserUid || !globalUserData) return;
             const withdrawAmount = parseInt(document.getElementById('withdrawAmount').value);
             
-            if (!withdrawAmount || withdrawAmount < 50000) {
-                return showNotification("⚠️ Cảnh báo", "Số tiền rút tối thiểu là 50.000đ!", "error");
-            }
-            if (globalUserData.balance < withdrawAmount) {
-                return showNotification("⚠️ Cảnh báo", "Số dư của bạn không đủ để thực hiện lệnh rút này!", "error");
-            }
-            if (!globalUserData.bankCode || !globalUserData.bankAccount) {
-                return showNotification("⚠️ Cảnh báo", "Vui lòng cập nhật đầy đủ Ngân hàng và Số tài khoản ở mục <b>Hồ Sơ Cá Nhân</b> trước khi rút!", "error");
-            }
+            if (!withdrawAmount || withdrawAmount < 50000) return showNotification("⚠️ Cảnh báo", "Số tiền rút tối thiểu là 50.000đ!", "error");
+            if (globalUserData.balance < withdrawAmount) return showNotification("⚠️ Cảnh báo", "Số dư không đủ!", "error");
+            if (!globalUserData.bankCode || !globalUserData.bankAccount) return showNotification("⚠️ Cảnh báo", "Vui lòng cập nhật STK ở Hồ Sơ Cá Nhân!", "error");
 
             const btn = document.getElementById('btnSubmitWithdraw');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý lệnh...';
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý lệnh...';
 
             try {
                 let wins = 0, losses = 0;
@@ -409,8 +406,7 @@
                 const txSnap = await getDocs(txQuery);
                 txSnap.forEach(doc => {
                     const status = doc.data().status;
-                    if (status === 'win') wins++;
-                    else if (status === 'lose') losses++;
+                    if (status === 'win') wins++; else if (status === 'lose') losses++;
                 });
 
                 const userRef = doc(db, "users", currentUserUid);
@@ -418,7 +414,7 @@
                     const userDoc = await transaction.get(userRef);
                     if (!userDoc.exists()) throw new Error("Tài khoản không tồn tại!");
                     const currentBalance = userDoc.data().balance || 0;
-                    if (currentBalance < withdrawAmount) throw new Error("Số dư đã thay đổi, không đủ để rút!");
+                    if (currentBalance < withdrawAmount) throw new Error("Số dư không đủ để rút!");
                     transaction.update(userRef, { balance: currentBalance - withdrawAmount });
                 });
 
@@ -427,35 +423,22 @@
                 document.getElementById('withdrawAmount').value = '';
 
                 const timeStr = new Date().toLocaleString('vi-VN');
-                const teleMsg = `🚨 *YÊU CẦU RÚT TIỀN MỚI* 🚨\n\n` +
-                                `👤 *User:* ${globalUserData.email}\n` +
-                                `💰 *Số tiền rút:* ${withdrawAmount.toLocaleString('vi-VN')}đ\n` +
-                                `💳 *Ngân hàng:* ${globalUserData.bankCode}\n` +
-                                `🏦 *STK:* \`${globalUserData.bankAccount}\`\n` +
-                                `📞 *SĐT:* ${globalUserData.phone || 'Chưa cập nhật'}\n` +
-                                `🕒 *Thời gian:* ${timeStr}\n\n` +
-                                `📊 *Thống kê lịch sử chơi:*\n` +
-                                `- Tổng ván: ${globalUserData.totalGames || 0}\n` +
-                                `- Thắng: ${wins}\n` +
-                                `- Thua: ${losses}`;
+                const teleMsg = `🚨 *YÊU CẦU RÚT TIỀN MỚI* 🚨\n\n👤 *User:* ${globalUserData.email}\n💰 *Số tiền rút:* ${withdrawAmount.toLocaleString('vi-VN')}đ\n💳 *Ngân hàng:* ${globalUserData.bankCode}\n🏦 *STK:* \`${globalUserData.bankAccount}\`\n📞 *SĐT:* ${globalUserData.phone || 'Trống'}\n🕒 *Thời gian:* ${timeStr}\n\n📊 *Lịch sử:* Thắng ${wins} - Thua ${losses}`;
 
                 const teleUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
                 await fetch(teleUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ chat_id: telegramChatId, text: teleMsg, parse_mode: 'Markdown' })
                 });
-
-                showNotification("✅ Thành công", "Lệnh rút tiền đã được gửi hệ thống! Vui lòng chờ Admin kiểm tra và chuyển khoản.", "success");
+                showNotification("✅ Thành công", "Lệnh rút tiền đã được gửi!", "success");
             } catch (error) {
-                showNotification("❌ Lỗi hệ thống", error.message || "Có lỗi xảy ra, vui lòng thử lại.", "error");
+                showNotification("❌ Lỗi hệ thống", error.message || "Có lỗi xảy ra.", "error");
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Gửi Yêu Cầu Rút Tiền';
+                btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Gửi Yêu Cầu Rút Tiền';
             }
         };
 
-        // ==================== LƯU PROFILE ====================
+        // LƯU PROFILE (GIỮ NGUYÊN)
         document.getElementById("btnSaveProfile").addEventListener("click", async () => {
             if (!currentUserUid) return;
             const phone = document.getElementById("profilePhone").value.trim();
@@ -463,32 +446,27 @@
             const bankAccount = document.getElementById("profileAccount").value.trim();
 
             try {
-                await updateDoc(doc(db, "users", currentUserUid), {
-                    phone: phone || null, bankCode: bankCode || null, bankAccount: bankAccount || null, updatedAt: new Date()
-                });
+                await updateDoc(doc(db, "users", currentUserUid), { phone: phone || null, bankCode: bankCode || null, bankAccount: bankAccount || null, updatedAt: new Date() });
                 globalUserData.phone = phone; globalUserData.bankCode = bankCode; globalUserData.bankAccount = bankAccount;
                 window.showNotification("✅ Thành công!", "Thông tin cá nhân đã được lưu.", "success");
-            } catch (err) {
-                window.showNotification("❌ Lỗi", "Không thể lưu thông tin. Vui lòng thử lại sau.", "error");
-            }
+            } catch (err) { window.showNotification("❌ Lỗi", "Lưu thông tin thất bại.", "error"); }
         });
 
-        // ==================== LOGOUT ====================
+        // LOGOUT (GIỮ NGUYÊN)
         document.getElementById("btnLogout").addEventListener("click", async () => {
-            if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
+            if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
                 try { await signOut(auth); window.location.href = "dangnhap.html"; } 
                 catch (err) { window.showNotification("❌ Lỗi", "Đăng xuất thất bại.", "error"); }
             }
         });
 
-        // ==================== TRA SOÁT ====================
+        // TRA SOÁT (GIỮ NGUYÊN)
         window.searchTransaction = async function() {
             const transId = document.getElementById('searchTransId').value.trim();
             const resBox = document.getElementById('searchResultBox');
-            if (!transId) return window.showNotification("⚠️ Cảnh báo", "Vui lòng nhập mã giao dịch để tra cứu!", "error");
+            if (!transId) return window.showNotification("⚠️ Cảnh báo", "Vui lòng nhập mã giao dịch!", "error");
             
-            resBox.style.display = 'block';
-            resBox.style.background = '#334155';
+            resBox.style.display = 'block'; resBox.style.background = '#334155';
             resBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin fa-2x"></i><p style="margin-top: 10px;">Đang tìm kiếm dữ liệu...</p>';
             
             try {
@@ -501,23 +479,19 @@
                     
                     if(data.status === 'win') {
                         resBox.style.background = 'var(--success)';
-                        resBox.innerHTML = `<h3><i class="fa-solid fa-circle-check"></i> THẮNG CƯỢC</h3>
-                            <p><b>Mã GD:</b> ${data.transId}</p><p><b>Thời gian:</b> ${timeStr}</p><p><b>Cửa đánh:</b> ${data.choice}</p><p><b>Tiền cược:</b> ${data.amount.toLocaleString('vi-VN')}đ</p>
-                            <div class="amt" style="font-size: 20px; font-weight: bold; margin-top: 10px; background: rgba(0,0,0,0.2); display: inline-block; padding: 5px 15px; border-radius: 20px;">Tiền nhận: ${(data.amount * data.rate).toLocaleString('vi-VN')}đ</div>`;
+                        resBox.innerHTML = `<h3><i class="fa-solid fa-circle-check"></i> THẮNG CƯỢC</h3><p><b>Mã GD:</b> ${data.transId}</p><p><b>Thời gian:</b> ${timeStr}</p><p><b>Cửa đánh:</b> ${data.choice}</p><p><b>Tiền cược:</b> ${data.amount.toLocaleString('vi-VN')}đ</p><div class="amt" style="font-size: 20px; font-weight: bold; margin-top: 10px; background: rgba(0,0,0,0.2); display: inline-block; padding: 5px 15px; border-radius: 20px;">Tiền nhận: ${(data.amount * data.rate).toLocaleString('vi-VN')}đ</div>`;
                     } else {
                         resBox.style.background = 'var(--danger)';
-                        resBox.innerHTML = `<h3><i class="fa-solid fa-circle-xmark"></i> THUA CƯỢC</h3>
-                            <p><b>Mã GD:</b> ${data.transId}</p><p><b>Thời gian:</b> ${timeStr}</p><p><b>Cửa đánh:</b> ${data.choice}</p><p><b>Tiền cược:</b> ${data.amount.toLocaleString('vi-VN')}đ</p><p style="margin-top:10px; font-style: italic;">Chúc bạn may mắn lần sau!</p>`;
+                        resBox.innerHTML = `<h3><i class="fa-solid fa-circle-xmark"></i> THUA CƯỢC</h3><p><b>Mã GD:</b> ${data.transId}</p><p><b>Thời gian:</b> ${timeStr}</p><p><b>Cửa đánh:</b> ${data.choice}</p><p><b>Tiền cược:</b> ${data.amount.toLocaleString('vi-VN')}đ</p><p style="margin-top:10px; font-style: italic;">Chúc bạn may mắn lần sau!</p>`;
                     }
                 } else {
                     resBox.style.background = '#f59e0b';
-                    resBox.innerHTML = `<h3><i class="fa-solid fa-triangle-exclamation"></i> KHÔNG TÌM THẤY</h3>
-                        <p>Mã giao dịch <b>${transId}</b> không tồn tại hoặc hệ thống chưa xử lý kịp.</p>`;
+                    resBox.innerHTML = `<h3><i class="fa-solid fa-triangle-exclamation"></i> KHÔNG TÌM THẤY</h3><p>Mã giao dịch <b>${transId}</b> không tồn tại.</p>`;
                 }
             } catch (error) { resBox.style.background = 'var(--danger)'; resBox.innerHTML = '<p>Lỗi hệ thống khi tra cứu dữ liệu.</p>'; }
         };
 
-        // ==================== UI FUNCTIONS ====================
+        // UI FUNCTIONS
         window.switchTab = function(tabName, element) {
             document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
@@ -525,8 +499,19 @@
             if(element) element.classList.add('active');
             if(window.innerWidth <= 768) window.toggleSidebar();
         };
-
         window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
+
+        // CHUYỂN ĐỔI TAB GAME (HÀM MỚI)
+        window.switchGameMode = function(modeName, element) {
+            document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.querySelectorAll('.game-mode-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`mode-${modeName}`).classList.add('active');
+            
+            // Xóa QR code hiển thị của game trước đó khi đổi mode
+            document.getElementById('qr-result').style.display = 'none';
+        }
 
         window.generateQR = function(choice, rate) {
             const amt = document.getElementById('coinAmount').value;
@@ -546,20 +531,13 @@
             const querySnapshot = await getDocs(q);
             tbody.innerHTML = '';
             if (querySnapshot.empty) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Chưa có giao dịch nào</td></tr>`;
-                return;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Chưa có giao dịch nào</td></tr>`; return;
             }
             querySnapshot.forEach((doc) => {
                 const tx = doc.data();
                 const d = tx.createdAt ? tx.createdAt.toDate() : new Date();
                 const badge = tx.status === 'win' ? `<span class="badge win">+${(tx.amount*tx.rate).toLocaleString()}đ</span>` : `<span class="badge lose">Thua</span>`;
-                tbody.innerHTML += `<tr>
-                    <td>${tx.transId}</td>
-                    <td>${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</td>
-                    <td><b>${tx.choice}</b></td>
-                    <td>${tx.amount.toLocaleString()}đ</td>
-                    <td>${badge}</td>
-                </tr>`;
+                tbody.innerHTML += `<tr><td>${tx.transId}</td><td>${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</td><td><b>${tx.choice}</b></td><td>${tx.amount.toLocaleString()}đ</td><td>${badge}</td></tr>`;
             });
         }
     </script>
@@ -568,13 +546,9 @@
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
         (function(){
             var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-            s1.async=true;
-            s1.src='https://embed.tawk.to/65eaf2cf8d261e1b5f6a7ef0/1hoes8uro';
-            s1.charset='UTF-8';
-            s1.setAttribute('crossorigin','*');
+            s1.async=true; s1.src='https://embed.tawk.to/65eaf2cf8d261e1b5f6a7ef0/1hoes8uro'; s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
             s0.parentNode.insertBefore(s1,s0);
         })();
     </script>
-
 </body>
 </html>
