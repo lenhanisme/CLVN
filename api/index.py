@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 import re
 from datetime import datetime
@@ -6,17 +7,23 @@ from firebase_admin import credentials, firestore
 
 app = Flask(__name__)
 
-# ================= KHỞI TẠO FIREBASE (Serverless Safe) =================
-# Kiểm tra xem app đã khởi tạo chưa (tránh lỗi sập web khi Vercel khởi động lại liên tục)
-if not firebase_admin._apps:
-    try:
-        cred = credentials.Certificate("serviceAccountKey.json")
+# ================= KHỞI TẠO FIREBASE (Vercel Safe) =================
+db = None
+try:
+    if not firebase_admin._apps:
+        # Lấy đường dẫn tuyệt đối của thư mục chứa file index.py hiện tại
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # Trỏ chính xác tới file serviceAccountKey.json nằm cùng thư mục
+        key_path = os.path.join(current_dir, "serviceAccountKey.json")
+        
+        cred = credentials.Certificate(key_path)
         firebase_admin.initialize_app(cred)
-        print("[+] Đã kết nối thành công với Firebase Firestore!")
-    except Exception as e:
-        print("[-] Lỗi kết nối Firebase:", e)
-
-db = firestore.client()
+    
+    # Khởi tạo db an toàn sau khi đã nạp chứng chỉ
+    db = firestore.client()
+    print("[+] Đã kết nối Firebase thành công!")
+except Exception as e:
+    print("[-] Lỗi khởi tạo Firebase:", e)
 
 # ================= LUẬT CHƠI =================
 GAME_RULES = {
@@ -31,7 +38,6 @@ GAME_RULES = {
     'N3': {'digits': [3, 6, 9], 'rate': 3.0}
 }
 
-# ================= KIỂM TRA GAME GẤP 3 (KG3) =================
 def check_kg3_result(ref_number):
     ref_str = ''.join(filter(str.isdigit, str(ref_number)))
     if not ref_str: return False, 0.0
@@ -63,21 +69,22 @@ def find_user_by_username(username):
     return None
 
 # ================= API WEBHOOK LẮNG NGHE SEPAY =================
-# SePay sẽ gọi vào đường dẫn /api/index (Phương thức POST) mỗi khi có tiền vào
+# Cấu hình 2 đường dẫn để chặn lỗi 308 Redirect của Vercel
+@app.route('/api', methods=['POST'])
 @app.route('/api/index', methods=['POST'])
 def sepay_webhook():
-    # Lấy dữ liệu SePay bắn sang
+    if db is None:
+        return jsonify({"status": "error", "message": "Firebase not initialized"}), 500
+
     data = request.json
     if not data:
         return jsonify({"status": "error", "message": "No data received"}), 400
 
-    # Định dạng Webhook của SePay (Tên biến có thể là amountIn hoặc amount_in tuỳ phiên bản)
     tx_id = str(data.get("id", ""))
     amount_in = float(data.get("amountIn", data.get("amount_in", 0)))
     ref_number = data.get("referenceNumber", data.get("reference_number", ""))
     content = data.get("transactionContent", data.get("transaction_content", "")).strip()
 
-    # Bỏ qua nếu không phải tiền vào
     if amount_in <= 0:
         return jsonify({"status": "ignored", "message": "Not an incoming transfer"}), 200
 
@@ -87,7 +94,6 @@ def sepay_webhook():
         print("    [-] Bỏ qua: Số tiền cược dưới 2.000đ.")
         return jsonify({"status": "ignored", "message": "Amount too low"}), 200
 
-    # Tìm cú pháp: CLVN <username> <C/L/C2/L2/CC/LL/N1/N2/N3/KG3>
     match = re.search(r'CLVN\s+(\w+)\s+(C2|L2|CC|LL|N1|N2|N3|KG3|C|L)', content, re.IGNORECASE)
     
     if match:
@@ -105,7 +111,7 @@ def sepay_webhook():
                 payout = amount_in * rate
                 status = "win"
             else:
-                rate = 3.0 # Chỉ dùng để lưu lịch sử
+                rate = 3.0
         else:
             last_digit = get_last_digit(ref_number)
             if last_digit is None:
@@ -146,7 +152,7 @@ def sepay_webhook():
                 tx_data = {
                     'transId': ref_number,
                     'amount': amount_in,
-                    'choice': f"{choice} (x{rate})" if choice != "KG3" or status == "win" else f"KG3 (Chờ x3-x5)",
+                    'choice': f"{choice} (x{rate})" if choice != "KG3" or status == "win" else "KG3 (Chờ x3-x5)",
                     'rate': rate,
                     'status': status,
                     'createdAt': firestore.SERVER_TIMESTAMP
@@ -169,6 +175,5 @@ def sepay_webhook():
         print("    [-] Sai cú pháp cược.")
         return jsonify({"status": "ignored", "message": "Invalid syntax"}), 200
 
-# Tuỳ thuộc vào nền tảng (Vercel hỗ trợ biến app ở dạng root)
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
