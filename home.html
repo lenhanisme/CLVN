@@ -49,14 +49,15 @@
         .bank-info-box { background: rgba(255,255,255,0.05); border: 1px dashed var(--border); padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
         
         /* CẬP NHẬT TAB GAMES */
-        .game-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: #0f172a; padding: 5px; border-radius: 10px;}
-        .btn-tab { flex: 1; padding: 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s;}
+        .game-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; background: #0f172a; padding: 5px; border-radius: 10px;}
+        .btn-tab { flex: 1; min-width: 100px; padding: 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s;}
         .btn-tab.active { background: var(--primary); color: #000;}
         .game-mode-content { display: none; animation: fadeIn 0.4s ease; }
         .game-mode-content.active { display: block; }
 
         .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
         .game-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 10px; }
+        .game-grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 10px; }
         
         .btn-bet { padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.2s; }
         .btn-bet:active { transform: scale(0.97); }
@@ -65,6 +66,9 @@
         .bg-c2 { background: #f59e0b; } .bg-l2 { background: #8b5cf6; }
         .bg-cc { background: #10b981; } .bg-ll { background: #14b8a6; }
         .bg-n1 { background: #ec4899; } .bg-n2 { background: #8b5cf6; } .bg-n3 { background: #14b8a6; }
+        .bg-gap3 { background: #f97316; }
+
+        .num-badge { background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 4px; font-size: 12px; display: inline-block; margin: 2px; }
         
         #qr-result { display: none; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; text-align: center; margin-top: 25px; border: 1px solid var(--primary); }
         #qr-result img { max-width: 220px; border-radius: 8px; margin: 15px 0; }
@@ -105,7 +109,7 @@
             .sidebar-close { display: block; } 
             .main-content { margin-left: 0; width: 100%; }
             .menu-toggle { display: block; } 
-            .game-grid, .contact-grid, .game-grid-3 { grid-template-columns: 1fr; }
+            .game-grid, .contact-grid, .game-grid-3, .game-grid-1 { grid-template-columns: 1fr; }
             .section-content { padding: 15px; } 
             header { padding: 15px; }
         }
@@ -159,26 +163,48 @@
                 <div class="game-tabs">
                     <button class="btn-tab active" onclick="switchGameMode('chanle', this)">Chẵn Lẻ Bank</button>
                     <button class="btn-tab" onclick="switchGameMode('1phan3', this)">1 Phần 3 (x3)</button>
+                    <button class="btn-tab" onclick="switchGameMode('gap3', this)">Gấp 3 (x3, x4, x5)</button>
                 </div>
 
                 <div id="mode-chanle" class="game-mode-content active">
                     <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn cửa dự đoán:</label>
                     <div class="game-grid">
-                        <button class="btn-bet bg-c" onclick="generateQR('C', 2)">CHẴN (C) <span>Đuôi 2,4,6,8 - x2</span></button>
-                        <button class="btn-bet bg-l" onclick="generateQR('L', 2)">LẺ (L) <span>Đuôi 1,3,5,7 - x2</span></button>
-                        <button class="btn-bet bg-c2" onclick="generateQR('C2', 1.5)">CHẴN 2 (C2) <span>Đuôi 0,2,4,6,8 - x1.5</span></button>
-                        <button class="btn-bet bg-l2" onclick="generateQR('L2', 1.5)">LẺ 2 (L2) <span>Đuôi 1,3,5,7,9 - x1.5</span></button>
-                        <button class="btn-bet bg-cc" onclick="generateQR('CC', 1.5)">TÀI (CC) <span>Đuôi 1,2,3,4,5 - x1.5</span></button>
-                        <button class="btn-bet bg-ll" onclick="generateQR('LL', 1.5)">XỈU (LL) <span>Đuôi 6,7,8,9,0 - x1.5</span></button>
+                        <button class="btn-bet bg-c" onclick="generateQR('C')">CHẴN (C) <span>Đuôi 2,4,6,8 - x2</span></button>
+                        <button class="btn-bet bg-l" onclick="generateQR('L')">LẺ (L) <span>Đuôi 1,3,5,7 - x2</span></button>
+                        <button class="btn-bet bg-c2" onclick="generateQR('C2')">CHẴN 2 (C2) <span>Đuôi 0,2,4,6,8 - x1.5</span></button>
+                        <button class="btn-bet bg-l2" onclick="generateQR('L2')">LẺ 2 (L2) <span>Đuôi 1,3,5,7,9 - x1.5</span></button>
+                        <button class="btn-bet bg-cc" onclick="generateQR('CC')">TÀI (CC) <span>Đuôi 1,2,3,4,5 - x1.5</span></button>
+                        <button class="btn-bet bg-ll" onclick="generateQR('LL')">XỈU (LL) <span>Đuôi 6,7,8,9,0 - x1.5</span></button>
                     </div>
                 </div>
 
                 <div id="mode-1phan3" class="game-mode-content">
                     <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn nhóm dự đoán (Tỷ lệ x3):</label>
                     <div class="game-grid-3">
-                        <button class="btn-bet bg-n1" onclick="generateQR('N1', 3)">NHÓM 1 (N1) <span>Đuôi 1, 5, 7 - x3</span></button>
-                        <button class="btn-bet bg-n2" onclick="generateQR('N2', 3)">NHÓM 2 (N2) <span>Đuôi 2, 4, 8 - x3</span></button>
-                        <button class="btn-bet bg-n3" onclick="generateQR('N3', 3)">NHÓM 3 (N3) <span>Đuôi 3, 6, 9 - x3</span></button>
+                        <button class="btn-bet bg-n1" onclick="generateQR('N1')">NHÓM 1 (N1) <span>Đuôi 1, 5, 7 - x3</span></button>
+                        <button class="btn-bet bg-n2" onclick="generateQR('N2')">NHÓM 2 (N2) <span>Đuôi 2, 4, 8 - x3</span></button>
+                        <button class="btn-bet bg-n3" onclick="generateQR('N3')">NHÓM 3 (N3) <span>Đuôi 3, 6, 9 - x3</span></button>
+                    </div>
+                </div>
+
+                <div id="mode-gap3" class="game-mode-content">
+                    <label style="display:block; margin: 10px 0; font-weight: 500;">Chọn cược Gấp 3 (Dựa vào 2-3 số cuối):</label>
+                    <div class="game-grid-1">
+                        <button class="btn-bet bg-gap3" onclick="generateQR('KG3')" style="flex-direction: row; justify-content: space-between; padding: 20px;">
+                            <div style="text-align: left;">
+                                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">CHƠI GẤP 3 (MÃ: KG3)</div>
+                                <div style="font-size: 13px; font-weight: normal; opacity: 0.95; line-height: 1.8;">
+                                    <b>x3:</b> 
+                                    <span class="num-badge">02</span><span class="num-badge">13</span><span class="num-badge">17</span><span class="num-badge">19</span><span class="num-badge">21</span><span class="num-badge">29</span>
+                                    <span class="num-badge">35</span><span class="num-badge">37</span><span class="num-badge">47</span><span class="num-badge">49</span><span class="num-badge">51</span><span class="num-badge">54</span>
+                                    <span class="num-badge">57</span><span class="num-badge">63</span><span class="num-badge">64</span><span class="num-badge">74</span><span class="num-badge">83</span><span class="num-badge">91</span>
+                                    <span class="num-badge">95</span><span class="num-badge">96</span><br>
+                                    <b>x4:</b> <span class="num-badge">66</span><span class="num-badge">99</span><br>
+                                    <b>x5:</b> <span class="num-badge">123</span><span class="num-badge">234</span><span class="num-badge">456</span><span class="num-badge">678</span><span class="num-badge">789</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-qrcode fa-2x" style="opacity: 0.8;"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -293,7 +319,7 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // (GIỮ NGUYÊN TOÀN BỘ CẤU HÌNH VÀ CODE CŨ CỦA FIREBASE)
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
             authDomain: "clvn-5571b.firebaseapp.com",
@@ -388,7 +414,7 @@
             }
         });
 
-        // XỬ LÝ RÚT TIỀN (GIỮ NGUYÊN)
+        // XỬ LÝ RÚT TIỀN 
         window.requestWithdraw = async function() {
             if (!currentUserUid || !globalUserData) return;
             const withdrawAmount = parseInt(document.getElementById('withdrawAmount').value);
@@ -438,7 +464,7 @@
             }
         };
 
-        // LƯU PROFILE (GIỮ NGUYÊN)
+        // LƯU PROFILE 
         document.getElementById("btnSaveProfile").addEventListener("click", async () => {
             if (!currentUserUid) return;
             const phone = document.getElementById("profilePhone").value.trim();
@@ -452,7 +478,7 @@
             } catch (err) { window.showNotification("❌ Lỗi", "Lưu thông tin thất bại.", "error"); }
         });
 
-        // LOGOUT (GIỮ NGUYÊN)
+        // LOGOUT 
         document.getElementById("btnLogout").addEventListener("click", async () => {
             if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
                 try { await signOut(auth); window.location.href = "dangnhap.html"; } 
@@ -460,7 +486,7 @@
             }
         });
 
-        // TRA SOÁT (GIỮ NGUYÊN)
+        // TRA SOÁT 
         window.searchTransaction = async function() {
             const transId = document.getElementById('searchTransId').value.trim();
             const resBox = document.getElementById('searchResultBox');
@@ -501,7 +527,7 @@
         };
         window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
 
-        // CHUYỂN ĐỔI TAB GAME (HÀM MỚI)
+        // CHUYỂN ĐỔI TAB GAME
         window.switchGameMode = function(modeName, element) {
             document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
@@ -509,11 +535,10 @@
             document.querySelectorAll('.game-mode-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`mode-${modeName}`).classList.add('active');
             
-            // Xóa QR code hiển thị của game trước đó khi đổi mode
             document.getElementById('qr-result').style.display = 'none';
         }
 
-        window.generateQR = function(choice, rate) {
+        window.generateQR = function(choice) {
             const amt = document.getElementById('coinAmount').value;
             const usr = document.getElementById('gameUsername').value;
             if (!amt || amt < 2000) return window.showNotification("⚠️ Cảnh báo", "Cược tối thiểu 2.000đ!", "error");
