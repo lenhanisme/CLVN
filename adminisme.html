@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN PANEL - CLVN.VN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #0f172a; --bg-sidebar: #1e293b; --bg-card: #1e293b;
+            --text-main: #f8fafc; --text-muted: #94a3b8; 
+            --primary: #f43f5e; /* Đổi màu chủ đạo sang Đỏ Hồng cho Admin */
+            --primary-hover: #e11d48; --border: #334155; 
+            --success: #22c55e; --danger: #ef4444; --warning: #f59e0b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); display: flex; overflow-x: hidden; }
+
+        .sidebar { width: 260px; height: 100vh; background-color: var(--bg-sidebar); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; display: flex; flex-direction: column; z-index: 1000; }
+        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); }
+        .sidebar-header h2 { color: var(--primary); font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .nav-links { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 5px; }
+        .nav-link { padding: 15px 25px; color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s; cursor: pointer; border-left: 3px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: var(--primary); background: rgba(244, 63, 94, 0.1); border-left: 3px solid var(--primary); }
+        
+        .main-content { margin-left: 260px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; width: calc(100% - 260px); }
+        header { background: var(--bg-sidebar); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 99; }
+        .btn-logout { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-logout:hover { background: var(--danger); color: #fff; }
+
+        .section-content { display: none; padding: 30px; animation: fadeIn 0.4s ease; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .section-content.active { display: block; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; }
+        .card-title { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        
+        /* DASHBOARD STATS */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 20px; }
+        .stat-icon { font-size: 35px; color: var(--primary); background: rgba(244, 63, 94, 0.1); padding: 15px; border-radius: 12px; }
+        .stat-info h3 { font-size: 24px; margin: 5px 0; }
+        .stat-info p { color: var(--text-muted); font-size: 14px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        table th { color: var(--text-muted); font-weight: 500; background: rgba(0,0,0,0.2); }
+        .badge { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+        .badge.win { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .badge.lose { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        
+        .btn-action { padding: 6px 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; font-size: 12px; background: var(--primary); transition: 0.2s;}
+        .btn-action:hover { opacity: 0.8; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg-card); padding: 35px 30px; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid var(--border); position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #94a3b8; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid var(--border); color: #fff; border-radius: 8px; outline: none; }
+        .btn-save { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="accessDenied" style="display: flex; position: fixed; width: 100%; height: 100%; background: #0f172a; z-index: 9999; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
+        <i class="fa-solid fa-shield-halved" style="font-size: 80px; color: var(--danger); margin-bottom: 20px;"></i>
+        <h1 style="font-size: 30px; margin-bottom: 10px;">ĐANG KIỂM TRA QUYỀN TRUY CẬP...</h1>
+        <p style="color: var(--text-muted);">Vui lòng chờ trong giây lát.</p>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fa-solid fa-user-tie"></i> ADMIN CLVN</h2>
+        </div>
+        <div class="nav-links">
+            <a class="nav-link active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Tổng Quan</a>
+            <a class="nav-link" onclick="switchTab('users', this)"><i class="fa-solid fa-users"></i> Quản Lý Users</a>
+            <a class="nav-link" onclick="switchTab('transactions', this)"><i class="fa-solid fa-money-bill-transfer"></i> Lịch Sử Đặt Cược</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="header-left">
+                <h3 style="color: var(--text-muted);"><i class="fa-solid fa-screwdriver-wrench"></i> Control Panel</h3>
+            </div>
+            <div class="header-right">
+                <span id="adminEmailDisplay" style="margin-right: 15px; font-weight: bold; color: var(--primary);">admin@...</span>
+                <button id="btnLogout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
+            </div>
+        </header>
+
+        <section id="sec-dashboard" class="section-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fa-solid fa-users stat-icon"></i>
+                    <div class="stat-info">
+                        <p>Tổng Thành Viên</p>
+                        <h3 id="statTotalUsers">0</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fa-solid fa-sack-dollar stat-icon" style="color: var(--success); background: rgba(34, 197, 94, 0.1);"></i>
+                    <div class="stat-info">
+                        <p>Tổng Số Dư Users Đang Giữ</p>
+                        <h3 id="statTotalBalance" style="color: var(--success);">0 đ</h3>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fa-solid fa-receipt stat-icon" style="color: var(--warning); background: rgba(245, 158, 11, 0.1);"></i>
+                    <div class="stat-info">
+                        <p>Giao Dịch Gần Đây (Data)</p>
+                        <h3 id="statTotalTx">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-bullhorn"></i> Hướng Dẫn Quản Trị</div>
+                <p style="color: var(--text-muted); line-height: 1.8; font-size: 14.5px;">
+                    - <b>Quản Lý Users:</b> Tại đây admin có thể xem được số dư của tất cả người chơi. Có thể chủ động <b>Cộng tiền</b> (Khi người dùng nạp tiền thủ công) hoặc <b>Trừ tiền</b>.<br>
+                    - <b>Lịch Sử Đặt Cược:</b> Xem chi tiết luồng tiền của bot tự động bắn về, quản lý kết quả thắng/thua.<br>
+                    - <i>Lưu ý: Thao tác thay đổi số dư sẽ tác động trực tiếp tới tài khoản người chơi ngay lập tức.</i>
+                </p>
+            </div>
+        </section>
+
+        <section id="sec-users" class="section-content">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-users"></i> Danh Sách Tài Khoản Người Chơi</div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email / Username</th>
+                                <th>Số Dư Hiện Tại</th>
+                                <th>Ngân Hàng</th>
+                                <th>Số Tài Khoản</th>
+                                <th>SĐT</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr><td colspan="6" style="text-align: center;">Đang tải dữ liệu...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-transactions" class="section-content">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-list-check"></i> 100 Giao Dịch Đặt Cược Gần Nhất (Toàn Hệ Thống)</div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã GD Bank</th>
+                                <th>Thời Gian</th>
+                                <th>Cửa Cược</th>
+                                <th>Số Tiền</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="txTableBody">
+                            <tr><td colspan="5" style="text-align: center;">Đang tải dữ liệu...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="balanceModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">×</span>
+            <h3 style="margin-bottom: 20px; color: var(--primary);"><i class="fa-solid fa-wallet"></i> Điều Chỉnh Số Dư</h3>
+            
+            <input type="hidden" id="editUid">
+            <div class="form-group">
+                <label>Email User</label>
+                <input type="text" id="editEmail" disabled style="opacity: 0.7;">
+            </div>
+            <div class="form-group">
+                <label>Số dư hiện tại</label>
+                <input type="text" id="editCurrentBalance" disabled style="color: var(--warning); font-weight: bold;">
+            </div>
+            <div class="form-group">
+                <label>Hành động</label>
+                <select id="editAction">
+                    <option value="add">➕ CỘNG TIỀN (Nạp quỹ)</option>
+                    <option value="sub">➖ TRỪ TIỀN (Phạt/Rút)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Số tiền thao tác (VNĐ)</label>
+                <input type="number" id="editAmount" placeholder="VD: 100000" min="0">
+            </div>
+            
+            <button class="btn-save" onclick="submitBalanceChange()">CẬP NHẬT SỐ DƯ</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // ================= CẤU HÌNH ADMIN =================
+        // NHẬP EMAIL BẠN VÀO ĐÂY ĐỂ ĐƯỢC CẤP QUYỀN VÀO TRANG NÀY
+        const ADMIN_EMAILS = [
+            "lenhancute1@gmail.com", 
+            "bot.thongbaoeth@gmail.com" // Sửa thành email của bạn
+        ];
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
+            authDomain: "clvn-5571b.firebaseapp.com",
+            projectId: "clvn-5571b",
+            storageBucket: "clvn-5571b.firebasestorage.app",
+            messagingSenderId: "864443672228",
+            appId: "1:864443672228:web:25d180dfc83e0212f2e831"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // ================= AUTH CHECK =================
+        onAuthStateChanged(auth, (user) => {
+            const accessDeniedScreen = document.getElementById('accessDenied');
+            
+            if (user) {
+                if (ADMIN_EMAILS.includes(user.email)) {
+                    // Là admin -> Mở trang
+                    accessDeniedScreen.style.display = 'none';
+                    document.getElementById('adminEmailDisplay').innerText = user.email;
+                    loadAllData();
+                } else {
+                    // Không phải admin -> Block
+                    accessDeniedScreen.innerHTML = `
+                        <i class="fa-solid fa-circle-xmark" style="font-size: 80px; color: var(--danger); margin-bottom: 20px;"></i>
+                        <h1 style="font-size: 30px; margin-bottom: 10px; color: var(--danger);">TRUY CẬP BỊ TỪ CHỐI</h1>
+                        <p style="color: var(--text-muted);">Tài khoản <b>${user.email}</b> không có quyền quản trị viên.</p>
+                        <button onclick="window.location.href='index.html'" style="margin-top:20px; padding: 10px 20px; border-radius: 8px; border:none; background: var(--primary); color:#fff; cursor:pointer;">Quay Về Trang Chủ</button>
+                    `;
+                }
+            } else {
+                window.location.href = "dangnhap.html";
+            }
+        });
+
+        // ================= LOAD DATA (USERS & TRANSACTIONS) =================
+        let usersList = [];
+
+        async function loadAllData() {
+            try {
+                // 1. Fetch Users
+                const usersSnap = await getDocs(collection(db, "users"));
+                let totalBalance = 0;
+                let totalUsers = 0;
+                usersList = [];
+
+                usersSnap.forEach(doc => {
+                    totalUsers++;
+                    const data = doc.data();
+                    data.uid = doc.id;
+                    totalBalance += (data.balance || 0);
+                    usersList.push(data);
+                });
+
+                document.getElementById('statTotalUsers').innerText = totalUsers;
+                document.getElementById('statTotalBalance').innerText = totalBalance.toLocaleString('vi-VN') + " đ";
+                
+                renderUsersTable();
+
+                // 2. Fetch Transactions (100 GD mới nhất toàn hệ thống)
+                const qTx = query(collection(db, "giaodich"), orderBy("createdAt", "desc"), limit(100));
+                const txSnap = await getDocs(qTx);
+                let txCount = 0;
+                const txBody = document.getElementById('txTableBody');
+                txBody.innerHTML = '';
+
+                if (txSnap.empty) {
+                    txBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Không có dữ liệu giao dịch</td></tr>';
+                } else {
+                    txSnap.forEach(doc => {
+                        txCount++;
+                        const tx = doc.data();
+                        const d = tx.createdAt ? tx.createdAt.toDate() : new Date();
+                        const timeStr = `${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+                        
+                        let badge = tx.status === 'win' ? `<span class="badge win">Thắng (Nhận ${(tx.amount * tx.rate).toLocaleString()}đ)</span>` : `<span class="badge lose">Thua</span>`;
+                        if(tx.choice.includes("Chờ")) badge = `<span class="badge" style="background:var(--warning); color:#000;">Đang xử lý</span>`;
+
+                        txBody.innerHTML += `
+                            <tr>
+                                <td><b>${tx.transId}</b></td>
+                                <td>${timeStr}</td>
+                                <td><b>${tx.choice}</b></td>
+                                <td>${tx.amount.toLocaleString('vi-VN')}đ</td>
+                                <td>${badge}</td>
+                            </tr>
+                        `;
+                    });
+                }
+                document.getElementById('statTotalTx').innerText = txCount;
+
+            } catch (error) {
+                console.error("Lỗi lấy dữ liệu:", error);
+                alert("Lỗi truy xuất dữ liệu! Vui lòng kiểm tra quyền Firestore Rules.");
+            }
+        }
+
+        // ================= RENDER USERS & EDIT =================
+        function renderUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+            
+            if (usersList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có người dùng nào.</td></tr>';
+                return;
+            }
+
+            usersList.forEach(u => {
+                const balance = u.balance || 0;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${u.email || 'Không rõ'}</b></td>
+                        <td style="color: var(--success); font-weight: bold;">${balance.toLocaleString('vi-VN')}đ</td>
+                        <td>${u.bankCode || '<i style="color:gray">Chưa lấp</i>'}</td>
+                        <td>${u.bankAccount || '<i style="color:gray">Chưa lấp</i>'}</td>
+                        <td>${u.phone || '<i style="color:gray">Chưa lấp</i>'}</td>
+                        <td>
+                            <button class="btn-action" onclick="openBalanceModal('${u.uid}', '${u.email}', ${balance})">
+                                <i class="fa-solid fa-pen-to-square"></i> Cập nhật tiền
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        window.openBalanceModal = function(uid, email, currentBalance) {
+            document.getElementById('editUid').value = uid;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editCurrentBalance').value = currentBalance.toLocaleString('vi-VN') + " VNĐ";
+            document.getElementById('editAmount').value = ""; // reset
+            document.getElementById('balanceModal').style.display = "flex";
+            
+            // Lưu lại balance gốc vào biến tạm trong window
+            window.tempCurrentBalance = currentBalance;
+        }
+
+        window.closeModal = function() {
+            document.getElementById('balanceModal').style.display = "none";
+        }
+
+        window.submitBalanceChange = async function() {
+            const uid = document.getElementById('editUid').value;
+            const action = document.getElementById('editAction').value;
+            const amountStr = document.getElementById('editAmount').value;
+            const amount = parseInt(amountStr);
+
+            if (!amount || amount <= 0) {
+                alert("Vui lòng nhập số tiền hợp lệ (> 0)");
+                return;
+            }
+
+            let newBalance = window.tempCurrentBalance;
+            if (action === 'add') {
+                newBalance += amount;
+            } else {
+                newBalance -= amount;
+                if (newBalance < 0) newBalance = 0; // Tránh âm tiền
+            }
+
+            if(confirm(`Xác nhận thao tác: ${action === 'add' ? 'CỘNG' : 'TRỪ'} ${amount.toLocaleString('vi-VN')}đ cho user này?`)) {
+                try {
+                    // Update Firebase
+                    await updateDoc(doc(db, "users", uid), {
+                        balance: newBalance
+                    });
+                    
+                    alert("✅ Cập nhật số dư thành công!");
+                    closeModal();
+                    loadAllData(); // Reload lại bảng
+                } catch (error) {
+                    console.error(error);
+                    alert("❌ Lỗi khi cập nhật số dư. Vui lòng thử lại.");
+                }
+            }
+        }
+
+        // ================= UI TAB =================
+        window.switchTab = function(tabName, element) {
+            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.getElementById(`sec-${tabName}`).classList.add('active');
+            if(element) element.classList.add('active');
+        };
+
+        // ================= LOGOUT =================
+        document.getElementById("btnLogout").addEventListener("click", async () => {
+            if (confirm("Đăng xuất khỏi Admin Panel?")) {
+                await signOut(auth);
+            }
+        });
+    </script>
+</body>
+</html>
