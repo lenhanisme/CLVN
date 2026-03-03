@@ -7,22 +7,21 @@ from firebase_admin import credentials, firestore
 
 app = Flask(__name__)
 
-# ================= KHỞI TẠO FIREBASE (Vercel Safe) =================
+# ================= KHỞI TẠO FIREBASE (VERCEL SAFE) =================
 db = None
 try:
     if not firebase_admin._apps:
-        # Lấy đường dẫn tuyệt đối của thư mục chứa file index.py hiện tại
+        # Tự động tìm file json dù ở bất cứ thư mục nào trên Vercel
         current_dir = os.path.dirname(os.path.abspath(__file__))
         key_path = os.path.join(current_dir, "serviceAccountKey.json")
         
-        # Kiểm tra xem file có tồn tại trên Vercel không
         if os.path.exists(key_path):
             cred = credentials.Certificate(key_path)
             firebase_admin.initialize_app(cred)
             db = firestore.client()
             print("[+] Firebase kết nối thành công!")
         else:
-            print(f"[-] LỖI NGHIÊM TRỌNG: Không tìm thấy file tại {key_path}")
+            print(f"[-] LỖI CHÍNH MẠNG: Không tìm thấy file {key_path}")
     else:
         db = firestore.client()
 except Exception as e:
@@ -44,18 +43,12 @@ GAME_RULES = {
 def check_kg3_result(ref_number):
     ref_str = ''.join(filter(str.isdigit, str(ref_number)))
     if not ref_str: return False, 0.0
-    
     last2 = ref_str[-2:] if len(ref_str) >= 2 else ""
     last3 = ref_str[-3:] if len(ref_str) >= 3 else ""
     
-    x3_list = ['02', '13', '17', '19', '21', '29', '35', '37', '47', '49', '51', '54', '57', '63', '64', '74', '83', '91', '95', '96']
-    x4_list = ['66', '99']
-    x5_list = ['123', '234', '456', '678', '789']
-    
-    if last3 in x5_list: return True, 5.0
-    if last2 in x4_list: return True, 4.0
-    if last2 in x3_list: return True, 3.0
-        
+    if last3 in ['123', '234', '456', '678', '789']: return True, 5.0
+    if last2 in ['66', '99']: return True, 4.0
+    if last2 in ['02', '13', '17', '19', '21', '29', '35', '37', '47', '49', '51', '54', '57', '63', '64', '74', '83', '91', '95', '96']: return True, 3.0
     return False, 0.0
 
 def get_last_digit(ref_number):
@@ -71,22 +64,31 @@ def find_user_by_username(username):
             return doc.reference
     return None
 
-# ================= API WEBHOOK LẮNG NGHE SEPAY =================
-@app.route('/api', methods=['POST'])
-@app.route('/api/index', methods=['POST'])
-def sepay_webhook():
-    # Chặn ngay nếu Firebase chưa load được file JSON
+# ================= API WEBHOOK =================
+@app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
+@app.route('/<path:path>', methods=['GET', 'POST'])
+def sepay_webhook(path):
+    if request.method == 'GET':
+        return jsonify({
+            "status": "ok", 
+            "message": "🔥 API Webhook CLVN đang hoạt động 100% công suất!",
+            "firebase": "Connected" if db else "Disconnected"
+        }), 200
+
     if db is None:
-        return jsonify({"status": "error", "message": "Firebase is not initialized. Please check serviceAccountKey.json"}), 500
+        return jsonify({"status": "error", "message": "Firebase not initialized"}), 500
 
     data = request.json
     if not data:
         return jsonify({"status": "error", "message": "No data received"}), 400
 
+    print(f"[*] DỮ LIỆU TỪ SEPAY GỬI QUA: {data}")
+
+    # ===== ĐÃ FIX TÊN BIẾN CHUẨN CỦA SEPAY WEBHOOK =====
     tx_id = str(data.get("id", ""))
-    amount_in = float(data.get("amountIn", data.get("amount_in", 0)))
-    ref_number = data.get("referenceNumber", data.get("reference_number", ""))
-    content = data.get("transactionContent", data.get("transaction_content", "")).strip()
+    amount_in = float(data.get("transferAmount", data.get("amountIn", data.get("amount_in", 0))))
+    ref_number = data.get("referenceCode", data.get("referenceNumber", data.get("reference_number", "")))
+    content = data.get("content", data.get("transactionContent", data.get("transaction_content", ""))).strip()
 
     if amount_in <= 0:
         return jsonify({"status": "ignored", "message": "Not an incoming transfer"}), 200
@@ -94,7 +96,6 @@ def sepay_webhook():
     print(f"\n[*] WEBHOOK NHẬN GD MỚI | ID: {tx_id} | Tiền: {amount_in:,.0f}đ | Mã Bank: {ref_number}")
 
     if amount_in < 2000:
-        print("    [-] Bỏ qua: Số tiền cược dưới 2.000đ.")
         return jsonify({"status": "ignored", "message": "Amount too low"}), 200
 
     match = re.search(r'CLVN\s+(\w+)\s+(C2|L2|CC|LL|N1|N2|N3|KG3|C|L)', content, re.IGNORECASE)
@@ -102,7 +103,6 @@ def sepay_webhook():
     if match:
         username = match.group(1).lower()
         choice = match.group(2).upper()
-        
         status = "lose"
         payout = 0
         rate = 0.0
@@ -118,8 +118,7 @@ def sepay_webhook():
         else:
             last_digit = get_last_digit(ref_number)
             if last_digit is None:
-                return jsonify({"status": "error", "message": "Cannot parse reference digit"}), 400
-
+                return jsonify({"status": "error", "message": "Parse ref digit failed"}), 400
             rule = GAME_RULES.get(choice)
             if last_digit in rule['digits']:
                 rate = rule['rate']
@@ -128,9 +127,8 @@ def sepay_webhook():
             else:
                 rate = rule['rate']
 
-        print(f"    => Lệnh: {username} | Cửa: {choice} | Kết quả: {status.upper()} | Trả thưởng: {payout}")
+        print(f"    => Xử lý: User [{username}] - Cửa [{choice}] - Kết quả [{status.upper()}] - Thưởng: {payout}")
 
-        # TƯƠNG TÁC FIREBASE
         user_ref = find_user_by_username(username)
         if user_ref:
             try:
@@ -138,7 +136,6 @@ def sepay_webhook():
                 def update_user_stats(transaction, ref):
                     snapshot = ref.get(transaction=transaction)
                     user_data = snapshot.to_dict() if snapshot.exists else {}
-                    
                     current_balance = float(user_data.get('balance', 0))
                     total_deposit = float(user_data.get('totalDeposit', 0))
                     total_games = int(user_data.get('totalGames', 0))
@@ -155,7 +152,7 @@ def sepay_webhook():
                 tx_data = {
                     'transId': ref_number,
                     'amount': amount_in,
-                    'choice': f"{choice} (x{rate})" if choice != "KG3" or status == "win" else "KG3 (Chờ x3-x5)",
+                    'choice': f"{choice} (x{rate})" if choice != "KG3" or status == "win" else "KG3",
                     'rate': rate,
                     'status': status,
                     'createdAt': firestore.SERVER_TIMESTAMP
@@ -165,17 +162,15 @@ def sepay_webhook():
                 if ref_number:
                     db.collection('giaodich').document(str(ref_number)).set(tx_data)
 
-                print("    [+] Đã cập nhật Firebase thành công!")
+                print("    [+] ĐÃ CỘNG TIỀN VÀO FIREBASE!")
                 return jsonify({"status": "success", "message": "Payout processed"}), 200
-                
             except Exception as e:
                 print(f"    [-] Lỗi Firebase: {e}")
-                return jsonify({"status": "error", "message": "Firebase update failed"}), 500
+                return jsonify({"status": "error", "message": str(e)}), 500
         else:
             print(f"    [-] Không tìm thấy user '{username}'")
             return jsonify({"status": "ignored", "message": "User not found"}), 200
     else:
-        print("    [-] Sai cú pháp cược.")
         return jsonify({"status": "ignored", "message": "Invalid syntax"}), 200
 
 if __name__ == "__main__":
