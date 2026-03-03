@@ -13,15 +13,18 @@ try:
     if not firebase_admin._apps:
         # Lấy đường dẫn tuyệt đối của thư mục chứa file index.py hiện tại
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        # Trỏ chính xác tới file serviceAccountKey.json nằm cùng thư mục
         key_path = os.path.join(current_dir, "serviceAccountKey.json")
         
-        cred = credentials.Certificate(key_path)
-        firebase_admin.initialize_app(cred)
-    
-    # Khởi tạo db an toàn sau khi đã nạp chứng chỉ
-    db = firestore.client()
-    print("[+] Đã kết nối Firebase thành công!")
+        # Kiểm tra xem file có tồn tại trên Vercel không
+        if os.path.exists(key_path):
+            cred = credentials.Certificate(key_path)
+            firebase_admin.initialize_app(cred)
+            db = firestore.client()
+            print("[+] Firebase kết nối thành công!")
+        else:
+            print(f"[-] LỖI NGHIÊM TRỌNG: Không tìm thấy file tại {key_path}")
+    else:
+        db = firestore.client()
 except Exception as e:
     print("[-] Lỗi khởi tạo Firebase:", e)
 
@@ -69,12 +72,12 @@ def find_user_by_username(username):
     return None
 
 # ================= API WEBHOOK LẮNG NGHE SEPAY =================
-# Cấu hình 2 đường dẫn để chặn lỗi 308 Redirect của Vercel
 @app.route('/api', methods=['POST'])
 @app.route('/api/index', methods=['POST'])
 def sepay_webhook():
+    # Chặn ngay nếu Firebase chưa load được file JSON
     if db is None:
-        return jsonify({"status": "error", "message": "Firebase not initialized"}), 500
+        return jsonify({"status": "error", "message": "Firebase is not initialized. Please check serviceAccountKey.json"}), 500
 
     data = request.json
     if not data:
@@ -163,14 +166,14 @@ def sepay_webhook():
                     db.collection('giaodich').document(str(ref_number)).set(tx_data)
 
                 print("    [+] Đã cập nhật Firebase thành công!")
-                return jsonify({"status": "success", "message": "Payout processed"})
+                return jsonify({"status": "success", "message": "Payout processed"}), 200
                 
             except Exception as e:
                 print(f"    [-] Lỗi Firebase: {e}")
                 return jsonify({"status": "error", "message": "Firebase update failed"}), 500
         else:
             print(f"    [-] Không tìm thấy user '{username}'")
-            return jsonify({"status": "ignored", "message": "User not found"}), 404
+            return jsonify({"status": "ignored", "message": "User not found"}), 200
     else:
         print("    [-] Sai cú pháp cược.")
         return jsonify({"status": "ignored", "message": "Invalid syntax"}), 200
