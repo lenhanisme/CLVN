@@ -11,7 +11,6 @@ app = Flask(__name__)
 db = None
 try:
     if not firebase_admin._apps:
-        # Tự động tìm file json dù ở bất cứ thư mục nào trên Vercel
         current_dir = os.path.dirname(os.path.abspath(__file__))
         key_path = os.path.join(current_dir, "serviceAccountKey.json")
         
@@ -56,12 +55,15 @@ def get_last_digit(ref_number):
     return int(digits[-1]) if digits else None
 
 def find_user_by_username(username):
-    users_ref = db.collection('users')
-    docs = users_ref.stream()
-    for doc in docs:
-        email = doc.to_dict().get('email', '')
-        if email.split('@')[0].lower() == username.lower():
-            return doc.reference
+    try:
+        users_ref = db.collection('users')
+        docs = users_ref.stream()
+        for doc in docs:
+            email = doc.to_dict().get('email', '')
+            if email.split('@')[0].lower() == username.lower():
+                return doc.reference
+    except Exception as e:
+        print("[-] Lỗi khi quét tìm User:", e)
     return None
 
 # ================= API WEBHOOK =================
@@ -69,11 +71,7 @@ def find_user_by_username(username):
 @app.route('/<path:path>', methods=['GET', 'POST'])
 def sepay_webhook(path):
     if request.method == 'GET':
-        return jsonify({
-            "status": "ok", 
-            "message": "🔥 API Webhook CLVN đang hoạt động 100% công suất!",
-            "firebase": "Connected" if db else "Disconnected"
-        }), 200
+        return jsonify({"status": "ok", "message": "API Webhook is fully operational!"}), 200
 
     if db is None:
         return jsonify({"status": "error", "message": "Firebase not initialized"}), 500
@@ -82,9 +80,6 @@ def sepay_webhook(path):
     if not data:
         return jsonify({"status": "error", "message": "No data received"}), 400
 
-    print(f"[*] DỮ LIỆU TỪ SEPAY GỬI QUA: {data}")
-
-    # ===== ĐÃ FIX TÊN BIẾN CHUẨN CỦA SEPAY WEBHOOK =====
     tx_id = str(data.get("id", ""))
     amount_in = float(data.get("transferAmount", data.get("amountIn", data.get("amount_in", 0))))
     ref_number = data.get("referenceCode", data.get("referenceNumber", data.get("reference_number", "")))
@@ -93,7 +88,7 @@ def sepay_webhook(path):
     if amount_in <= 0:
         return jsonify({"status": "ignored", "message": "Not an incoming transfer"}), 200
 
-    print(f"\n[*] WEBHOOK NHẬN GD MỚI | ID: {tx_id} | Tiền: {amount_in:,.0f}đ | Mã Bank: {ref_number}")
+    print(f"\n[*] WEBHOOK NHẬN GD MỚI | ID: {tx_id} | Tiền: {amount_in:,.0f}đ | Mã Bank: {ref_number} | ND: {content}")
 
     if amount_in < 2000:
         return jsonify({"status": "ignored", "message": "Amount too low"}), 200
@@ -119,6 +114,7 @@ def sepay_webhook(path):
             last_digit = get_last_digit(ref_number)
             if last_digit is None:
                 return jsonify({"status": "error", "message": "Parse ref digit failed"}), 400
+            
             rule = GAME_RULES.get(choice)
             if last_digit in rule['digits']:
                 rate = rule['rate']
@@ -132,22 +128,12 @@ def sepay_webhook(path):
         user_ref = find_user_by_username(username)
         if user_ref:
             try:
-                @firestore.transactional
-                def update_user_stats(transaction, ref):
-                    snapshot = ref.get(transaction=transaction)
-                    user_data = snapshot.to_dict() if snapshot.exists else {}
-                    current_balance = float(user_data.get('balance', 0))
-                    total_deposit = float(user_data.get('totalDeposit', 0))
-                    total_games = int(user_data.get('totalGames', 0))
-                    
-                    transaction.update(ref, {
-                        'balance': current_balance + payout,
-                        'totalDeposit': total_deposit + amount_in,
-                        'totalGames': total_games + 1
-                    })
-                
-                transaction = db.transaction()
-                update_user_stats(transaction, user_ref)
+                # FIX BẤT TỬ: Dùng firestore.Increment() chống sập Serverless
+                user_ref.set({
+                    'balance': firestore.Increment(payout),
+                    'totalDeposit': firestore.Increment(amount_in),
+                    'totalGames': firestore.Increment(1)
+                }, merge=True)
                 
                 tx_data = {
                     'transId': ref_number,
@@ -162,15 +148,17 @@ def sepay_webhook(path):
                 if ref_number:
                     db.collection('giaodich').document(str(ref_number)).set(tx_data)
 
-                print("    [+] ĐÃ CỘNG TIỀN VÀO FIREBASE!")
+                print("    [+] ĐÃ LƯU KẾT QUẢ FIREBASE THÀNH CÔNG!")
                 return jsonify({"status": "success", "message": "Payout processed"}), 200
+            
             except Exception as e:
-                print(f"    [-] Lỗi Firebase: {e}")
+                print(f"    [-] Lỗi Firebase Write: {e}")
                 return jsonify({"status": "error", "message": str(e)}), 500
         else:
             print(f"    [-] Không tìm thấy user '{username}'")
             return jsonify({"status": "ignored", "message": "User not found"}), 200
     else:
+        print("    [-] Sai cú pháp cược.")
         return jsonify({"status": "ignored", "message": "Invalid syntax"}), 200
 
 if __name__ == "__main__":
