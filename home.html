@@ -139,6 +139,16 @@
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(24px); }
 
+        /* ====== SUPPORT CENTER CSS ====== */
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .contact-card { background: rgba(19, 27, 47, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 30px; text-align: center; transition: 0.3s; text-decoration: none; color: var(--text-main); display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .contact-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 15px 35px rgba(0, 242, 254, 0.2); }
+        .contact-card i { font-size: 45px; margin-bottom: 15px; display: block; }
+        .contact-card.tele i { color: #0088cc; text-shadow: 0 0 15px rgba(0, 136, 204, 0.5); }
+        .contact-card.mail i { color: var(--success); text-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        .contact-card h3 { margin-bottom: 8px; font-size: 20px; color: #fff; }
+        .contact-card p { color: var(--text-muted); font-size: 14px; }
+
         @keyframes shakeBowl { 0% { transform: translate(2px, 2px) rotate(0deg); } 25% { transform: translate(-2px, -2px) rotate(-5deg); } 50% { transform: translate(-2px, 2px) rotate(5deg); } 75% { transform: translate(2px, -2px) rotate(-5deg); } 100% { transform: translate(2px, 2px) rotate(0deg); } }
         @keyframes flashIn { 0% { background: rgba(0, 242, 254, 0.2); transform: translateX(-10px); } 100% { background: rgba(0,0,0,0.2); transform: translateX(0); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -266,7 +276,7 @@
                 </div>
 
                 <div id="qr-result">
-                    <h3 style="color: var(--primary);">Quét Mã Chuyển Khoản</h3>
+                    <h3 style="color: var(--primary);"><i class="fa-solid fa-qrcode"></i> Quét Mã Chuyển Khoản</h3>
                     <img id="qrImage" src="" alt="QR Thanh Toán">
                     <p id="instruction" style="font-size: 15px; margin-bottom: 15px;"></p>
                 </div>
@@ -294,7 +304,7 @@
 
             <div class="col-grid">
                 <div class="glass-panel">
-                    <h3><i class="fa-solid fa-satellite-dish" style="color: var(--primary);"></i> Giao Dịch Hệ Thống</h3>
+                    <h3><i class="fa-solid fa-satellite-dish" style="color: var(--primary);"></i> Giao Dịch Toàn Hệ Thống</h3>
                     <div id="liveFeedContainer" style="height: 380px; overflow: hidden; position: relative; padding-right: 5px;">
                         </div>
                 </div>
@@ -404,7 +414,7 @@
 
         <section id="sec-search" class="section-content">
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-magnifying-glass"></i> Tra Soát Giao Dịch Bank</div>
+                <div class="card-title"><i class="fa-solid fa-magnifying-glass"></i> Tra Soát Giao Dịch</div>
                 <div class="form-group">
                     <label>Mã Tham Chiếu Giao Dịch Ngân Hàng</label>
                     <input type="text" id="searchTransId" placeholder="Nhập mã FT... tại đây">
@@ -440,13 +450,22 @@
         <section id="sec-support" class="section-content">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-headset"></i> Trung Tâm Hỗ Trợ</div>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px; text-align: center;">Hệ thống hỗ trợ 24/7. Nếu bạn cần nạp/rút thủ công hoặc check mã, hãy liên hệ ngay với chúng tôi.</p>
                 <div class="contact-grid">
-                    <a href="https://t.me/tolabimat" target="_blank" class="contact-card tele" style="border: 1px solid rgba(0, 136, 204, 0.3);">
-                        <i class="fa-brands fa-telegram"></i><h3>Telegram Admin</h3><p>@tolabimat</p>
+                    <a href="https://t.me/tolabimat" target="_blank" class="contact-card tele">
+                        <i class="fa-brands fa-telegram"></i>
+                        <h3>Telegram Admin</h3>
+                        <p>@tolabimat</p>
+                    </a>
+                    <a href="#" onclick="window.Tawk_API.maximize(); return false;" class="contact-card mail">
+                        <i class="fa-solid fa-comments"></i>
+                        <h3>Chat Trực Tuyến</h3>
+                        <p>Hỗ trợ ngay trên web</p>
                     </a>
                 </div>
             </div>
         </section>
+
     </div>
 
     <div id="notificationModal" class="modal">
@@ -531,11 +550,10 @@
         });
 
         /* ========================================================
-           SYSTEM: GAME MÈO CÁ (TÀI XỈU 3D) - CLIENT SIDE
-           Lưu ý: Logic random hiện tại chạy client-side. Cần dời về Python bot sau nếu đánh lớn.
+           SYSTEM: GAME MÈO CÁ (TÀI XỈU 3D) - ĐÃ FIX BUG DOUBLE LOAD
         ======================================================== */
         let mcTimer = 30;
-        let mcPhase = "BET"; // BET -> SHAKE -> REVEAL
+        let mcPhase = "BET"; 
         let mcCurrentBet = null; 
         let mcSessionId = 1000;
         let mcEngineStarted = false;
@@ -559,18 +577,16 @@
                         document.getElementById('btnSubmitMcBet').innerHTML = '<i class="fa-solid fa-lock"></i> KHÓA BẢNG - ĐANG LẮC';
                     }
                 } else if (mcTimer === 0 && mcPhase === "SHAKE") {
-                    // HẾT GIỜ -> MỞ BÁT (Chỉ chạy 1 lần duy nhất nhờ điều kiện mcPhase === "SHAKE")
                     mcPhase = "REVEAL";
                     document.getElementById('mcBowl').classList.remove('shaking');
                     resolveMeoCaRound();
                     
-                    // Reset phiên mới sau 5 giây
                     setTimeout(() => {
                         mcTimer = 30;
                         mcPhase = "BET";
                         mcSessionId++;
                         mcCurrentBet = null;
-                        document.getElementById('mcBowl').classList.remove('hidden'); // Úp bát lại
+                        document.getElementById('mcBowl').classList.remove('hidden'); 
                         document.getElementById('mcBowlText').style.display = 'none';
                         document.getElementById('btnSubmitMcBet').disabled = false;
                         document.getElementById('btnSubmitMcBet').innerHTML = '<i class="fa-solid fa-check-double"></i> CHỐT CƯỢC ĐỢT NÀY';
@@ -592,7 +608,6 @@
             const amt = parseInt(document.getElementById('mcBetAmount').value);
             if(!amt || amt < 1000) return showNotification("⚠️", "Cược tối thiểu 1.000đ", "error");
             
-            // XỬ LÝ TRỪ TIỀN LOCAL CLIENT
             if(globalUserData.balance < amt) return showNotification("⚠️", "Số dư không đủ!", "error");
             
             const btn = document.getElementById('btnSubmitMcBet');
@@ -619,21 +634,18 @@
         }
 
         async function resolveMeoCaRound() {
-            // 1. Roll Random
             const d1 = Math.floor(Math.random() * 6) + 1;
             const d2 = Math.floor(Math.random() * 6) + 1;
             const d3 = Math.floor(Math.random() * 6) + 1;
             const sum = d1 + d2 + d3;
 
-            // 2. Cập nhật UI Dice
             document.getElementById('mcDie1').className = `fa-solid ${diceFaces[d1-1]} mc-die`;
             document.getElementById('mcDie2').className = `fa-solid ${diceFaces[d2-1]} mc-die`;
             document.getElementById('mcDie3').className = `fa-solid ${diceFaces[d3-1]} mc-die`;
 
-            // 3. Logic Thắng Thua
             let winSide = "none";
             if(sum >= 4 && sum <= 10) winSide = "ca";
-            if(sum >= 11 && sum <= 17) winSide = "meo";
+            if(sum >= 11 && sum <= 17) winSide = "meo"; 
             
             let payout = 0;
             let status = "lose";
@@ -645,9 +657,8 @@
                 }
 
                 const betAmountLogged = mcCurrentBet.amount;
-                mcCurrentBet.amount = 0; // Chống double process
+                mcCurrentBet.amount = 0; 
 
-                // Cộng tiền nếu thắng
                 if(status === "win") {
                     const userRef = doc(db, "users", currentUserUid);
                     try {
@@ -660,21 +671,17 @@
                     } catch(e) { console.error("Lỗi cộng tiền MC", e); }
                 }
 
-                // Ghi log Local HTML
                 const tbody = document.getElementById('mcHistoryBody');
                 if(tbody.innerHTML.includes("Chưa có")) tbody.innerHTML = '';
                 const bText = status === 'win' ? `<span class="badge win">+${payout.toLocaleString()}đ</span>` : `<span class="badge lose">Thua</span>`;
                 tbody.innerHTML = `<tr><td>#${mcSessionId}</td><td>${mcCurrentBet.choice.toUpperCase()}</td><td>${betAmountLogged.toLocaleString()}đ</td><td>${d1}-${d2}-${d3} (${sum})</td><td>${bText}</td></tr>` + tbody.innerHTML;
             }
 
-            // 4. Xử lý mở nắp (Nặn vs Mở nhanh)
             const isNan = document.getElementById('mcNanMode').checked;
             if(!isNan) {
-                // Mở nhanh
-                document.getElementById('mcBowl').classList.add('hidden');
+                document.getElementById('mcBowl').classList.add('hidden'); 
             } else {
-                // Chế độ nặn -> User phải tự click mở
-                document.getElementById('mcBowlText').style.display = 'block';
+                document.getElementById('mcBowlText').style.display = 'block'; 
             }
         }
 
