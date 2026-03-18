@@ -1151,15 +1151,46 @@
         window.searchTransaction = async function() {
             const transId = document.getElementById('searchTransId').value.trim();
             const resBox = document.getElementById('searchResultBox');
-            if (!transId) return; resBox.style.display = 'block'; resBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang tìm kiếm...';
+            if (!transId) return showNotification("⚠️", "Vui lòng nhập mã giao dịch!", "warning");
+            
+            // Xóa các style cồng kềnh của box kết quả cũ, đưa về dạng gọn nhẹ lề trái
+            resBox.style.display = 'block'; 
+            resBox.style.background = 'transparent';
+            resBox.style.border = 'none';
+            resBox.style.padding = '10px 0 0 0';
+            resBox.style.boxShadow = 'none';
+            resBox.style.textAlign = 'left';
+            
+            resBox.innerHTML = '<span style="color: var(--text-muted); font-size: 14px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tìm kiếm...</span>';
+            
             try {
                 const docSnap = await getDoc(doc(db, "giaodich", transId));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    const b = data.status === 'win' ? `<span style="color:var(--success)">Thắng (+${(data.amount*data.rate).toLocaleString()}đ)</span>` : `<span style="color:var(--danger)">Thua</span>`;
-                    resBox.innerHTML = `<h3><i class="fa-solid fa-receipt"></i> KẾT QUẢ GIAO DỊCH</h3><p>Mã: ${data.transId}</p><p>Cược: ${data.choice}</p><p>Tiền: ${data.amount.toLocaleString()}đ</p><b style="font-size: 16px;">Kết quả: ${b}</b>`;
-                } else resBox.innerHTML = `<p style="color: var(--warning)"><i class="fa-solid fa-triangle-exclamation"></i> Mã giao dịch không tồn tại.</p>`;
-            } catch (error) { resBox.innerHTML = 'Lỗi hệ thống tra cứu.'; }
+                    const b = data.status === 'win' 
+                        ? `<span style="color:var(--success); font-weight: 700;">Thắng (+${(data.amount*data.rate).toLocaleString()}đ)</span>` 
+                        : `<span style="color:var(--danger); font-weight: 700;">Thua</span>`;
+                    
+                    // Giao diện kết quả gọn gàng, font chữ sắc nét
+                    resBox.innerHTML = `
+                        <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 10px;">
+                            <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-receipt"></i> KẾT QUẢ GIAO DỊCH
+                            </h3>
+                            <div style="font-size: 14px; color: var(--text-muted); line-height: 1.8;">
+                                <div><strong style="color: #f8fafc; font-weight: 600;">Mã:</strong> ${data.transId}</div>
+                                <div><strong style="color: #f8fafc; font-weight: 600;">Cược:</strong> ${data.choice}</div>
+                                <div><strong style="color: #f8fafc; font-weight: 600;">Tiền:</strong> ${data.amount.toLocaleString()}đ</div>
+                                <div><strong style="color: #f8fafc; font-weight: 600;">Kết quả:</strong> ${b}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resBox.innerHTML = `<div style="margin-top: 15px; font-size: 14px; color: var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i> Mã giao dịch không tồn tại trên hệ thống.</div>`;
+                }
+            } catch (error) { 
+                resBox.innerHTML = `<div style="margin-top: 15px; font-size: 14px; color: var(--danger);"><i class="fa-solid fa-circle-xmark"></i> Lỗi hệ thống khi tra cứu dữ liệu.</div>`; 
+            }
         };
     </script>
 </body>
