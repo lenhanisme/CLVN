@@ -25,12 +25,12 @@
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
-            padding: 20px; /* Thêm padding cho body để tránh sát cạnh trên mobile */
+            padding: 20px; 
         }
         .auth-box { 
             background: var(--glass-bg); 
-            padding: 30px; /* Giảm padding một chút để vuông vức hơn */
-            border-radius: 8px; /* Giảm border-radius để vuông vức hơn */
+            padding: 30px; 
+            border-radius: 8px; 
             border: 1px solid rgba(255,255,255,0.1); 
             width: 100%; 
             max-width: 400px; 
@@ -39,7 +39,7 @@
         .auth-box h2 { 
             text-align: center; 
             color: var(--primary); 
-            margin-bottom: 20px; /* Giảm margin để gọn gàng */
+            margin-bottom: 20px; 
             font-weight: 800; 
         }
         .form-group { 
@@ -51,26 +51,32 @@
             font-size: 14px; 
             color: #aaa; 
         }
-        .form-group input { 
+        .form-group input, .form-group select { 
             width: 100%; 
             padding: 12px; 
             background: rgba(0,0,0,0.2); 
             border: 1px solid rgba(255,255,255,0.2); 
-            border-radius: 5px; /* Làm input vuông vức hơn */
+            border-radius: 5px; 
             color: #fff; 
             outline: none; 
             transition: 0.3s; 
         }
-        .form-group input:focus { 
+        .form-group input:focus, .form-group select:focus { 
             border-color: var(--primary); 
         }
-       
+        
+        /* Chỉnh style riêng cho thẻ option bên trong select để dễ nhìn trên nền tối */
+        .form-group select option {
+            background-color: #1e293b;
+            color: #fff;
+        }
+
         .btn-submit { 
             width: 100%; 
             padding: 12px; 
             background: linear-gradient(45deg, #4facfe, #00f2fe); 
             border: none; 
-            border-radius: 5px; /* Vuông vức hơn */
+            border-radius: 5px; 
             color: #000; 
             font-weight: bold; 
             font-size: 16px; 
@@ -82,7 +88,7 @@
             opacity: 0.9; 
             transform: translateY(-2px); 
         }
-       
+        
         /* CSS cho phần Google */
         .divider { 
             display: flex; 
@@ -106,7 +112,7 @@
             background: #fff; 
             color: #333; 
             border: none; 
-            border-radius: 5px; /* Vuông vức hơn */
+            border-radius: 5px; 
             font-weight: bold; 
             font-size: 15px; 
             cursor: pointer; 
@@ -140,24 +146,24 @@
             display: none; 
         }
 
-        /* Media query cho responsive trên mobile */
         @media (max-width: 480px) {
             .auth-box {
-                padding: 20px; /* Giảm padding trên mobile để tiết kiệm không gian */
-                border-radius: 5px; /* Làm vuông vức hơn trên mobile */
+                padding: 20px; 
+                border-radius: 5px; 
             }
             .auth-box h2 {
-                font-size: 1.5em; /* Giảm kích thước tiêu đề nếu cần */
+                font-size: 1.5em; 
                 margin-bottom: 15px;
             }
             .form-group input,
+            .form-group select,
             .btn-submit,
             .btn-google {
-                padding: 10px; /* Giảm padding cho các nút và input */
-                font-size: 14px; /* Giảm font size cho phù hợp mobile */
+                padding: 10px; 
+                font-size: 14px; 
             }
             .auth-links {
-                font-size: 12px; /* Giảm font size cho liên kết */
+                font-size: 12px; 
             }
         }
     </style>
@@ -166,7 +172,7 @@
     <div class="auth-box">
         <h2>ĐĂNG KÝ</h2>
         <div id="errorMsg" class="error-msg"></div>
-       
+        
         <form id="registerForm">
             <div class="form-group">
                 <label>Email</label>
@@ -176,12 +182,20 @@
                 <label>Mật khẩu</label>
                 <input type="password" id="password" placeholder="Nhập mật khẩu (từ 6 ký tự)" required>
             </div>
+            
+            <div class="form-group">
+                <label>Ngân hàng nhận thưởng</label>
+                <select id="bankCode" required>
+                    </select>
+            </div>
+
             <div class="form-group">
                 <label>Số tài khoản nhận thưởng</label>
-                <input type="text" id="bankAccount" placeholder="VD: 1903... (Techcombank)" required>
+                <input type="text" id="bankAccount" placeholder="VD: 1903... " required>
             </div>
             <button type="submit" class="btn-submit">Tạo Tài Khoản</button>
         </form>
+        
         <div class="divider"><span>HOẶC</span></div>
         <button type="button" id="btnGoogle" class="btn-google">
             <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
@@ -192,10 +206,12 @@
             <a href="index.html">&larr; Về trang chủ</a>
         </div>
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
             authDomain: "clvn-5571b.firebaseapp.com",
@@ -205,26 +221,63 @@
             appId: "1:864443672228:web:25d180dfc83e0212f2e831",
             measurementId: "G-CPH3LZ0RT2"
         };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
         const errorMsg = document.getElementById('errorMsg');
+
+        // ==================== DANH SÁCH NGÂN HÀNG ====================
+        const bankList = [
+            { code: "ICB", short_name: "VietinBank" }, { code: "VCB", short_name: "Vietcombank" },
+            { code: "MB", short_name: "MBBank" }, { code: "ACB", short_name: "ACB" },
+            { code: "VPB", short_name: "VPBank" }, { code: "TPB", short_name: "TPBank" },
+            { code: "TCB", short_name: "Techcombank" }, { code: "VBA", short_name: "Agribank" },
+            { code: "BIDV", short_name: "BIDV" }, { code: "STB", short_name: "Sacombank" },
+            { code: "VIB", short_name: "VIB" }, { code: "HDB", short_name: "HDBank" },
+            { code: "MSB", short_name: "MSB" }, { code: "SHB", short_name: "SHB" },
+            { code: "EIB", short_name: "Eximbank" }, { code: "OCB", short_name: "OCB" },
+            { code: "LPB", short_name: "LienVietPostBank" }, { code: "SEAB", short_name: "SeABank" },
+            { code: "NAB", short_name: "NamABank" }, { code: "VCCB", short_name: "VietCapitalBank" },
+            { code: "GPB", short_name: "GPBank" }, { code: "PVCB", short_name: "PVcomBank" },
+            { code: "NCB", short_name: "NCB" }, { code: "SHBVN", short_name: "ShinhanBank" },
+            { code: "SCB", short_name: "SCB" }, { code: "PGB", short_name: "PGBank" },
+            { code: "SGICB", short_name: "SaigonBank" }, { code: "DOB", short_name: "DongABank" },
+            { code: "BAB", short_name: "BacABank" }, { code: "ABB", short_name: "ABBANK" },
+            { code: "VAB", short_name: "VietABank" }, { code: "VIETBANK", short_name: "VietBank" },
+            { code: "BVB", short_name: "BaoVietBank" }, { code: "KLB", short_name: "KienLongBank" },
+            { code: "COOPBANK", short_name: "COOPBANK" }
+        ];
+
+        // Nạp danh sách ngân hàng vào thẻ <select>
+        const bankSelect = document.getElementById('bankCode');
+        bankSelect.innerHTML = '<option value="">-- Chọn ngân hàng --</option>';
+        bankList.forEach(bank => {
+            bankSelect.innerHTML += `<option value="${bank.code}">${bank.short_name} (${bank.code})</option>`;
+        });
+
         // Xử lý đăng ký Email/Password
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const bankCode = document.getElementById('bankCode').value; // Lấy mã ngân hàng
             const bankAccount = document.getElementById('bankAccount').value;
+            
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
+                
+                // Lưu thêm bankCode vào Firebase
                 await setDoc(doc(db, "users", user.uid), {
                     email: email,
+                    bankCode: bankCode, 
                     bankAccount: bankAccount,
                     balance: 0,
                     createdAt: new Date()
                 });
+                
                 alert("Đăng ký thành công! Đang chuyển hướng...");
                 window.location.href = "dangnhap.html";
             } catch (error) {
@@ -235,19 +288,21 @@
                 else errorMsg.innerText = "Lỗi đăng ký: " + error.message;
             }
         });
+
         // Xử lý đăng ký bằng Google
         document.getElementById('btnGoogle').addEventListener('click', async () => {
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
-                // Sử dụng { merge: true } để không ghi đè nếu user đã tồn tại và lỡ bấm nhầm nút Đăng ký Google
+                
+                // Sử dụng { merge: true } để không ghi đè nếu user đã tồn tại
                 await setDoc(doc(db, "users", user.uid), {
                     email: user.email,
-                    // Không có số tài khoản khi login Google, để trống
                     balance: 0,
                     lastLogin: new Date()
                 }, { merge: true });
-                window.location.href = "index.html"; // Chuyển thẳng về trang chủ/trang game
+                
+                window.location.href = "index.html"; 
             } catch (error) {
                 console.error(error);
                 errorMsg.style.display = 'block';
