@@ -39,11 +39,6 @@
         .card { background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card-title { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; color: #fff; }
         
-        /* ĐỒNG HỒ LIVE MILLISECOND */
-        .live-clock-box { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--primary); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0, 242, 254, 0.1), 0 0 15px rgba(0, 242, 254, 0.2); }
-        .live-clock-title { color: var(--primary); font-size: 14px; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .live-clock-value { font-size: 36px; font-family: monospace; font-weight: 800; color: #fff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); letter-spacing: 4px; }
-        
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; transition: 0.3s; }
@@ -271,27 +266,39 @@
                 </div>
 
                 <div id="qr-result">
-                    <h3 style="color: var(--primary);"><i class="fa-solid fa-qrcode"></i> Quét Mã Chuyển Khoản</h3>
+                    <h3 style="color: var(--primary);">Quét Mã Chuyển Khoản</h3>
                     <img id="qrImage" src="" alt="QR Thanh Toán">
                     <p id="instruction" style="font-size: 15px; margin-bottom: 15px;"></p>
                 </div>
 
-                <div id="playArea" style="display: none; margin-top: 25px; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 16px; border: 1px dashed var(--primary);">
-                    <h3 style="text-align: center; color: #fff; margin-bottom: 20px;"><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> KIỂM TRA MÃ GD + MILLISECOND</h3>
-                    <div class="form-group" style="margin-bottom: 25px; display: flex; gap: 10px;">
-                        <input type="text" id="playTransId" placeholder="VD: FT123456..." style="font-size: 16px; font-weight: bold;">
-                        <button class="btn-save" style="margin-top: 0; width: 160px;" onclick="spinMillisecond()"><i class="fa-solid fa-dice"></i> MỞ BÁT</button>
+                <div id="playArea" style="display: none; margin-top: 25px; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 16px; border: 1px dashed var(--primary); box-shadow: inset 0 0 20px rgba(0, 242, 254, 0.1);">
+                    <h3 style="text-align: center; color: #fff; margin-bottom: 20px; font-size: 20px;"><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> KIỂM TRA MÃ GD + MILLISECOND</h3>
+                    
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="color: #fff;">Nhập Mã Giao Dịch (Sau khi CK thành công)</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="playTransId" placeholder="VD: FT123456789..." style="font-size: 16px; font-weight: bold; letter-spacing: 1px;">
+                            <button class="btn-save" style="margin-top: 0; width: 160px; font-size: 16px;" onclick="spinMillisecond()"><i class="fa-solid fa-dice"></i> MỞ BÁT</button>
+                        </div>
                     </div>
-                    <div style="text-align: center; margin: 30px 0;"><div id="msSlot" class="slot-box">0000000000000</div></div>
-                    <div id="finalResultBox" class="result-box" style="display:none; background: rgba(19, 27, 47, 0.9); border: 2px solid var(--border); padding: 20px; border-radius: 12px;"></div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <div id="msSlot" class="slot-box">0000000000000</div>
+                    </div>
+                    
+                    <div id="finalResultBox" class="result-box" style="display:none; background: rgba(19, 27, 47, 0.9); border: 2px solid var(--border); padding: 20px; border-radius: 12px; margin-top: 20px;">
+                        </div>
                 </div>
+
             </div>
 
             <div class="col-grid">
                 <div class="glass-panel">
                     <h3><i class="fa-solid fa-satellite-dish" style="color: var(--primary);"></i> Giao Dịch Hệ Thống</h3>
-                    <div id="liveFeedContainer" style="height: 380px; overflow: hidden; position: relative;"></div>
+                    <div id="liveFeedContainer" style="height: 380px; overflow: hidden; position: relative; padding-right: 5px;">
+                        </div>
                 </div>
+
                 <div class="glass-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;">
                         <h3 style="margin: 0; border: none; padding: 0;"><i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Vinh Danh Đại Gia</h3>
@@ -300,7 +307,8 @@
                             <button class="btn-tab" style="padding: 6px 12px; min-width: auto; font-size: 12px;" onclick="renderLeaderboard('month', this)">Tháng</button>
                         </div>
                     </div>
-                    <div id="leaderboardContainer" style="height: 325px; overflow-y: auto;"></div>
+                    <div id="leaderboardContainer" style="height: 325px; overflow-y: auto; padding-right: 5px;">
+                        </div>
                 </div>
             </div>
         </section>
@@ -523,15 +531,20 @@
         });
 
         /* ========================================================
-           SYSTEM: GAME MÈO CÁ (TÀI XỈU 3D)
+           SYSTEM: GAME MÈO CÁ (TÀI XỈU 3D) - CLIENT SIDE
+           Lưu ý: Logic random hiện tại chạy client-side. Cần dời về Python bot sau nếu đánh lớn.
         ======================================================== */
         let mcTimer = 30;
         let mcPhase = "BET"; // BET -> SHAKE -> REVEAL
         let mcCurrentBet = null; 
         let mcSessionId = 1000;
+        let mcEngineStarted = false;
         const diceFaces = ['fa-dice-one', 'fa-dice-two', 'fa-dice-three', 'fa-dice-four', 'fa-dice-five', 'fa-dice-six'];
 
         function startMeoCaEngine() {
+            if (mcEngineStarted) return;
+            mcEngineStarted = true;
+
             setInterval(() => {
                 if(mcTimer > 0) {
                     mcTimer--;
@@ -545,8 +558,8 @@
                         document.getElementById('btnSubmitMcBet').disabled = true;
                         document.getElementById('btnSubmitMcBet').innerHTML = '<i class="fa-solid fa-lock"></i> KHÓA BẢNG - ĐANG LẮC';
                     }
-                } else {
-                    // HẾT GIỜ -> MỞ BÁT
+                } else if (mcTimer === 0 && mcPhase === "SHAKE") {
+                    // HẾT GIỜ -> MỞ BÁT (Chỉ chạy 1 lần duy nhất nhờ điều kiện mcPhase === "SHAKE")
                     mcPhase = "REVEAL";
                     document.getElementById('mcBowl').classList.remove('shaking');
                     resolveMeoCaRound();
@@ -579,6 +592,7 @@
             const amt = parseInt(document.getElementById('mcBetAmount').value);
             if(!amt || amt < 1000) return showNotification("⚠️", "Cược tối thiểu 1.000đ", "error");
             
+            // XỬ LÝ TRỪ TIỀN LOCAL CLIENT
             if(globalUserData.balance < amt) return showNotification("⚠️", "Số dư không đủ!", "error");
             
             const btn = document.getElementById('btnSubmitMcBet');
@@ -605,19 +619,21 @@
         }
 
         async function resolveMeoCaRound() {
-            // Random Xúc Xắc
+            // 1. Roll Random
             const d1 = Math.floor(Math.random() * 6) + 1;
             const d2 = Math.floor(Math.random() * 6) + 1;
             const d3 = Math.floor(Math.random() * 6) + 1;
             const sum = d1 + d2 + d3;
 
+            // 2. Cập nhật UI Dice
             document.getElementById('mcDie1').className = `fa-solid ${diceFaces[d1-1]} mc-die`;
             document.getElementById('mcDie2').className = `fa-solid ${diceFaces[d2-1]} mc-die`;
             document.getElementById('mcDie3').className = `fa-solid ${diceFaces[d3-1]} mc-die`;
 
+            // 3. Logic Thắng Thua
             let winSide = "none";
             if(sum >= 4 && sum <= 10) winSide = "ca";
-            if(sum >= 11 && sum <= 17) winSide = "meo"; // 3 và 18 nhà cái ăn
+            if(sum >= 11 && sum <= 17) winSide = "meo";
             
             let payout = 0;
             let status = "lose";
@@ -627,6 +643,9 @@
                     status = "win";
                     payout = mcCurrentBet.amount * 1.75;
                 }
+
+                const betAmountLogged = mcCurrentBet.amount;
+                mcCurrentBet.amount = 0; // Chống double process
 
                 // Cộng tiền nếu thắng
                 if(status === "win") {
@@ -641,28 +660,32 @@
                     } catch(e) { console.error("Lỗi cộng tiền MC", e); }
                 }
 
-                // Ghi log
+                // Ghi log Local HTML
                 const tbody = document.getElementById('mcHistoryBody');
                 if(tbody.innerHTML.includes("Chưa có")) tbody.innerHTML = '';
                 const bText = status === 'win' ? `<span class="badge win">+${payout.toLocaleString()}đ</span>` : `<span class="badge lose">Thua</span>`;
-                tbody.innerHTML = `<tr><td>#${mcSessionId}</td><td>${mcCurrentBet.choice.toUpperCase()}</td><td>${mcCurrentBet.amount.toLocaleString()}đ</td><td>${d1}-${d2}-${d3} (${sum})</td><td>${bText}</td></tr>` + tbody.innerHTML;
+                tbody.innerHTML = `<tr><td>#${mcSessionId}</td><td>${mcCurrentBet.choice.toUpperCase()}</td><td>${betAmountLogged.toLocaleString()}đ</td><td>${d1}-${d2}-${d3} (${sum})</td><td>${bText}</td></tr>` + tbody.innerHTML;
             }
 
-            // Chế độ Nặn (Mở Nhanh / Nặn Bát)
+            // 4. Xử lý mở nắp (Nặn vs Mở nhanh)
             const isNan = document.getElementById('mcNanMode').checked;
             if(!isNan) {
-                document.getElementById('mcBowl').classList.add('hidden'); // Mở tự động
+                // Mở nhanh
+                document.getElementById('mcBowl').classList.add('hidden');
             } else {
-                document.getElementById('mcBowlText').style.display = 'block'; // Yêu cầu click
+                // Chế độ nặn -> User phải tự click mở
+                document.getElementById('mcBowlText').style.display = 'block';
             }
         }
 
         window.manualRevealBowl = function() {
-            if(mcPhase === "REVEAL") document.getElementById('mcBowl').classList.add('hidden');
+            if(mcPhase === "REVEAL") {
+                document.getElementById('mcBowl').classList.add('hidden');
+            }
         }
 
         /* ========================================================
-           SYSTEM: CHẴN LẺ BANK & QUAY THƯỞNG MILLISECOND
+           SYSTEM: QUAY THƯỞNG MILLISECOND & CHẴN LẺ BANK
         ======================================================== */
         window.selectBet = function(choice, rate, btnElement) {
             const amt = document.getElementById('coinAmount').value;
