@@ -39,6 +39,11 @@
         .card { background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card-title { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; color: #fff; }
         
+        /* ĐỒNG HỒ LIVE MILLISECOND */
+        .live-clock-box { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--primary); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0, 242, 254, 0.1), 0 0 15px rgba(0, 242, 254, 0.2); }
+        .live-clock-title { color: var(--primary); font-size: 14px; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .live-clock-value { font-size: 36px; font-family: monospace; font-weight: 800; color: #fff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); letter-spacing: 4px; }
+        
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; transition: 0.3s; }
@@ -139,6 +144,50 @@
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(24px); }
 
+        /* ====== SẢNH BÀI CASINO ====== */
+        .sanhbai-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 10px; }
+        .game-item { position: relative; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.4); text-align: center; padding: 25px 10px; }
+        .game-item:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 15px 30px rgba(0, 242, 254, 0.2); }
+        .game-item i { font-size: 50px; margin-bottom: 15px; display: block; }
+        .game-item h4 { color: #fff; font-size: 16px; margin-bottom: 5px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .game-item p { font-size: 12px; color: var(--text-muted); }
+        
+        .gi-tienlen i { color: #f59e0b; text-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
+        .gi-poker i { color: #ec4899; text-shadow: 0 0 15px rgba(236, 72, 153, 0.5); }
+        .gi-phom i { color: #10b981; text-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        .gi-baccarat i { color: #3b82f6; text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        .gi-blackjack i { color: #8b5cf6; text-shadow: 0 0 15px rgba(139, 92, 246, 0.5); }
+
+        .game-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s; backdrop-filter: blur(2px); }
+        .game-item:hover .game-overlay { opacity: 1; }
+        .game-overlay span { background: var(--primary); color: #000; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; }
+
+        /* BACCARAT BOARD */
+        .bac-board { display: none; background: radial-gradient(circle at center, #064e3b 0%, #022c22 100%); border: 2px solid #fbbf24; border-radius: 20px; padding: 30px; box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.5); position: relative; animation: fadeIn 0.4s; }
+        .bac-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .bac-zones { display: flex; justify-content: space-around; gap: 20px; margin-bottom: 30px; }
+        .bac-zone { flex: 1; text-align: center; background: rgba(0,0,0,0.3); border-radius: 15px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .bac-zone-title { font-size: 20px; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; }
+        .title-player { color: #3b82f6; text-shadow: 0 0 10px rgba(59,130,246,0.5); }
+        .title-banker { color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .bac-score { font-size: 30px; font-weight: bold; margin-top: 15px; color: #fff; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 20px; border-radius: 10px; }
+        
+        .bac-cards { display: flex; justify-content: center; gap: 10px; min-height: 120px; }
+        .playing-card { width: 80px; height: 115px; background: #fff; border-radius: 8px; border: 1px solid #ccc; display: flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: bold; font-size: 20px; position: relative; box-shadow: 2px 5px 10px rgba(0,0,0,0.5); animation: dealCard 0.4s ease-out; }
+        .card-red { color: #ef4444; } .card-black { color: #000; }
+        .card-top { position: absolute; top: 5px; left: 8px; line-height: 1; }
+        .card-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 35px; }
+        .card-bottom { position: absolute; bottom: 5px; right: 8px; transform: rotate(180deg); line-height: 1; }
+
+        .bac-bet-controls { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .bac-bet-btn { padding: 15px 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #fff; font-size: 16px; flex: 1; max-width: 200px; transition: 0.3s; }
+        .bac-bet-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-b-player { background: linear-gradient(135deg, #2563eb, #1e40af); box-shadow: 0 5px 15px rgba(37,99,235,0.4); }
+        .btn-b-tie { background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 5px 15px rgba(16,185,129,0.4); }
+        .btn-b-banker { background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 5px 15px rgba(220,38,38,0.4); }
+
+        @keyframes dealCard { 0% { transform: translateY(-50px) scale(0.5); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+
         /* ====== SUPPORT CENTER CSS ====== */
         .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
         .contact-card { background: rgba(19, 27, 47, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 30px; text-align: center; transition: 0.3s; text-decoration: none; color: var(--text-main); display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
@@ -169,12 +218,15 @@
             .sidebar-close { display: block; } 
             .main-content { margin-left: 0; width: 100%; }
             .menu-toggle { display: block; } 
-            .game-grid, .game-grid-3, .game-grid-1, .col-grid { grid-template-columns: 1fr; }
+            .game-grid, .game-grid-3, .game-grid-1, .col-grid, .sanhbai-grid { grid-template-columns: 1fr; }
             .section-content { padding: 15px; } 
             header { padding: 15px; }
             .slot-box, .live-clock-value { font-size: 28px; letter-spacing: 2px;}
             .meoca-board { flex-direction: column; gap: 20px; }
             .meoca-bet-btn { width: 100%; height: 90px; flex-direction: row; gap: 15px;}
+            .bac-zones { flex-direction: column; gap: 15px; }
+            .bac-bet-controls { flex-direction: column; }
+            .bac-bet-btn { max-width: 100%; }
         }
     </style>
 </head>
@@ -187,6 +239,7 @@
         </div>
         <div class="nav-links">
             <a class="nav-link active" onclick="switchTab('game', this)"><i class="fa-solid fa-gamepad"></i> Trang Chủ</a>
+            <a class="nav-link" onclick="switchTab('sanhbai', this)"><i class="fa-solid fa-layer-group"></i> Sảnh Bài Casino <span style="background:var(--danger);color:#fff;font-size:10px;padding:2px 5px;border-radius:4px;margin-left:5px;">HOT</span></a>
             <a class="nav-link" onclick="switchTab('meoca', this)"><i class="fa-solid fa-cat"></i> Mèo Cá (Minigame)</a>
             <a class="nav-link" onclick="switchTab('withdraw', this)"><i class="fa-solid fa-money-bill-transfer"></i> Rút Tiền</a>
             <a class="nav-link" onclick="switchTab('search', this)"><i class="fa-solid fa-magnifying-glass-chart"></i> Tra Soát Giao Dịch</a>
@@ -299,16 +352,13 @@
                     <div id="finalResultBox" class="result-box" style="display:none; background: rgba(19, 27, 47, 0.9); border: 2px solid var(--border); padding: 20px; border-radius: 12px; margin-top: 20px;">
                         </div>
                 </div>
-
             </div>
 
             <div class="col-grid">
                 <div class="glass-panel">
                     <h3><i class="fa-solid fa-satellite-dish" style="color: var(--primary);"></i> Giao Dịch Toàn Hệ Thống</h3>
-                    <div id="liveFeedContainer" style="height: 380px; overflow: hidden; position: relative; padding-right: 5px;">
-                        </div>
+                    <div id="liveFeedContainer" style="height: 380px; overflow: hidden; position: relative; padding-right: 5px;"></div>
                 </div>
-
                 <div class="glass-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;">
                         <h3 style="margin: 0; border: none; padding: 0;"><i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Vinh Danh Đại Gia</h3>
@@ -317,8 +367,112 @@
                             <button class="btn-tab" style="padding: 6px 12px; min-width: auto; font-size: 12px;" onclick="renderLeaderboard('month', this)">Tháng</button>
                         </div>
                     </div>
-                    <div id="leaderboardContainer" style="height: 325px; overflow-y: auto; padding-right: 5px;">
+                    <div id="leaderboardContainer" style="height: 325px; overflow-y: auto; padding-right: 5px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-sanhbai" class="section-content">
+            <div id="sanhbai-lobby" class="card">
+                <div class="card-title" style="font-size: 22px;"><i class="fa-solid fa-layer-group" style="color: var(--primary);"></i> CỔNG GAME BÀI HOÀNG GIA</div>
+                <p style="color: var(--text-muted); margin-bottom: 25px;">Trải nghiệm sòng bài đẳng cấp quốc tế. Chơi mượt mà ngay trên số dư website.</p>
+                
+                <div class="sanhbai-grid">
+                    <div class="game-item gi-baccarat" onclick="openBaccarat()">
+                        <i class="fa-solid fa-cards"></i>
+                        <h4>Baccarat Kim Tài</h4>
+                        <p>Chơi Ngay (Live 24/7)</p>
+                        <div class="game-overlay"><span><i class="fa-solid fa-play"></i> VÀO BÀN</span></div>
+                    </div>
+                    <div class="game-item gi-tienlen" onclick="showMatchmaking()">
+                        <i class="fa-solid fa-diamond"></i>
+                        <h4>Tiến Lên Miền Nam</h4>
+                        <p>Ghép Bàn Multiplayer</p>
+                        <div class="game-overlay"><span><i class="fa-solid fa-spinner fa-spin"></i> TÌM BÀN</span></div>
+                    </div>
+                    <div class="game-item gi-phom" onclick="showMatchmaking()">
+                        <i class="fa-solid fa-club"></i>
+                        <h4>Phỏm / Tá Lả</h4>
+                        <p>Ghép Bàn Multiplayer</p>
+                        <div class="game-overlay"><span><i class="fa-solid fa-spinner fa-spin"></i> TÌM BÀN</span></div>
+                    </div>
+                    <div class="game-item gi-poker" onclick="showMatchmaking()">
+                        <i class="fa-solid fa-heart"></i>
+                        <h4>Poker Texas</h4>
+                        <p>Ghép Bàn Multiplayer</p>
+                        <div class="game-overlay"><span><i class="fa-solid fa-spinner fa-spin"></i> TÌM BÀN</span></div>
+                    </div>
+                    <div class="game-item gi-blackjack" onclick="showMatchmaking()">
+                        <i class="fa-solid fa-spade"></i>
+                        <h4>Black Jack</h4>
+                        <p>Ghép Bàn Multiplayer</p>
+                        <div class="game-overlay"><span><i class="fa-solid fa-spinner fa-spin"></i> TÌM BÀN</span></div>
+                    </div>
+                    <div class="game-item" style="border-color: rgba(255,255,255,0.05);" onclick="showMatchmaking()">
+                        <i class="fa-solid fa-chess-knight" style="color: #64748b;"></i>
+                        <h4>Sâm Lốc</h4>
+                        <p>Sắp Ra Mắt</p>
+                    </div>
+                    <div class="game-item" style="border-color: rgba(255,255,255,0.05);" onclick="showMatchmaking()">
+                        <i class="fa-solid fa-chess-queen" style="color: #64748b;"></i>
+                        <h4>Mậu Binh</h4>
+                        <p>Sắp Ra Mắt</p>
+                    </div>
+                    <div class="game-item" style="border-color: rgba(255,255,255,0.05);" onclick="showMatchmaking()">
+                        <i class="fa-solid fa-chess-king" style="color: #64748b;"></i>
+                        <h4>Xì Dách</h4>
+                        <p>Sắp Ra Mắt</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="baccarat-game" style="display: none;">
+                <button onclick="closeBaccarat()" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-weight: bold;"><i class="fa-solid fa-arrow-left"></i> Rời Bàn</button>
+                
+                <div class="bac-board">
+                    <div class="bac-header">
+                        <h2 style="color: #fbbf24; margin: 0; font-size: 24px;"><i class="fa-solid fa-cards"></i> BACCARAT KIM TÀI</h2>
+                        <div style="background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; border: 1px solid #fbbf24; color: #fff; font-weight: bold;">Luật 9 Nút</div>
+                    </div>
+
+                    <div class="bac-zones">
+                        <div class="bac-zone">
+                            <div class="bac-zone-title title-player">PLAYER</div>
+                            <div class="bac-cards" id="bacPlayerCards">
+                                </div>
+                            <div class="bac-score" id="bacPlayerScore">0</div>
                         </div>
+
+                        <div class="bac-zone">
+                            <div class="bac-zone-title title-banker">BANKER</div>
+                            <div class="bac-cards" id="bacBankerCards">
+                                </div>
+                            <div class="bac-score" id="bacBankerScore">0</div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px; margin-top: 20px;">
+                        <div class="form-group" style="max-width: 300px; margin: 0 auto 20px;">
+                            <label style="text-align: center; color: #fbbf24;">Số tiền cược (Tối thiểu 5.000đ)</label>
+                            <input type="number" id="bacBetAmount" placeholder="Nhập số tiền cược..." min="5000" step="1000" style="text-align: center; font-weight: bold; font-size: 18px; border-color: #fbbf24;">
+                        </div>
+                        
+                        <div class="bac-bet-controls">
+                            <button class="bac-bet-btn btn-b-player" id="btnBacPlayer" onclick="playBaccarat('player')">PLAYER<br><span style="font-size:12px; opacity:0.8;">1 ĂN 1</span></button>
+                            <button class="bac-bet-btn btn-b-tie" id="btnBacTie" onclick="playBaccarat('tie')">HÒA (TIE)<br><span style="font-size:12px; opacity:0.8;">1 ĂN 8</span></button>
+                            <button class="bac-bet-btn btn-b-banker" id="btnBacBanker" onclick="playBaccarat('banker')">BANKER<br><span style="font-size:12px; opacity:0.8;">1 ĂN 0.95</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 25px;">
+                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Lịch Sử Baccarat Gần Đây</div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead><tr><th>Phiên</th><th>Cửa Đặt</th><th>Tiền Cược</th><th>Điểm P-B</th><th>Trạng Thái</th></tr></thead>
+                            <tbody id="bacHistoryBody"><tr><td colspan="5" style="text-align: center;">Chưa có dữ liệu phiên này.</td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
@@ -543,14 +697,14 @@
                     globalUserData = newData; updateUIVisuals(globalUserData);
                 }
                 initLiveFeedAndLeaderboard();
-                startMeoCaEngine(); // Khởi động loop Mèo Cá
+                startMeoCaEngine(); 
             } else {
                 window.location.href = "dangnhap.html";
             }
         });
 
         /* ========================================================
-           SYSTEM: GAME MÈO CÁ (TÀI XỈU 3D) - ĐÃ FIX BUG DOUBLE LOAD
+           SYSTEM: GAME MÈO CÁ (TÀI XỈU 3D)
         ======================================================== */
         let mcTimer = 30;
         let mcPhase = "BET"; 
@@ -607,7 +761,6 @@
             if(!mcCurrentBet) return showNotification("⚠️", "Vui lòng chọn MÈO hoặc CÁ", "error");
             const amt = parseInt(document.getElementById('mcBetAmount').value);
             if(!amt || amt < 1000) return showNotification("⚠️", "Cược tối thiểu 1.000đ", "error");
-            
             if(globalUserData.balance < amt) return showNotification("⚠️", "Số dư không đủ!", "error");
             
             const btn = document.getElementById('btnSubmitMcBet');
@@ -647,15 +800,13 @@
             if(sum >= 4 && sum <= 10) winSide = "ca";
             if(sum >= 11 && sum <= 17) winSide = "meo"; 
             
-            let payout = 0;
-            let status = "lose";
+            let payout = 0; let status = "lose";
 
             if(mcCurrentBet && mcCurrentBet.amount > 0) {
                 if(mcCurrentBet.choice === winSide) {
                     status = "win";
                     payout = mcCurrentBet.amount * 1.75;
                 }
-
                 const betAmountLogged = mcCurrentBet.amount;
                 mcCurrentBet.amount = 0; 
 
@@ -678,17 +829,145 @@
             }
 
             const isNan = document.getElementById('mcNanMode').checked;
-            if(!isNan) {
-                document.getElementById('mcBowl').classList.add('hidden'); 
-            } else {
-                document.getElementById('mcBowlText').style.display = 'block'; 
+            if(!isNan) { document.getElementById('mcBowl').classList.add('hidden'); } else { document.getElementById('mcBowlText').style.display = 'block'; }
+        }
+        window.manualRevealBowl = function() { if(mcPhase === "REVEAL") document.getElementById('mcBowl').classList.add('hidden'); }
+
+        /* ========================================================
+           SYSTEM: GAME BACCARAT KIM TÀI
+        ======================================================== */
+        let bacSessionId = 5000;
+        const deckSuits = ['♥', '♦', '♣', '♠'];
+        const deckValues = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+        window.openBaccarat = function() {
+            document.getElementById('sanhbai-lobby').style.display = 'none';
+            document.getElementById('baccarat-game').style.display = 'block';
+        }
+        window.closeBaccarat = function() {
+            document.getElementById('baccarat-game').style.display = 'none';
+            document.getElementById('sanhbai-lobby').style.display = 'block';
+        }
+        window.showMatchmaking = function() {
+            showNotification("⏳ Đang tìm bàn...", "Hệ thống đang ghép bàn đa người chơi. Vui lòng thử lại sau vài phút!", "info");
+        }
+
+        function getBaccaratCard() {
+            const v = deckValues[Math.floor(Math.random() * deckValues.length)];
+            const s = deckSuits[Math.floor(Math.random() * deckSuits.length)];
+            const point = (v === 'A') ? 1 : (['10','J','Q','K'].includes(v) ? 0 : parseInt(v));
+            const color = (s === '♥' || s === '♦') ? 'red' : 'black';
+            return { v, s, point, color };
+        }
+
+        function renderCardHTML(card) {
+            const cClass = card.color === 'red' ? 'card-red' : 'card-black';
+            return `<div class="playing-card ${cClass}">
+                        <div class="card-top">${card.v}<br>${card.s}</div>
+                        <div class="card-center">${card.s}</div>
+                        <div class="card-bottom">${card.v}<br>${card.s}</div>
+                    </div>`;
+        }
+
+        window.playBaccarat = async function(betChoice) {
+            const amt = parseInt(document.getElementById('bacBetAmount').value);
+            if(!amt || amt < 5000) return showNotification("⚠️", "Cược tối thiểu 5.000đ", "error");
+            if(globalUserData.balance < amt) return showNotification("⚠️", "Số dư không đủ!", "error");
+
+            // Disable buttons
+            document.querySelectorAll('.bac-bet-btn').forEach(btn => btn.disabled = true);
+            
+            try {
+                // Trừ tiền
+                const userRef = doc(db, "users", currentUserUid);
+                await runTransaction(db, async (transaction) => {
+                    const userDoc = await transaction.get(userRef);
+                    const bal = userDoc.data().balance || 0;
+                    if(bal < amt) throw "Số dư không đủ!";
+                    transaction.update(userRef, { balance: bal - amt });
+                });
+                globalUserData.balance -= amt; updateUIVisuals(globalUserData);
+
+                // Reset UI Bàn
+                document.getElementById('bacPlayerCards').innerHTML = '';
+                document.getElementById('bacBankerCards').innerHTML = '';
+                document.getElementById('bacPlayerScore').innerText = '?';
+                document.getElementById('bacBankerScore').innerText = '?';
+
+                // Deal Cards (Luật rút gọn: Mỗi bên chia 2 lá, tính tổng đuôi)
+                let pCards = [getBaccaratCard(), getBaccaratCard()];
+                let bCards = [getBaccaratCard(), getBaccaratCard()];
+
+                // Rút bài ngẫu nhiên lá thứ 3 (Simplified Logic cho web)
+                if(Math.random() > 0.5) pCards.push(getBaccaratCard());
+                if(Math.random() > 0.5) bCards.push(getBaccaratCard());
+
+                // Animation lật bài
+                let pScore = 0, bScore = 0;
+                let htmlP = '', htmlB = '';
+                
+                pCards.forEach(c => { htmlP += renderCardHTML(c); pScore += c.point; });
+                bCards.forEach(c => { htmlB += renderCardHTML(c); bScore += c.point; });
+
+                pScore = pScore % 10;
+                bScore = bScore % 10;
+
+                setTimeout(() => {
+                    document.getElementById('bacPlayerCards').innerHTML = htmlP;
+                    document.getElementById('bacPlayerScore').innerText = pScore;
+                    
+                    setTimeout(() => {
+                        document.getElementById('bacBankerCards').innerHTML = htmlB;
+                        document.getElementById('bacBankerScore').innerText = bScore;
+                        
+                        setTimeout(() => resolveBaccarat(betChoice, amt, pScore, bScore), 1000);
+                    }, 1000);
+                }, 500);
+
+            } catch (e) {
+                document.querySelectorAll('.bac-bet-btn').forEach(btn => btn.disabled = false);
+                showNotification("❌ Lỗi", e, "error");
             }
         }
 
-        window.manualRevealBowl = function() {
-            if(mcPhase === "REVEAL") {
-                document.getElementById('mcBowl').classList.add('hidden');
+        async function resolveBaccarat(betChoice, amt, pScore, bScore) {
+            let result = 'tie';
+            if (pScore > bScore) result = 'player';
+            if (bScore > pScore) result = 'banker';
+
+            let isWin = (betChoice === result);
+            let payout = 0;
+
+            if (isWin) {
+                if (result === 'player') payout = amt * 2; // 1 ăn 1 (Trả lại vốn + lãi)
+                if (result === 'banker') payout = amt + (amt * 0.95); // 1 ăn 0.95
+                if (result === 'tie') payout = amt * 9; // 1 ăn 8 (Trả vốn + lãi x8)
+                
+                const userRef = doc(db, "users", currentUserUid);
+                try {
+                    await runTransaction(db, async (t) => {
+                        const ud = await t.get(userRef);
+                        t.update(userRef, { balance: (ud.data().balance || 0) + payout });
+                    });
+                    globalUserData.balance += payout;
+                    updateUIVisuals(globalUserData);
+                } catch(e) {}
             }
+
+            if (isWin) {
+                showNotification("🎉 CHÚC MỪNG", `Cửa ${result.toUpperCase()} thắng! Bạn nhận được ${payout.toLocaleString()}đ`, "success");
+            } else {
+                showNotification("😢 RẤT TIẾC", `Cửa ${result.toUpperCase()} thắng. Chúc bạn may mắn lần sau.`, "error");
+            }
+
+            // Ghi Lịch sử Baccarat
+            bacSessionId++;
+            const tbody = document.getElementById('bacHistoryBody');
+            if(tbody.innerHTML.includes("Chưa có")) tbody.innerHTML = '';
+            const bText = isWin ? `<span class="badge win">+${payout.toLocaleString()}đ</span>` : `<span class="badge lose">Thua</span>`;
+            tbody.innerHTML = `<tr><td>#${bacSessionId}</td><td>${betChoice.toUpperCase()}</td><td>${amt.toLocaleString()}đ</td><td><b>P:${pScore} - B:${bScore}</b></td><td>${bText}</td></tr>` + tbody.innerHTML;
+
+            document.querySelectorAll('.bac-bet-btn').forEach(btn => btn.disabled = false);
         }
 
         /* ========================================================
@@ -751,7 +1030,6 @@
         window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
         window.switchGameMode = function(m, e) { document.querySelectorAll('.btn-tab').forEach(el => el.classList.remove('active')); e.classList.add('active'); document.querySelectorAll('.game-mode-content').forEach(el => el.classList.remove('active')); document.getElementById(`mode-${m}`).classList.add('active'); document.getElementById('qr-result').style.display = 'none'; document.getElementById('playArea').style.display = 'none'; }
 
-        // Live Feed & Ranking (Ảo + Thật)
         let liveFeedList = [];
         const phonePrefixes = ['098', '097', '038', '039', '091', '094', '086', '088'];
         function generateFakeTransaction() {
@@ -800,7 +1078,6 @@
             }
         }
 
-        // ==================== CÁC CHỨC NĂNG RÚT/LƯU/TRA SOÁT ====================
         window.requestWithdraw = async function() {
             if (!currentUserUid || !globalUserData) return;
             const withdrawAmount = parseInt(document.getElementById('withdrawAmount').value);
