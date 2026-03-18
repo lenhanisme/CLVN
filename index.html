@@ -4,107 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLVN.VN | Nền Tảng Giải Trí Tài Chính Đỉnh Cao</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-dark: #070B19;
-            --bg-card: #111827;
-            --primary: #00F2FE;
-            --primary-glow: rgba(0, 242, 254, 0.4);
-            --accent: #FFD700;
-            --accent-glow: rgba(255, 215, 0, 0.3);
-            --text-main: #FFFFFF;
-            --text-muted: #9CA3AF;
-            --border: rgba(255, 255, 255, 0.1);
+            --bg-body: #020617; 
+            --bg-glass: rgba(15, 23, 42, 0.7);
+            --primary: #06b6d4;
+            --primary-glow: rgba(6, 182, 212, 0.5);
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.5);
+            --gold: #fbbf24;
+            --gold-glow: rgba(251, 191, 36, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
         }
 
-        /* FIX LỆCH MOBILE: Khóa chặt chiều ngang của toàn bộ trang */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        html, body { scroll-behavior: smooth; overflow-x: hidden; width: 100%; position: relative; background-color: var(--bg-dark); color: var(--text-main); }
-
-        /* Background Effects */
-        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); top: -200px; left: -200px; border-radius: 50%; filter: blur(80px); z-index: -1; pointer-events: none; }
-        .bg-glow.right { top: 20%; left: auto; right: -200px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html, body { scroll-behavior: smooth; overflow-x: hidden; width: 100%; position: relative; background-color: var(--bg-body); color: var(--text-main); }
+        
+        /* Nền không gian Casino */
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 60%); z-index: -2; }
+        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); top: -200px; left: -200px; border-radius: 50%; filter: blur(100px); z-index: -1; pointer-events: none; animation: pulseGlow 8s infinite alternate;}
+        .bg-glow.right { top: 20%; left: auto; right: -200px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); animation-delay: 4s;}
 
         /* --- NAVBAR --- */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(7, 11, 25, 0.85); backdrop-filter: blur(15px); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid var(--border); }
-        .logo { font-size: 28px; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; z-index: 1001; }
-        .logo span { color: var(--primary); }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(20px); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .logo { font-size: 30px; font-weight: 900; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; z-index: 1001; text-shadow: 0 0 15px rgba(6, 182, 212, 0.6); letter-spacing: 1px;}
+        .logo i { color: var(--primary); }
         
-        .nav-links { display: flex; align-items: center; gap: 25px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .nav-link { color: var(--text-main); text-decoration: none; font-weight: 600; transition: 0.3s; font-size: 15px; }
-        .nav-link:hover { color: var(--primary); }
+        .nav-links { display: flex; align-items: center; gap: 30px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-link { color: var(--text-main); text-decoration: none; font-weight: 600; transition: 0.3s; font-size: 15px; text-transform: uppercase; letter-spacing: 1px;}
+        .nav-link:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
         
         .auth-buttons { display: flex; align-items: center; gap: 15px; }
-        .btn-outline { border: 1px solid var(--primary); color: var(--primary); padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: 0.3s; display: inline-block; }
+        .btn-outline { border: 2px solid var(--primary); color: var(--primary); padding: 10px 28px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: 0.3s; display: inline-block; background: rgba(6, 182, 212, 0.05);}
         .btn-outline:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
         
-        .btn-glow { background: linear-gradient(90deg, #FFD700, #FDB931); color: #000; padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 800; text-transform: uppercase; transition: 0.3s; box-shadow: 0 0 20px var(--accent-glow); border: none; cursor: pointer; display: inline-block; }
-        .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 5px 25px var(--accent-glow); }
+        .btn-glow { background: linear-gradient(135deg, var(--gold), #d97706); color: #000; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 800; text-transform: uppercase; transition: 0.3s; box-shadow: 0 0 20px var(--gold-glow); border: none; cursor: pointer; display: inline-block; letter-spacing: 1px;}
+        .btn-glow:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(251, 191, 36, 0.6); filter: brightness(1.1);}
 
-        .menu-toggle { display: none; background: none; border: none; color: var(--text-main); font-size: 24px; cursor: pointer; z-index: 1001; }
+        .menu-toggle { display: none; background: none; border: none; color: var(--text-main); font-size: 28px; cursor: pointer; z-index: 1001; transition: 0.3s;}
+        .menu-toggle:hover { color: var(--primary); }
 
         /* --- HERO SECTION --- */
-        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 120px 5% 50px; position: relative; gap: 50px; max-width: 1400px; margin: 0 auto; }
-        .hero-content { flex: 1; max-width: 600px; z-index: 10; }
-        .badge-live { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .badge-live .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: blink 1s infinite; }
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 140px 5% 60px; position: relative; gap: 50px; max-width: 1400px; margin: 0 auto; }
+        .hero-content { flex: 1.2; z-index: 10; }
+        .badge-live { display: inline-flex; align-items: center; gap: 10px; background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.4); color: var(--primary); padding: 8px 20px; border-radius: 30px; font-size: 14px; font-weight: 700; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);}
+        .badge-live .dot { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; animation: blink 1s infinite; box-shadow: 0 0 10px var(--primary);}
         
-        .hero h1 { font-size: 3.8rem; line-height: 1.2; margin-bottom: 20px; font-weight: 800; }
-        .hero h1 span { background: linear-gradient(90deg, var(--primary), #4facfe); -webkit-background-clip: text; color: transparent; }
-        .hero p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; }
+        .hero h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 25px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;}
+        .hero h1 span { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; color: transparent; text-shadow: 0 0 30px rgba(6, 182, 212, 0.3);}
+        .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 45px; line-height: 1.8; max-width: 600px; font-weight: 400;}
         
         .hero-btns { display: flex; gap: 20px; width: 100%; }
-        .btn-play-large { background: var(--primary); color: #000; padding: 16px 40px; border-radius: 30px; text-decoration: none; font-size: 18px; font-weight: 800; box-shadow: 0 0 30px var(--primary-glow); transition: 0.3s; text-align: center; display: inline-block; }
-        .btn-play-large:hover { transform: translateY(-3px); box-shadow: 0 10px 40px var(--primary-glow); }
+        .btn-play-large { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; padding: 18px 45px; border-radius: 40px; text-decoration: none; font-size: 18px; font-weight: 800; box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4); transition: 0.3s; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 12px; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.2);}
+        .btn-play-large:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 40px rgba(6, 182, 212, 0.6); }
 
-        /* Floating Cards Visual */
-        .hero-visual { flex: 1; position: relative; height: 500px; display: flex; justify-content: center; align-items: center; }
-        .floating-card { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--border); padding: 25px; border-radius: 20px; width: 320px; position: absolute; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: float 6s ease-in-out infinite; }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .card-top h3 { color: var(--text-main); font-size: 16px; }
-        .card-top i { color: var(--accent); font-size: 24px; }
-        .mock-btn { background: var(--border); height: 40px; border-radius: 8px; margin-top: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: bold; }
-        .floating-card.c1 { transform: rotate(-5deg); left: 0; z-index: 2; border-color: rgba(0, 242, 254, 0.3); }
-        .floating-card.c2 { transform: rotate(5deg); right: 0; top: 100px; animation-delay: 3s; border-color: rgba(255, 215, 0, 0.3); }
+        /* Floating Cards Visual (Baccarat & Chẵn Lẻ) */
+        .hero-visual { flex: 1; position: relative; height: 600px; display: flex; justify-content: center; align-items: center; perspective: 1000px;}
+        .floating-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 24px; width: 340px; position: absolute; box-shadow: 0 25px 50px rgba(0,0,0,0.6); animation: float 6s ease-in-out infinite; border-top: 2px solid rgba(255,255,255,0.2);}
+        
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .card-top h3 { color: #fff; font-size: 18px; font-weight: 800;}
+        .card-top i { font-size: 26px; }
+        
+        .floating-card.c1 { transform: rotate(-5deg) translateZ(50px); left: -20px; z-index: 3; border-color: rgba(6, 182, 212, 0.5); }
+        .floating-card.c1 .card-top i { color: var(--primary); }
+        .floating-card.c2 { transform: rotate(8deg) translateZ(-50px); right: -10px; top: 120px; animation-delay: -3s; border-color: rgba(251, 191, 36, 0.5); z-index: 2;}
+        .floating-card.c2 .card-top i { color: var(--gold); }
+
+        .mock-val { font-size: 32px; font-weight: 900; color: var(--primary); letter-spacing: 2px; margin: 15px 0; text-shadow: 0 0 15px rgba(6, 182, 212, 0.5);}
+        .mock-btn { background: rgba(0,0,0,0.5); padding: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-weight: bold; font-size: 14px; border: 1px solid rgba(255,255,255,0.05);}
+        
+        /* Baccarat Mock */
+        .mock-bac { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px;}
+        .mock-card { background: #fff; color: #000; border-radius: 8px; padding: 10px 5px; text-align: center; font-weight: 900; font-size: 20px; flex: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+        .mock-card.red { color: #ef4444; }
 
         /* --- STATS TICKER --- */
-        .ticker-wrap { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; padding: 15px 0; display: flex; width: 100%; }
-        .ticker { display: flex; white-space: nowrap; animation: ticker 25s linear infinite; }
-        .ticker-item { display: inline-flex; align-items: center; gap: 10px; margin: 0 30px; font-size: 15px; font-weight: 600; color: var(--text-muted); }
-        .ticker-item span { color: var(--success); }
+        .ticker-wrap { background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); overflow: hidden; padding: 18px 0; display: flex; width: 100%; backdrop-filter: blur(10px);}
+        .ticker { display: flex; white-space: nowrap; animation: ticker 30s linear infinite; }
+        .ticker:hover { animation-play-state: paused; }
+        .ticker-item { display: inline-flex; align-items: center; gap: 12px; margin: 0 40px; font-size: 16px; font-weight: 600; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 8px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.02);}
+        .ticker-item span { color: var(--success); font-weight: 800;}
+        .ticker-item i { color: var(--gold); }
 
         /* --- FEATURES SECTION --- */
-        .features { padding: 80px 5%; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
-        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 50px; }
+        .features { padding: 100px 5%; max-width: 1300px; margin: 0 auto; text-align: center; position: relative; z-index: 10;}
+        .section-title { font-size: 3rem; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;}
+        .section-subtitle { color: var(--text-muted); font-size: 1.2rem; margin-bottom: 60px; font-weight: 500;}
         
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .feature-box { background: var(--bg-card); border: 1px solid var(--border); padding: 40px 30px; border-radius: 20px; transition: 0.4s; position: relative; overflow: hidden; }
-        .feature-box:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 40px rgba(0,242,254,0.1); }
-        .icon-wrapper { width: 70px; height: 70px; background: rgba(0,242,254,0.1); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 25px; }
-        .feature-box h3 { font-size: 1.3rem; margin-bottom: 15px; }
-        .feature-box p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 35px; }
+        .feature-box { background: var(--bg-glass); backdrop-filter: blur(15px); border: 1px solid var(--border); padding: 50px 30px; border-radius: 24px; transition: 0.4s; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.1);}
+        .feature-box::before { content:''; position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at center, rgba(6,182,212,0.1) 0%, transparent 70%); opacity: 0; transition: 0.4s; pointer-events: none;}
+        .feature-box:hover { transform: translateY(-15px); border-color: var(--primary); box-shadow: 0 20px 50px rgba(6,182,212,0.2); }
+        .feature-box:hover::before { opacity: 1; }
+        
+        .icon-wrapper { width: 80px; height: 80px; background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(139,92,246,0.2)); color: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 35px; margin: 0 auto 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.4s;}
+        .feature-box:hover .icon-wrapper { transform: scale(1.1) rotate(5deg); background: var(--primary); box-shadow: 0 0 20px var(--primary); border-color: #fff;}
+        .feature-box h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 800; color: #fff;}
+        .feature-box p { color: var(--text-muted); line-height: 1.7; font-size: 1rem; font-weight: 400;}
 
         /* --- FOOTER --- */
-        footer { background: #050811; padding: 40px 5%; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); width: 100%; }
-        .social-icons { margin: 20px 0; display: flex; justify-content: center; gap: 15px; }
-        .social-icons a { width: 40px; height: 40px; background: var(--bg-card); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-main); text-decoration: none; transition: 0.3s; border: 1px solid var(--border); }
-        .social-icons a:hover { background: var(--primary); color: #000; border-color: var(--primary); }
+        footer { background: rgba(2, 6, 23, 0.9); padding: 50px 5% 30px; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); width: 100%; backdrop-filter: blur(10px);}
+        .social-icons { margin: 25px 0; display: flex; justify-content: center; gap: 20px; }
+        .social-icons a { width: 50px; height: 50px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); font-size: 20px;}
+        .social-icons a:hover { background: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(6,182,212,0.4); border-color: #fff; color: #000;}
 
         /* Animations */
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); } 50% { transform: translateY(-20px) rotate(var(--rot, 0deg)); } }
+        @keyframes blink { 0%, 100% { opacity: 1; box-shadow: 0 0 15px var(--primary);} 50% { opacity: 0.3; box-shadow: 0 0 0 transparent;} }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)) translateZ(0); } 50% { transform: translateY(-25px) rotate(calc(var(--rot, 0deg) + 2deg)) translateZ(20px); } }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes pulseGlow { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 0.8; transform: scale(1.2); } }
 
         /* ================= RESPONSIVE MOBILE TỐI ƯU ================= */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3.5rem; }
+            .floating-card { width: 300px; padding: 20px; }
+        }
+
         @media (max-width: 992px) {
-            .hero { flex-direction: column; text-align: center; padding-top: 120px; }
-            .hero-content { margin: 0 auto; width: 100%; }
+            .hero { flex-direction: column; text-align: center; padding-top: 130px; gap: 40px;}
+            .hero-content { margin: 0 auto; width: 100%; display: flex; flex-direction: column; align-items: center;}
             .hero-btns { justify-content: center; }
-            .hero-visual { display: none; /* Ẩn thẻ bay lơ lửng trên màn hình nhỏ để tránh rối mắt/tràn viền */ }
+            .hero-visual { height: 400px; width: 100%; max-width: 600px; }
+            .floating-card.c1 { left: 10%; transform: rotate(-5deg) scale(0.9); }
+            .floating-card.c2 { right: 10%; top: 80px; transform: rotate(5deg) scale(0.9); }
             .grid-3 { grid-template-columns: repeat(2, 1fr); }
         }
 
@@ -112,42 +141,43 @@
             .navbar { padding: 15px 20px; }
             .menu-toggle { display: block; }
             
-            /* Sửa Menu Mobile: Trượt dọc xuống thay vì trượt ngang để chống rách layout */
             .nav-links {
                 position: absolute; top: 100%; left: 0; width: 100%;
-                background: rgba(7, 11, 25, 0.98); backdrop-filter: blur(15px);
+                background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(20px);
                 flex-direction: column; padding: 20px 0; gap: 15px;
                 border-bottom: 1px solid var(--border);
                 transform: translateY(-150%); opacity: 0; pointer-events: none; z-index: -1;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             }
             .nav-links.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
             
-            .nav-link { display: block; width: 100%; text-align: center; padding: 10px 0; }
+            .nav-link { display: block; width: 100%; text-align: center; padding: 12px 0; font-size: 16px;}
             
-            .auth-buttons { flex-direction: column; width: 100%; padding: 0 20px; gap: 10px; }
-            .auth-buttons a, .auth-buttons button { width: 100%; text-align: center; justify-content: center; display: block; }
+            .auth-buttons { flex-direction: column; width: 100%; padding: 10px 20px; gap: 12px; }
+            .auth-buttons a, .auth-buttons button { width: 100%; text-align: center; justify-content: center; display: flex; }
 
-            .hero h1 { font-size: 2.2rem; }
-            .hero p { font-size: 1rem; padding: 0; }
-            .btn-play-large { font-size: 16px; padding: 15px 0; width: 100%; display: block; }
-            .hero-btns { flex-direction: column; width: 100%; padding: 0; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.05rem; padding: 0 10px; }
+            .btn-play-large { font-size: 16px; padding: 16px 0; width: 100%; border-radius: 15px;}
+            .hero-btns { flex-direction: column; width: 100%; padding: 0 20px; }
             
-            .grid-3 { grid-template-columns: 1fr; gap: 20px; }
-            .section-title { font-size: 2rem; }
-            .feature-box { padding: 30px 20px; }
+            .hero-visual { display: none; /* Ẩn visual trên điện thoại để tối ưu */ }
+
+            .grid-3 { grid-template-columns: 1fr; gap: 25px; }
+            .section-title { font-size: 2.2rem; }
+            .feature-box { padding: 40px 25px; }
             
-            .ticker-item { font-size: 13px; margin: 0 15px; }
+            .ticker-item { font-size: 14px; margin: 0 20px; padding: 6px 15px;}
             
-            /* Xử lý User Email khi đăng nhập trên mobile */
-            .user-welcome-text { display: block; width: 100%; text-align: center; margin-bottom: 10px; }
+            .user-welcome-text { display: block; width: 100%; text-align: center; margin-bottom: 5px; font-size: 16px;}
         }
 
-        /* Cho màn hình cực nhỏ (iPhone SE / điện thoại cũ) */
         @media (max-width: 480px) {
-            .hero h1 { font-size: 1.8rem; }
-            .badge-live { font-size: 11px; padding: 5px 12px; }
-            .hero { padding-top: 100px; padding-bottom: 30px; }
-            .section-title { font-size: 1.6rem; }
+            .hero h1 { font-size: 2rem; }
+            .badge-live { font-size: 12px; padding: 6px 15px; }
+            .hero { padding-top: 110px; padding-bottom: 40px; }
+            .section-title { font-size: 1.8rem; }
+            .logo { font-size: 24px; }
         }
     </style>
 </head>
@@ -157,12 +187,12 @@
     <div class="bg-glow right"></div>
 
     <nav class="navbar">
-        <a href="index.html" class="logo"><i class="fa-solid fa-dice-d20"></i> CLVN.VN</span></a>
+        <a href="index.html" class="logo"><i class="fa-solid fa-dice-d20"></i> CLVN.VN</a>
         
-        <button class="menu-toggle" id="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+        <button class="menu-toggle" id="mobile-menu-btn"><i class="fa-solid fa-bars-staggered"></i></button>
         
         <div class="nav-links" id="nav-menu">
-            <a href="#luat-choi" class="nav-link" id="btn-luat-choi">Luật Chơi</a>
+            <a href="#luat-choi" class="nav-link" id="btn-luat-choi">Giới Thiệu</a>
             
             <div class="auth-buttons" id="auth-section">
                 <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
@@ -173,35 +203,45 @@
 
     <section class="hero">
         <div class="hero-content">
-            <div class="badge-live"><div class="dot"></div> Hệ thống đang hoạt động 24/7</div>
-            <h1>Kiếm Tiền Nhanh Chóng Cùng <span>Mini Game Bank</span></h1>
-            <p>Sân chơi chẵn lẻ minh bạch nhất dựa trên mã tham chiếu ngân hàng thực tế. Hệ thống thanh toán tự động, nạp rút không giới hạn chỉ trong 3 giây.</p>
+            <div class="badge-live"><div class="dot"></div> Server Đang Hoạt Động 24/7</div>
+            <h1>Cổng Game Giải Trí <br><span>& Tài Chính Đỉnh Cao</span></h1>
+            <p>Trải nghiệm hệ thống mini game xanh chín nhất hiện nay. Đa dạng thể loại từ Chẵn Lẻ Bank, Baccarat Kim Tài, Xóc Đĩa đến Mèo Cá 3D. Nạp rút tự động 3 giây.</p>
             <div class="hero-btns" id="hero-cta">
-                <a href="dangky.html" class="btn-play-large">VÀO CHƠI NGAY <i class="fa-solid fa-arrow-right" style="margin-left: 10px;"></i></a>
+                <a href="dangky.html" class="btn-play-large">VÀO SẢNH CHƠI NGAY <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
         
         <div class="hero-visual">
-            <div class="floating-card c1" style="--rot: -5deg;">
+            <div class="floating-card c1" style="--rot: -6deg;">
                 <div class="card-top">
-                    <h3><i class="fa-solid fa-bolt"></i> Khớp Lệnh Nhanh</h3>
+                    <h3><i class="fa-solid fa-bolt"></i> CHẴN LẺ BANK</h3>
                 </div>
-                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Chuyển khoản đến MBBank:</div>
-                <h2 style="color: var(--primary); letter-spacing: 1px; margin-bottom: 10px;">0987654321</h2>
-                <div style="font-size: 13px; color: var(--text-main); font-weight: bold; margin-bottom: 10px;">NGUYEN VAN A</div>
+                <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; font-weight: 600;">Khớp Lệnh Tự Động</div>
+                <h2 class="mock-val">0987654321</h2>
                 <div class="mock-btn">Nội dung: CLVN User C2</div>
+                <div style="margin-top: 15px; display: flex; justify-content: space-between; font-size: 13px;">
+                    <span style="color: var(--text-muted);">Mã GD: FT...89</span>
+                    <span style="color: var(--success); font-weight: bold;"><i class="fa-solid fa-check-circle"></i> Win x1.5</span>
+                </div>
             </div>
             
-            <div class="floating-card c2" style="--rot: 5deg;">
+            <div class="floating-card c2" style="--rot: 8deg;">
                 <div class="card-top">
-                    <h3><i class="fa-solid fa-trophy"></i> Trả Thưởng Tự Động</h3>
+                    <h3><i class="fa-solid fa-cards"></i> BACCARAT VIP</h3>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                    <span style="color: var(--text-muted); font-size: 14px;">Mã GD: FT...89</span>
-                    <span style="color: var(--success); font-weight: bold;">Win x2</span>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="color: #3b82f6; font-weight: 800; font-size: 18px;">PLAYER (9)</span>
+                    <span style="color: #ef4444; font-weight: 800; font-size: 18px;">BANKER (0)</span>
                 </div>
-                <div class="mock-btn" style="background: rgba(34, 197, 94, 0.1); color: var(--success); border: 1px solid var(--success);">
-                    + 200,000 đ
+                <div class="mock-bac">
+                    <div class="mock-card">4<br>♠</div>
+                    <div class="mock-card">5<br>♣</div>
+                    <div class="mock-card" style="background: none; box-shadow: none;">VS</div>
+                    <div class="mock-card red">J<br>♥</div>
+                    <div class="mock-card red">10<br>♦</div>
+                </div>
+                <div class="mock-btn" style="background: rgba(16, 185, 129, 0.15); color: var(--success); border-color: rgba(16, 185, 129, 0.4); margin-top: 20px; font-size: 16px;">
+                    + 500,000 đ
                 </div>
             </div>
         </div>
@@ -209,46 +249,48 @@
 
     <div class="ticker-wrap">
         <div class="ticker">
-            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User tuananh*** vừa thắng <span>+500,000đ</span></div>
-            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User hoang_nam*** vừa thắng <span>+1,200,000đ</span></div>
-            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User le_ngoc*** vừa thắng <span>+150,000đ</span></div>
-            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User minhthu12*** vừa thắng <span>+400,000đ</span></div>
-            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User tuananh*** vừa thắng <span>+500,000đ</span></div>
-            <div class="ticker-item"><i class="fa-solid fa-bell" style="color: var(--accent);"></i> User hoang_nam*** vừa thắng <span>+1,200,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-gem"></i> VIP tuananh*** vừa nổ hũ Baccarat <span>+1,500,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-sack-dollar"></i> User hoang_nam*** thắng lớn Xóc Đĩa <span>+3,200,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-bolt"></i> User le_ngoc*** chốt lãi Chẵn Lẻ <span>+450,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-cat"></i> User minhthu12*** thắng đậm Mèo Cá <span>+1,400,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-gem"></i> VIP tuananh*** vừa nổ hũ Baccarat <span>+1,500,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-sack-dollar"></i> User hoang_nam*** thắng lớn Xóc Đĩa <span>+3,200,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-bolt"></i> User le_ngoc*** chốt lãi Chẵn Lẻ <span>+450,000đ</span></div>
+            <div class="ticker-item"><i class="fa-solid fa-cat"></i> User minhthu12*** thắng đậm Mèo Cá <span>+1,400,000đ</span></div>
         </div>
     </div>
 
     <section class="features" id="luat-choi">
-        <h2 class="section-title">Trải Nghiệm Đẳng Cấp</h2>
-        <p class="section-subtitle">Tại sao hơn 15.000+ người chơi tin tưởng lựa chọn CLVN?</p>
+        <h2 class="section-title">Tại Sao Chọn CLVN?</h2>
+        <p class="section-subtitle">Sân chơi tài chính uy tín, đẳng cấp và dẫn đầu xu hướng 2026.</p>
         
         <div class="grid-3">
             <div class="feature-box">
                 <div class="icon-wrapper"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3>Minh Bạch 100%</h3>
-                <p>Kết quả dựa hoàn toàn vào số cuối mã giao dịch (Mã tham chiếu FT) của ngân hàng. Không thể can thiệp, không thể gian lận.</p>
+                <p>Thuật toán xanh chín tuyệt đối. Kết quả dựa hoàn toàn vào mã tham chiếu ngân hàng (FT) và hệ thống Random chuẩn quốc tế không thể can thiệp.</p>
             </div>
             <div class="feature-box">
-                <div class="icon-wrapper" style="background: rgba(255, 215, 0, 0.1); color: var(--accent);"><i class="fa-solid fa-bolt-lightning"></i></div>
-                <h3>Trả Thưởng 3 Giây</h3>
-                <p>Khớp lệnh và cộng tiền tự động vào số dư trên Web ngay khi ngân hàng báo nhận được tiền. Tốc độ ánh sáng, không cần đợi Admin.</p>
+                <div class="icon-wrapper" style="background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(217,119,6,0.2)); color: var(--gold); border-color: rgba(251,191,36,0.2);"><i class="fa-solid fa-layer-group"></i></div>
+                <h3>Đa Dạng Game Đỉnh Cao</h3>
+                <p>Hệ sinh thái game phong phú từ Chẵn Lẻ Bank truyền thống đến Sảnh Casino lộng lẫy với Baccarat Kim Tài, Xóc Đĩa, Mèo Cá 3D nặn siêu cuốn.</p>
             </div>
             <div class="feature-box">
-                <div class="icon-wrapper" style="background: rgba(34, 197, 94, 0.1); color: var(--success);"><i class="fa-solid fa-headset"></i></div>
-                <h3>Hỗ Trợ 24/7</h3>
-                <p>Đội ngũ Chăm Sóc Khách Hàng chuyên nghiệp hoạt động ngày đêm. Sẵn sàng giải quyết mọi sự cố hay lỗi nạp rút của bạn.</p>
+                <div class="icon-wrapper" style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(4,120,87,0.2)); color: var(--success); border-color: rgba(16,185,129,0.2);"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                <h3>Nạp Rút Tốc Độ Ánh Sáng</h3>
+                <p>Nền tảng thanh toán tự động API duyệt lệnh trong 3 giây. Rút tiền trực tiếp về thẻ ngân hàng 24/7 hoàn toàn ẩn danh và an toàn tuyệt đối.</p>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="logo" style="justify-content: center; margin-bottom: 15px;"><i class="fa-solid fa-dice-d20"></i> CLVN.VN</span></div>
-        <p>Hệ thống mini game giao dịch tự động. Tham gia giải trí có trách nhiệm.</p>
+        <div class="logo" style="justify-content: center; margin-bottom: 20px;"><i class="fa-solid fa-dice-d20"></i> CLVN.VN</div>
+        <p style="font-size: 15px; max-width: 600px; margin: 0 auto; line-height: 1.8;">Nền tảng giải trí và đầu tư tài chính tự động hàng đầu. <br>Tham gia có trách nhiệm và tuân thủ quy định.</p>
         <div class="social-icons">
-            <a href="https://t.me/@tolabimat"><i class="fa-brands fa-telegram"></i></a>
-            <a href="https://t.me/@tolabimat"><i class="fa-solid fa-comment-dots"></i></a>
+            <a href="https://t.me/@tolabimat" title="Telegram Admin"><i class="fa-brands fa-telegram"></i></a>
+            <a href="#" title="Live Chat"><i class="fa-solid fa-headset"></i></a>
         </div>
-        <p style="font-size: 12px; margin-top: 20px; color: #666;">&copy; 2026 CLVN.VN Platform. All rights reserved.</p>
+        <p style="font-size: 13px; margin-top: 30px; color: rgba(255,255,255,0.2); font-weight: 600; letter-spacing: 1px;">&copy; 2026 CLVN.VN CASINO PLATFORM. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script type="module">
@@ -262,13 +304,22 @@
 
         menuBtn.addEventListener('click', () => {
             navMenu.classList.toggle('active');
+            // Đổi icon hamburger -> X
+            const i = menuBtn.querySelector('i');
+            if(navMenu.classList.contains('active')) {
+                i.classList.remove('fa-bars-staggered'); i.classList.add('fa-xmark');
+            } else {
+                i.classList.remove('fa-xmark'); i.classList.add('fa-bars-staggered');
+            }
         });
 
-        // Bấm vào link Luật chơi tự động đóng menu trên Mobile
         btnLuatChoi.addEventListener('click', () => {
             navMenu.classList.remove('active');
+            menuBtn.querySelector('i').classList.remove('fa-xmark');
+            menuBtn.querySelector('i').classList.add('fa-bars-staggered');
         });
 
+        // Config chuẩn từ code của bạn
         const firebaseConfig = {
             apiKey: "AIzaSyAsGt_7b1mcaCcm5ta7-BZmmw766kNIraA",
             authDomain: "clvn-5571b.firebaseapp.com",
@@ -284,25 +335,32 @@
         const authSection = document.getElementById('auth-section');
         const heroCta = document.getElementById('hero-cta');
 
+        // Lắng nghe trạng thái đăng nhập
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 const username = user.email.split('@')[0];
                 
-                // Update Navbar cho User đã đăng nhập (Thêm class user-welcome-text cho mobile)
+                // Update Navbar cho User đã đăng nhập
                 authSection.innerHTML = `
-                    <span class="user-welcome-text" style="color: var(--text-muted); font-weight: 600;">Hi, <span style="color: var(--primary);">${username}</span></span>
-                    <a href="home.html" class="btn-glow">Vào Dashboard</a>
-                    <button id="btnLogout" style="background:none; border:none; color: var(--text-muted); cursor:pointer; font-size: 18px; padding: 10px;"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    <span class="user-welcome-text" style="color: var(--text-muted); font-weight: 600;">Welcome, <span style="color: var(--primary); text-shadow: 0 0 10px rgba(6,182,212,0.5);">${username}</span></span>
+                    <a href="home.html" class="btn-glow" style="padding: 10px 25px; font-size: 14px;">VÀO SẢNH</a>
+                    <button id="btnLogout" style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); border-radius: 50%; color: var(--danger); cursor:pointer; width: 42px; height: 42px; display: flex; align-items:center; justify-content:center; transition: 0.3s;"><i class="fa-solid fa-power-off"></i></button>
                 `;
 
                 // Update Hero Button
-                heroCta.innerHTML = `<a href="home.html" class="btn-play-large">VÀO CHƠI NGAY <i class="fa-solid fa-arrow-right" style="margin-left: 10px;"></i></a>`;
+                heroCta.innerHTML = `<a href="home.html" class="btn-play-large" style="width: 100%;">TIẾP TỤC CHƠI <i class="fa-solid fa-gamepad" style="margin-left: 10px;"></i></a>`;
 
+                // Nút đăng xuất
                 document.getElementById('btnLogout').addEventListener('click', () => {
                     signOut(auth).then(() => window.location.reload());
                 });
+                // Thêm hover effect cho nút logout
+                const logoutBtn = document.getElementById('btnLogout');
+                logoutBtn.addEventListener('mouseenter', () => { logoutBtn.style.background = 'var(--danger)'; logoutBtn.style.color = '#fff'; });
+                logoutBtn.addEventListener('mouseleave', () => { logoutBtn.style.background = 'rgba(244,63,94,0.1)'; logoutBtn.style.color = 'var(--danger)'; });
+
             } else {
-                // Not logged in
+                // Chưa đăng nhập
                 authSection.innerHTML = `
                     <a href="dangnhap.html" class="btn-outline">Đăng Nhập</a>
                     <a href="dangky.html" class="btn-glow">Đăng Ký Ngay</a>
