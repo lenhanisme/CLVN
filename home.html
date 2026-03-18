@@ -39,6 +39,11 @@
         .card { background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card-title { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 15px; color: #fff; }
         
+        /* ĐỒNG HỒ LIVE MILLISECOND */
+        .live-clock-box { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--primary); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0, 242, 254, 0.1), 0 0 15px rgba(0, 242, 254, 0.2); }
+        .live-clock-title { color: var(--primary); font-size: 14px; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .live-clock-value { font-size: 36px; font-family: monospace; font-weight: 800; color: #fff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); letter-spacing: 4px; }
+        
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; transition: 0.3s; }
@@ -132,7 +137,7 @@
             .game-grid, .game-grid-3, .game-grid-1, .col-grid { grid-template-columns: 1fr; }
             .section-content { padding: 15px; } 
             header { padding: 15px; }
-            .slot-box { font-size: 28px; letter-spacing: 2px;}
+            .slot-box, .live-clock-value { font-size: 28px; letter-spacing: 2px;}
         }
     </style>
 </head>
@@ -166,12 +171,19 @@
 
         <section id="sec-game" class="section-content active">
             <div class="card">
-                <div class="card-title"><i class="fa-solid fa-coins"></i> Đặt Cược Tự Động (Bank + Millisecond)</div>
+                <div class="card-title"><i class="fa-solid fa-coins"></i> Đặt Cược Tự Động</div>
                 <div class="bank-info-box">
                     <p style="color: var(--text-muted); font-size: 14px;">Hệ thống chuyển khoản tự động MBBank</p>
                     <h2 style="color: var(--primary); margin: 5px 0; letter-spacing: 2px;">4477040408</h2>
                     <p><b>LE NGOC NHAN</b></p>
                 </div>
+
+                <div class="live-clock-box">
+                    <div class="live-clock-title"><i class="fa-solid fa-stopwatch"></i> LIVE MILLISECOND <i class="fa-solid fa-stopwatch"></i></div>
+                    <div id="alwaysOnMs" class="live-clock-value">0000000000000</div>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px; font-style: italic;">(Căn đúng thời điểm số đẹp để chuyển khoản nhé!)</p>
+                </div>
+
                 <div class="form-group">
                     <label>Username của bạn</label>
                     <input type="text" id="gameUsername" disabled>
@@ -188,7 +200,7 @@
                 </div>
 
                 <div id="mode-chanle" class="game-mode-content active">
-                    <label style="display:block; margin: 10px 0; font-weight: 500;">Bấm chọn cửa để lấy QR & Quay Thưởng:</label>
+                    <label style="display:block; margin: 10px 0; font-weight: 500;">Bấm chọn cửa để lấy QR & Check KQ:</label>
                     <div class="game-grid">
                         <button class="btn-bet bg-c" onclick="selectBet('C', 2, this)">CHẴN (C) <span>Đuôi 2,4,6,8 - x2</span></button>
                         <button class="btn-bet bg-l" onclick="selectBet('L', 2, this)">LẺ (L) <span>Đuôi 1,3,5,7 - x2</span></button>
@@ -200,7 +212,7 @@
                 </div>
 
                 <div id="mode-1phan3" class="game-mode-content">
-                    <label style="display:block; margin: 10px 0; font-weight: 500;">Bấm chọn nhóm để lấy QR & Quay Thưởng:</label>
+                    <label style="display:block; margin: 10px 0; font-weight: 500;">Bấm chọn nhóm để lấy QR & Check KQ:</label>
                     <div class="game-grid-3">
                         <button class="btn-bet bg-n1" onclick="selectBet('N1', 3, this)">NHÓM 1 (N1) <span>Đuôi 1, 5, 7 - x3</span></button>
                         <button class="btn-bet bg-n2" onclick="selectBet('N2', 3, this)">NHÓM 2 (N2) <span>Đuôi 2, 4, 8 - x3</span></button>
@@ -209,7 +221,7 @@
                 </div>
 
                 <div id="mode-gap3" class="game-mode-content">
-                    <label style="display:block; margin: 10px 0; font-weight: 500;">Bấm chọn để lấy QR & Quay Thưởng:</label>
+                    <label style="display:block; margin: 10px 0; font-weight: 500;">Bấm chọn để lấy QR & Check KQ:</label>
                     <div class="game-grid-1">
                         <button class="btn-bet bg-gap3" onclick="selectBet('KG3', 0, this)" style="flex-direction: row; justify-content: space-between; padding: 20px;">
                             <div style="text-align: left;">
@@ -247,7 +259,6 @@
                     </div>
                     
                     <div style="text-align: center; margin: 30px 0;">
-                        <p style="color: var(--primary); font-size: 14px; margin-bottom: 8px; font-weight: bold; letter-spacing: 1px;">ĐỒNG HỒ MILLISECOND</p>
                         <div id="msSlot" class="slot-box">0000000000000</div>
                     </div>
                     
@@ -397,6 +408,12 @@
         window.closeModal = function() { document.getElementById("notificationModal").style.display = "none"; }
         document.getElementById('notificationModal').addEventListener('click', function(e) { if (e.target === this) window.closeModal(); });
 
+        // KHỞI CHẠY ĐỒNG HỒ MILLISECOND LIÊN TỤC
+        setInterval(() => {
+            const msElement = document.getElementById('alwaysOnMs');
+            if(msElement) msElement.innerText = Date.now();
+        }, 11); // Tốc độ cập nhật cực nhanh
+
         // BANK LIST
         const bankList = [
             { code: "ICB", short_name: "VietinBank" }, { code: "VCB", short_name: "Vietcombank" },
@@ -487,7 +504,6 @@
 
             // Animation quay số Date.now()
             let counter = 0;
-            let spinSound = new Audio(); // Có thể thêm file âm thanh sau
             
             let interval = setInterval(() => {
                 slot.innerText = Date.now();
@@ -520,7 +536,7 @@
             const last2 = totalStr.slice(-2);
             const last3 = totalStr.slice(-3);
 
-            // LOGIC KIỂM TRA ĐÚNG CHUẨN
+            // LOGIC KIỂM TRA
             if (choice === 'C' && ['2','4','6','8'].includes(last1)) isWin = true;
             else if (choice === 'L' && ['1','3','5','7'].includes(last1)) isWin = true;
             else if (choice === 'C2' && ['0','2','4','6','8'].includes(last1)) isWin = true;
@@ -558,7 +574,7 @@
                 <div style="margin-top: 20px; font-size: 26px; font-weight: 900; text-transform: uppercase; color: ${isWin ? 'var(--success)' : 'var(--danger)'}; text-shadow: 0 0 10px ${isWin ? 'rgba(16, 185, 129, 0.5)' : 'rgba(244, 63, 94, 0.5)'};">
                     ${isWin ? `🎉 WIN! (+${receive.toLocaleString()}đ)` : `😢 THUA MẤT RỒI!`}
                 </div>
-                <p style="margin-top: 15px; font-size: 12px; color: #64748b;">(Lưu ý: Tính năng quay số frontend mang tính biểu diễn minh họa, kết quả cộng tiền chính thức vẫn phụ thuộc vào máy chủ Bot Admin check mã Bank).</p>
+                <p style="margin-top: 15px; font-size: 12px; color: #64748b;">(Lưu ý: Tính năng quay số frontend mang tính biểu diễn minh họa, kết quả cộng tiền chính thức sẽ do máy chủ cập nhật).</p>
             `;
         }
 
