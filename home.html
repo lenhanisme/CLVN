@@ -76,6 +76,7 @@
 
         .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
         .game-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+        .game-grid-1 { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
         
         .btn-bet { padding: 20px; border: 2px solid transparent; border-radius: 16px; font-weight: bold; cursor: pointer; color: white; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.3s; position: relative; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.3);}
         .btn-bet:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0,0,0,0.4); }
@@ -84,6 +85,8 @@
         .bg-c { background: linear-gradient(135deg, #ef4444, #991b1b); } .bg-l { background: linear-gradient(135deg, #3b82f6, #1e3a8a); }
         .bg-c2 { background: linear-gradient(135deg, #f59e0b, #92400e); } .bg-l2 { background: linear-gradient(135deg, #8b5cf6, #5b21b6); }
         .bg-cc { background: linear-gradient(135deg, #10b981, #064e3b); } .bg-ll { background: linear-gradient(135deg, #14b8a6, #115e59); }
+        .bg-n1 { background: linear-gradient(135deg, #ec4899, #9d174d); } .bg-n2 { background: linear-gradient(135deg, #6366f1, #3730a3); } .bg-n3 { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+        .bg-gap3 { background: linear-gradient(135deg, #f97316, #9a3412); }
         
         #qr-result { display: none; background: rgba(6, 182, 212, 0.05); padding: 30px; border-radius: 20px; text-align: center; margin-top: 30px; border: 1px dashed rgba(6, 182, 212, 0.3); }
         #qr-result img { max-width: 220px; border-radius: 16px; margin: 20px 0; box-shadow: 0 15px 30px rgba(0,0,0,0.5); padding: 10px; background: #fff;}
@@ -154,13 +157,10 @@
         .card-top { position: absolute; top: 5px; left: 8px; line-height: 1; }
         .card-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 35px; }
         .card-bottom { position: absolute; bottom: 5px; right: 8px; transform: rotate(180deg); line-height: 1; }
-
         .bac-bet-controls { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
         .bac-bet-btn { padding: 15px 20px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; color: #fff; font-size: 16px; flex: 1; max-width: 200px; transition: 0.3s; }
         .bac-bet-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
-        .btn-b-player { background: linear-gradient(135deg, #2563eb, #1e40af); }
-        .btn-b-tie { background: linear-gradient(135deg, #10b981, #047857); }
-        .btn-b-banker { background: linear-gradient(135deg, #dc2626, #991b1b); }
+        .btn-b-player { background: linear-gradient(135deg, #2563eb, #1e40af); } .btn-b-tie { background: linear-gradient(135deg, #10b981, #047857); } .btn-b-banker { background: linear-gradient(135deg, #dc2626, #991b1b); }
 
         /* ====== GAME TRUYỀN THỐNG CSS ====== */
         .meoca-board { display: flex; align-items: center; justify-content: center; gap: 40px; margin: 40px 0; position: relative; }
@@ -195,6 +195,7 @@
         .modal-content { background: var(--bg-card); padding: 40px 30px 30px; border-radius: 24px; width: 90%; max-width: 420px; text-align: center; border: 1px solid var(--primary); position: relative; }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: var(--text-muted); transition: 0.3s;}
 
+        /* ANIMATIONS */
         @keyframes dealCard { 0% { transform: translateY(-50px) scale(0.5); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -262,6 +263,7 @@
 
                 <div class="game-tabs">
                     <button class="btn-tab active" onclick="switchGameMode('chanle', this)">Chẵn Lẻ</button>
+                    <button class="btn-tab" onclick="switchGameMode('1phan3', this)">1 Phần 3</button>
                     <button class="btn-tab" onclick="switchGameMode('gap3', this)">Gấp 3</button>
                 </div>
 
@@ -269,6 +271,18 @@
                     <div class="game-grid">
                         <button class="btn-bet bg-c" onclick="selectBet('C', 2, this)">CHẴN (C) <span style="margin-top:5px;">Đuôi 2,4,6,8 (x2)</span></button>
                         <button class="btn-bet bg-l" onclick="selectBet('L', 2, this)">LẺ (L) <span style="margin-top:5px;">Đuôi 1,3,5,7 (x2)</span></button>
+                        <button class="btn-bet bg-c2" onclick="selectBet('C2', 1.5, this)">CHẴN 2 (C2) <span style="margin-top:5px;">Đuôi 0,2,4,6,8 (x1.5)</span></button>
+                        <button class="btn-bet bg-l2" onclick="selectBet('L2', 1.5, this)">LẺ 2 (L2) <span style="margin-top:5px;">Đuôi 1,3,5,7,9 (x1.5)</span></button>
+                        <button class="btn-bet bg-cc" onclick="selectBet('CC', 1.5, this)">TÀI (CC) <span style="margin-top:5px;">Đuôi 1,2,3,4,5 (x1.5)</span></button>
+                        <button class="btn-bet bg-ll" onclick="selectBet('LL', 1.5, this)">XỈU (LL) <span style="margin-top:5px;">Đuôi 6,7,8,9,0 (x1.5)</span></button>
+                    </div>
+                </div>
+
+                <div id="mode-1phan3" class="game-mode-content">
+                    <div class="game-grid-3">
+                        <button class="btn-bet bg-n1" onclick="selectBet('N1', 3, this)">NHÓM 1 (N1) <span style="margin-top:5px;">Đuôi 1,5,7 (x3)</span></button>
+                        <button class="btn-bet bg-n2" onclick="selectBet('N2', 3, this)">NHÓM 2 (N2) <span style="margin-top:5px;">Đuôi 2,4,8 (x3)</span></button>
+                        <button class="btn-bet bg-n3" onclick="selectBet('N3', 3, this)">NHÓM 3 (N3) <span style="margin-top:5px;">Đuôi 3,6,9 (x3)</span></button>
                     </div>
                 </div>
 
@@ -606,7 +620,7 @@
                     <div style="overflow-x: auto;">
                         <table>
                             <thead><tr><th>Phiên</th><th>Cửa Đặt</th><th>Tiền Cược</th><th>Điểm P-B</th><th>Trạng Thái</th></tr></thead>
-                            <tbody id="bacHistoryBody"><tr><td colspan="5" style="text-align: center;">Chưa có dữ liệu.</td></tr></tbody>
+                            <tbody id="bacHistoryBody"><tr><td colspan="5" style="text-align: center;">Chưa có dữ liệu phiên này.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -839,7 +853,7 @@
                     }
                     fetchHistory(user.uid);
                     initLiveFeedAndLeaderboard();
-                    initRealtimeTxTrend(); // Gọi Realtime Cầu TX
+                    initRealtimeTxTrend(); 
                 } catch (e) {
                     console.error("Lỗi nạp User Data:", e);
                 }
